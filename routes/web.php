@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Some changes, in order to commit in the dev branch.
 Route::post('/threads/{thread}/replies', 'ReplyController@store');
 
 Route::resource('threads','ThreadController');
