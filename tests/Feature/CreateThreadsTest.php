@@ -13,35 +13,48 @@ class CreateThreadsTest extends TestCase
 	/** @test */
 	public function guest_may_not_create_threads()
 	{
-	   $this->expectException('Illuminate\Auth\AuthenticationException');
+		 $this->expectException('Illuminate\Auth\AuthenticationException');
 
 
-	   // $thread = factory('App\Thread')->make();
+		 // $thread = factory('App\Thread')->make();
 
-     $thread = make('App\Thread');
+		 $thread = make('App\Thread');
 
-     $this->post('/threads', $thread->toArray());
+		 $this->post('/threads', $thread->toArray());
 	}
 
-    /** @test */
-    public function an_authenticated_user_can_create_new_forum_threads()
-    {
-       // $this->actingAs(factory('App\User')->create());
-       
-       // $this->actingAs(create('App\User'));
-       
-       $this->signIn();
+	/**
+	 * According to the EP8: Beside recomment the throw in Handler.php.
+	 * You should also phpunit --filter=guests_cannot_see_the_create_thread_page
+	 * Or it could be thrown by the aboved test.
+	 * 
+	 */
+	/** @test */
+	public function guests_cannot_see_the_create_thread_page()
+	{
+	   $this->withExceptionHandling()
+	   			->get('/threads/create')
+	   			 ->assertRedirect('login');
+	}
 
-       //can use raw() to make an array
-       // $thread = factory('App\Thread')->make();
+		/** @test */
+		public function an_authenticated_user_can_create_new_forum_threads()
+		{
+			 // $this->actingAs(factory('App\User')->create());
+			 
+			 // $this->actingAs(create('App\User'));
+			 
+			 $this->signIn();
 
-       $thread = make('App\Thread');
+			 //can use raw() to make an array
+			 // $thread = factory('App\Thread')->make();
 
-       $this->post('/threads', $thread->toArray());
+			 $thread = make('App\Thread');
 
-       $this->get($thread->path())
-       		->assertSee($thread->title)
-       		->assertSee($thread->body);
+			 $this->post('/threads', $thread->toArray());
 
-    }
+			 $this->get($thread->path())
+					->assertSee($thread->title)
+					->assertSee($thread->body);
+		}
 }

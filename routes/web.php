@@ -20,7 +20,6 @@ Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('threads
 
 Route::resource('threads','ThreadController');
 
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
