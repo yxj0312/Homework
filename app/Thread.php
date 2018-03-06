@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-	protected  $guarded = [];
+    protected  $guarded = [];
 
-	public function path()
-	{
-		return '/threads/' . $this->id;   
-	}
+    public function path()
+    {
+      //refactor
+      return "/threads/{$this->channel->slug}/{$this->id}";
+    	// return '/threads/' . $this->channel->slug . '/' .  $this->id;   
+    }
 
     public function replies()
     {
@@ -23,8 +25,13 @@ class Thread extends Model
        return $this->belongsTo(User::class, 'user_id');
     }
 
-   	public function addReply($reply)
-	{
-	   $this->replies()->create($reply); 
-	}
+    	public function addReply($reply)
+    {
+       $this->replies()->create($reply); 
+    }
+
+    public function channel()
+    {
+       return $this->belongsTo(Channel::class);
+    }
 }

@@ -15,11 +15,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Some changes, in order to commit in the dev branch.
-Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('threads.replies');
-
-Route::resource('threads','ThreadController');
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+Route::get('threads', 'ThreadController@index')->name('threads.index');
+Route::get('threads/create', 'ThreadController@create');
+Route::get('threads/{channel}/{thread}','ThreadController@show')->name('threads.show');
+Route::post('threads', 'ThreadController@store');
+Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('threads.replies');
+
+// Route::resource('threads','ThreadController');
+
+

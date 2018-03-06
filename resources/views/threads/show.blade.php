@@ -28,7 +28,7 @@
         <br>
         <div class="row justify-content-center">
             <div class="col-md-8">            
-                <form action={{ route('threads.replies',['thread'=>$thread->id])}} method="POST">
+                <form action={{ route('threads.replies',['channel'=>$thread->channel,'thread'=>$thread->id])}} method="POST">
                     {{ csrf_field() }}
                     <label for="body">Body:</label>
                     <textarea name="body" id="body" cols="30" rows="5" class="form-control" placeholder="Have something to say?"></textarea>
