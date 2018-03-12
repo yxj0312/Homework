@@ -16,8 +16,8 @@ class CreateThreadsTest extends TestCase
 
 		$this->withExceptionHandling();
 
-		$this->get('threads/create')
-				 ->assertRedirect('login');
+		// $this->get('threads/create')
+		// 		 ->assertRedirect('login');
 
 	  $this->post('/threads')
 	   		 ->assertRedirect('login');
@@ -46,26 +46,68 @@ class CreateThreadsTest extends TestCase
 	//    			 ->assertRedirect('login');
 	// }
 
-		/** @test */
-		public function an_authenticated_user_can_create_new_forum_threads()
-		{
-			 // $this->actingAs(factory('App\User')->create());
-			 
-			 // $this->actingAs(create('App\User'));
-			 
-			 $this->signIn();
+	/** @test */
+	public function an_authenticated_user_can_create_new_forum_threads()
+	{
+		 // $this->actingAs(factory('App\User')->create());
+		 
+		 // $this->actingAs(create('App\User'));
+		 
+		 $this->signIn();
 
-			 //can use raw() to make an array
-			 // $thread = factory('App\Thread')->make();
+		 //can use raw() to make an array
+		 // $thread = factory('App\Thread')->make();
 
-			 $thread = create('App\Thread');
+		 /* Mistake by EP9. should not be create, otherwise it has already existed in DB. 
+		  * We already know its title and body. Thus the post test below is meaningless   
+		  **/
+		 $thread = make('App\Thread');
 
-			 $this->post('/threads', $thread->toArray());
+		 $response = $this->post('/threads', $thread->toArray());
 
-			 // dd($thread->path());
+		 $this->get($response->headers->get('Location'))
+				->assertSee($thread->title)
+				->assertSee($thread->body);
+	}
 
-			 $this->get($thread->path())
-					->assertSee($thread->title)
-					->assertSee($thread->body);
-		}
+	/** @test */
+	public function a_thread_requires_a_title()
+	{
+		$this->publishThread(['title' => null])
+			->assertSessionHasErrors('title');
+
+	}
+
+	/** @test */
+	public function a_thread_requires_a_body()
+	{
+		$this->publishThread(['body' => null])
+			->assertSessionHasErrors('body');
+
+	}
+
+
+	/** @test */
+	public function a_thread_requires_a_valid_channel()
+	{
+		factory('App\Channel', 2)->create();
+
+		$this->publishThread(['channel_id' => null])
+			->assertSessionHasErrors('channel_id');
+
+		$this->publishThread(['channel_id' => 999])
+			->assertSessionHasErrors('channel_id');
+
+	}
+
+	public function publishThread($overrides = [])
+	{
+	   
+	   $this->withExceptionHandling()->signIn();
+
+	   $thread = make('App\Thread', $overrides);
+
+	   return $this->post('/threads', $thread->toArray());
+
+	}
 }

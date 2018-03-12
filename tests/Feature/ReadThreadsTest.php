@@ -32,7 +32,7 @@ class ReadThreadsTest extends TestCase
     public function a_user_can_read_a_single_thread() {
         // $thread = factory('App\Thread')->create();
 
-        $this->get('/threads/'. $this->thread->channel . '/' . $this->thread->id)
+        $this->get('/threads/'. $this->thread->channel->slug . '/' . $this->thread->id)
         
              ->assertSee($this->thread->title);
     }
@@ -43,8 +43,22 @@ class ReadThreadsTest extends TestCase
         $reply = factory('App\Reply')
                 ->create(['thread_id' => $this->thread->id]);
 
-        $this->get('/threads/'. $this->thread->channel . '/' . $this->thread->id)
+        $this->get('/threads/'. $this->thread->channel->slug . '/' . $this->thread->id)
             ->assertSee($reply->body);
 
     }
+
+    /** @test */
+    function a_user_can_filter_threads_according_to_a_channel() 
+    {
+        $channel = create('App\Channel');
+        $threadInChannel = create('App\Thread',['channel_id'=>$channel->id]);
+        $threadNotInChannel = create('App\Thread');
+         
+        $this->get('/threads/' . $channel->slug)
+            ->assertSee($threadInChannel->title)
+            ->assertDontSee($threadNotInChannel->title);
+    }
+
+    
 }
