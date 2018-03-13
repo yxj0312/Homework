@@ -16,11 +16,11 @@ class CreateThreadsTest extends TestCase
 
 		$this->withExceptionHandling();
 
-		// $this->get('threads/create')
-		// 		 ->assertRedirect('login');
+		$this->get('threads/create')
+			->assertRedirect('login');
 
 	  $this->post('/threads')
-	   		 ->assertRedirect('login');
+	   	->assertRedirect('login');
  
 
 		 /*$this->expectException('Illuminate\Auth\AuthenticationException');
@@ -63,9 +63,7 @@ class CreateThreadsTest extends TestCase
 		  **/
 		 $thread = make('App\Thread');
 
-
-		//  dd($thread->toArray());
-		 $response = $this->post('/threads/', $thread->toArray());
+		 $response = $this->post('/threads', $thread->toArray());
 
 		 $this->get($response->headers->get('Location'))
 				->assertSee($thread->title)

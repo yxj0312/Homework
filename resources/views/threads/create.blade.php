@@ -12,21 +12,21 @@
 
                         <div class="form-group">
                             <label for="channel_id">Choose a Channel:</label>
-                            <select name="channel_id" id="channel_id" class="form-control">
-                                <option value="" disabled default>Choose one...</option>
+                            <select name="channel_id" id="channel_id" class="form-control" required>
+                                <option value="" disabled selected="selected">Choose one...</option>
                                 @foreach (App\Channel::all() as $channel)
-                                    <option value="{{ $channel->id}}">{{ $channel->name}}</option>
+                                    <option value="{{ $channel->id}}" {{ old('channel_id')== $channel->id ? 'selected' : ''}}>{{ $channel->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="title">Title:</label>
-                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" placeholder="title">
+                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" placeholder="title" required>
                         </div>
                         <div class="form-group">
                             <label for="body">Body:</label>
-                            <textarea name="body" id="body" class="form-control" rows="8">{{ old('body') }}</textarea>
+                            <textarea name="body" id="body" class="form-control" rows="8" required>{{ old('body') }}</textarea>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Publish</button>
