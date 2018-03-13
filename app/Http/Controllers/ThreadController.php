@@ -29,7 +29,7 @@ class ThreadController extends Controller
             $threads = Thread::latest()->get();
         }
         
-        return view('threads.index',compact('threads'));
+        return view('threads.index', compact('threads'));
     }
 
     /**
@@ -53,15 +53,16 @@ class ThreadController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
-            'channel_id' => 'required|exists:channels, id'
+            'channel_id' => 'required|exists:channels,id'
         ]);
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
             'channel_id' => request('channel_id'),
-            'title' => $request->title,
-            'body' => $request->body
+            'title' => request('title'),
+            'body' => request('body')
         ]);
+
         return redirect(route('threads.show',['channel'=>$thread->channel->slug,'thread'  => $thread->id]));
     }
 
