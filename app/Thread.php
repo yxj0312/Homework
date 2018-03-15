@@ -8,12 +8,9 @@ class Thread extends Model
 {
     protected  $guarded = [];
 
-    public function path()
-    {
-      //refactor
-      return "/threads/{$this->channel->slug}/{$this->id}";
-    	// return '/threads/' . $this->channel->slug . '/' .  $this->id;   
-    }
+    // ##############################################################
+    // Relations
+    // ##############################################################
 
     public function replies()
     {
@@ -25,13 +22,37 @@ class Thread extends Model
        return $this->belongsTo(User::class, 'user_id');
     }
 
-    	public function addReply($reply)
-    {
-       $this->replies()->create($reply); 
-    }
-
     public function channel()
     {
        return $this->belongsTo(Channel::class);
     }
+
+    // ##############################################################
+    // Methods
+    // ##############################################################
+
+    public function path()
+    {
+      //refactor
+      return "/threads/{$this->channel->slug}/{$this->id}";
+    	// return '/threads/' . $this->channel->slug . '/' .  $this->id;   
+    }
+
+    public function addReply($reply)
+    {
+       $this->replies()->create($reply); 
+    }
+
+    // ##############################################################
+    // Query Scopes
+    // ##############################################################
+    /**
+     * We want set this filter to current running query
+     * so we alsos set an query scope
+     */
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
+
 }
