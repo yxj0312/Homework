@@ -48,7 +48,7 @@ class Thread extends Model
     // ##############################################################
     /**
      * We want set this filter to current running query
-     * so we alsos set an query scope
+     * so we also set an query scope
      */
     public function scopeFilter($query, $filters)
     {

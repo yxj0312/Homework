@@ -24,14 +24,23 @@ class ThreadController extends Controller
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
-        $threads = Thread::filter($filter)->get();
-        
-        // if($channel->exists) {
-        //     $threads = $channel->threads()->latest();
-        // } else {
-        //     $threads = Thread::latest();
-        // }
+        // $threads = Thread::filter($filters)->get();
 
+        $threads = $this->getThreads($channel, $filters);
+
+        /* if($channel->exists) {
+            $threads = $channel->threads()->latest();
+        } else {
+            $threads = Thread::latest();
+        } */
+
+        /**
+         * When we called the filter method on Thread.php, 
+         * that will ask our thread filter to apply(See scopeFilter) itself to the query
+         * in ThreadFilters, when we accept our request, and call the apply method
+         * we will find the user or failed, and apply the user-id to the query 
+         */
+        /* $threads = $threads->filter($filters)->get();  */   
         // if ($username = request('by')) { 
         //     $user = \App\User::where('name', $username)->firstOrFail();
         //     $threads->where('user_id', $user->id);
@@ -87,6 +96,22 @@ class ThreadController extends Controller
         return view('threads.show',compact('channelId','thread'));
     }
 
+    /**
+     * Fetch all relevant threads.
+     *
+     * @param Channel       $channel
+     * @param ThreadFilters $filters
+     * @return mixed
+     */
+    protected function getThreads(Channel $channel, ThreadFilters $filters)
+    {
+        $threads = Thread::latest()->filter($filters);
+        if ($channel->exists) {
+            $threads->where('channel_id', $channel->id);
+        }
+        return $threads->get();
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *
