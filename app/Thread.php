@@ -8,12 +8,23 @@ class Thread extends Model
 {
     protected  $guarded = [];
 
-    public function path()
+    // ##############################################################
+    // Global Query Scopes
+    // ##############################################################
+
+    //This can be used anywhere.
+    protected static function boot()
     {
-      //refactor
-      return "/threads/{$this->channel->slug}/{$this->id}";
-    	// return '/threads/' . $this->channel->slug . '/' .  $this->id;   
+        parent::boot();
+
+        static::addGlobalScope('replyCount',function($builder){
+            $builder->withCount('replies');
+        });
     }
+
+    // ##############################################################
+    // Relations
+    // ##############################################################
 
     public function replies()
     {
@@ -25,13 +36,37 @@ class Thread extends Model
        return $this->belongsTo(User::class, 'user_id');
     }
 
-    	public function addReply($reply)
-    {
-       $this->replies()->create($reply); 
-    }
-
     public function channel()
     {
        return $this->belongsTo(Channel::class);
     }
+
+    // ##############################################################
+    // Methods
+    // ##############################################################
+
+    public function path()
+    {
+      //refactor
+      return "/threads/{$this->channel->slug}/{$this->id}";
+    	// return '/threads/' . $this->channel->slug . '/' .  $this->id;   
+    }
+
+    public function addReply($reply)
+    {
+       $this->replies()->create($reply); 
+    }
+
+    // ##############################################################
+    // Query Scopes
+    // ##############################################################
+    /**
+     * We want set this filter to current running query
+     * so we also set an query scope
+     */
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
+
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-md-8">
             <div class="card card-default">
                 <div class="card-header">
@@ -14,20 +14,14 @@
                     {{ $thread->body }}
                 </div>
             </div>
-        </div>
-    </div>
-    <br>
-    <div class="row justify-content-center">
-        <div class="col-md-8">            
-            @foreach ($thread->replies as $reply)
+            <br>
+            @foreach ($replies as $reply)
                 @include('threads.reply')
             @endforeach
-        </div>
-    </div>
-    @if (auth()->check())
-        <br>
-        <div class="row justify-content-center">
-            <div class="col-md-8">            
+
+            {{ $replies->links() }}
+
+            @if (auth()->check())
                 <form action={{ route('threads.replies',['channel'=>$thread->channel->slug,'thread'=>$thread->id])}} method="POST">
                     {{ csrf_field() }}
                     <label for="body">Body:</label>
@@ -35,11 +29,27 @@
                     <br>
                     <button type="submit" class="btn btn-default">Post</button>
                 </form>
+            @else
+                <br>
+                <p class="text-center">Please <a href={{route('login')}}>sign in</a> to participate in this discussion.</p>
+            @endif
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-default">
+               
+                {{--  Careful: when u call a relationship as a property, it gonna perform a SQL-query behind the scenes.
+                So, if u just want the number of replies, do like below $thread->replies()->count() --}}
+                <div class="card-body">
+                    <p>
+                        This thread was published {{ $thread->created_at->diffForHumans()}} by
+                        <a href="">{{$thread->creator->name}}</a>, and currently 
+                        {{--  has {{$thread->replies()->count()}} comments.  --}}
+                        has {{$thread->replies_count}} {{ str_plural('comment',$thread->replies_count)}}.                        
+                    </p>
+                </div>
             </div>
         </div>
-    @else
-        <br>
-        <p class="text-center">Please <a href={{route('login')}}>sign in</a> to participate in this discussion.</p>
-    @endif
+    </div>
 </div>
 @endsection

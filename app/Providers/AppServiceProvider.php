@@ -19,12 +19,13 @@ class AppServiceProvider extends ServiceProvider
     {
         // \View::composer(['threads.create','threads.index'], function ($view) {
         
-        /* \View::composer('*', function($view){
-            $view->with('channels',\App\Channel::all());
-        }); */
+        //This Query will be toggled until view loaded.
+        \View::composer('*', function($view){
+            $view->with('channels',Channel::all());
+        });
 
-        //equal to above
-        \View::share('channels', Channel::all());
+        //equal to above, but it gonna run before 'RefreshDatabase' by test.
+        // \View::share('channels', Channel::all());
 
     }
 
