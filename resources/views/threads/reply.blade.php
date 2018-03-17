@@ -10,3 +10,4 @@
         {{ $reply->body }}
     </div>
 </div>
+<br>

@@ -9,6 +9,20 @@ class Thread extends Model
     protected  $guarded = [];
 
     // ##############################################################
+    // Global Query Scopes
+    // ##############################################################
+
+    //This can be used anywhere.
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('replyCount',function($builder){
+            $builder->withCount('replies');
+        });
+    }
+
+    // ##############################################################
     // Relations
     // ##############################################################
 
