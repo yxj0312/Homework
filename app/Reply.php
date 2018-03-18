@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
+	use Favoritable;
+
 	protected  $guarded = [];
+
+	/* Global Scopes */
+	protected $with = ['owner', 'favorites'];
 	
 	// ##############################################################
     // Relations
@@ -16,26 +21,7 @@ class Reply extends Model
 	   return $this->belongsTo(User::class, 'user_id');
 	}
 
-	public function favorites()
-	{
-		return $this->morphMany(Favorite::class, 'favorited');
-	}
-
 	// ##############################################################
     // Methods
     // ##############################################################
-	public function favorite()
-	{
-		$attributes = ['user_id' => auth()->id()];
-
-		if (!$this->favorites()->where($attributes)->exists()) {
-			//Because we set morphMany above, we just add auth_id here.
-			return $this->favorites()->create($attributes);
-		}
-	}
-
-	public function isFavorited()
-	{
-		return $this->favorites()->where('user_id', auth()->id())->exists();
-	}
 }
