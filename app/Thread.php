@@ -28,7 +28,12 @@ class Thread extends Model
 
     public function replies()
     {
-       return $this->hasMany(Reply::class);
+        /* Eager load: when we catch the replies for a thread
+        as part of that process, I want to include the count of the
+        favorites relationship */
+       return $this->hasMany(Reply::class)
+            ->withCount('favorites')
+            ->with('owner');
     }
 
     public function creator()

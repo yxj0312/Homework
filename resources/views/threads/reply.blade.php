@@ -13,8 +13,9 @@
                     {{ csrf_field() }}
                     {{-- remeber favorites() is better than favorites --}}
                     <button type="submit" class="btn btn-default" {{ $reply->isFavorited() ? 'disabled' : ''}}>
-                        {{ $reply->favorites()->count() }} 
-                        {{ str_plural('Favorite', $reply->favorites()->count())}}
+                        {{--  {{ $reply->favorites()->count() }} 
+                        {{ str_plural('Favorite', $reply->favorites()->count())}}  --}}
+                        {{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count)}}
                     </button>
                 </form>
             </div>         

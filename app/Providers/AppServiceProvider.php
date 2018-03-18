@@ -21,7 +21,11 @@ class AppServiceProvider extends ServiceProvider
         
         //This Query will be toggled until view loaded.
         \View::composer('*', function($view){
-            $view->with('channels',Channel::all());
+            $channels = \Cache::rememberForever('channels', function(){
+                return Channel::all();
+            });
+
+            $view->with('channels', $channels);
         });
 
         //equal to above, but it gonna run before 'RefreshDatabase' by test.
@@ -36,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->isLocal()) {
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+        }
     }
 }
