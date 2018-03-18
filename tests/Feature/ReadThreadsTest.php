@@ -61,7 +61,7 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
-    function a_user_can_filter_by_any_username()
+    function a_user_can_filter_threads_by_any_username()
     {
         $this->signIn(create('App\User', ['name' => 'JohnDoe']));
 
@@ -72,5 +72,24 @@ class ReadThreadsTest extends TestCase
         $this->get('threads?by=JohnDoe')
             ->assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
+    }
+
+    /** @test */
+    function a_user_can_filter_threads_by_popularity()
+    {
+        //Give we have three threads
+        $threadWithTwoReplies = create('App\Thread');
+        $threadWithThreeReplies = create('App\Thread');
+        $threadWithNoReplies = $this->thread;
+        
+        //With 2 replies, 3 replies, 0 replies, respectively
+        create('App\Reply',['thread_id' => $threadWithTwoReplies->id], 2);
+        create('App\Reply', ['thread_id' => $threadWithThreeReplies->id], 3);
+        
+        //When I filter all threads by popularity
+        $response = $this->getJson('threads?popular=1')->json();
+
+        //Then they should be returned from most replies to least.
+        $this->assertEquals([3,2,0], array_column($response,'replies_count')); 
     }
 }

@@ -6,10 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
+	use Favoritable;
+
 	protected  $guarded = [];
+
+	/* Global Scopes */
+	protected $with = ['owner', 'favorites'];
 	
+	// ##############################################################
+    // Relations
+    // ##############################################################
 	public function owner()
 	{
 	   return $this->belongsTo(User::class, 'user_id');
 	}
+
+	// ##############################################################
+    // Methods
+    // ##############################################################
 }
