@@ -48,6 +48,11 @@ class ThreadController extends Controller
 
         // $threads = $threads->get();
 
+
+        if(request()->wantsJson()){
+            return $threads;
+        }
+
         return view('threads.index', compact('threads'));
     }
 
@@ -113,6 +118,9 @@ class ThreadController extends Controller
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
         }
+
+        // dd($threads->toSql());
+        
         return $threads->get();
     }
     
