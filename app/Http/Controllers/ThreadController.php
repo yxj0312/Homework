@@ -96,13 +96,13 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show($channelId, Thread $thread)
+    public function show($channel, Thread $thread)
     {
         // return $thread->load('replies');
         // return Thread::withCount('replies')->find($thread->id);
         // return $thread;
         $replies = $thread->replies()->paginate(20);
-        return view('threads.show',compact('channelId','thread','replies'));
+        return view('threads.show',compact('channel','thread','replies'));
     }
 
     /**
@@ -156,8 +156,20 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy($channel, Thread $thread)
     {
-        //
+        // Option 2nd, to prevent delete thread if replies exist.
+        // Option 1 see create_replies_table
+        /* $thread->replies()->delete(); */
+
+        // Option 3rd, overwrite the delete() method.
+        $thread->delete();
+
+        // Option 4nd: Model convention, see Thread.php
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+
+        return redirect('/threads');
     }
 }

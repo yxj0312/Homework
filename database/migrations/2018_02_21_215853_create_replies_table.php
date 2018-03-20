@@ -19,6 +19,9 @@ class CreateRepliesTable extends Migration
             $table->integer('user_id');
             $table->text('body');
             $table->timestamps();
+
+            // One option to prevent delete thread if replies exist.
+            // $table->foreign('thread_id')->onDelete('casade')
         });
     }
 

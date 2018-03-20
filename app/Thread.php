@@ -29,6 +29,11 @@ class Thread extends Model
         // static::addGlobalScope('creator', function ($builder) {
         //     $builder->with('creator');
         // });
+
+        // Option 2nd, to prevent delete thread if replies exist.
+        static::deleting(function ($thread){
+            $thread->replies()->delete();
+        });
     }
 
     // ##############################################################
