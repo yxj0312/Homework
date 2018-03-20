@@ -19,8 +19,8 @@ class CreateThreadsTest extends TestCase
 		$this->get('threads/create')
 			->assertRedirect('login');
 
-	  $this->post('/threads')
-	   	->assertRedirect('login');
+	  	$this->post('/threads')
+	   		->assertRedirect('login');
  
 
 		 /*$this->expectException('Illuminate\Auth\AuthenticationException');
@@ -55,7 +55,7 @@ class CreateThreadsTest extends TestCase
 		 
 		 $this->signIn();
 
-		 //can use raw() to make an array
+		 // Can use raw() to make an array
 		 // $thread = factory('App\Thread')->make();
 
 		 /* Mistake by EP9. should not be create, otherwise it has already existed in DB. 
@@ -98,6 +98,44 @@ class CreateThreadsTest extends TestCase
 		$this->publishThread(['channel_id' => 999])
 			->assertSessionHasErrors('channel_id');
 
+	}
+
+	/** @test */
+	function unauthorized_users_may_not_delete_threads()
+	{
+		$this->withExceptionHandling();
+
+		$thread = create('App\Thread');
+
+		// If u use json request here, it will return a 401. (Not a standard request)
+		$this->delete($thread->path())
+		// Or we can even throw an exception.
+			->assertRedirect('/login');
+
+		$this->signIn();
+
+		// $this->delete($thread->path())->assertRedirect('/login');
+		$this->delete($thread->path())->assertStatus(403);
+	}
+
+	/** @test */
+	function authorized_user_can_delete_threads()
+	{
+		$this->signIn();
+
+		$thread = create('App\Thread', ['user_id' => auth()->id()]);
+
+		$reply = create('App\Reply', ['thread_id' => $thread->id]);
+
+		$response = $this->json('DELETE', $thread->path());
+
+		/**
+		 * 204 means we accepted what u gave us, we have nothing to response with.
+		 */
+		$response->assertStatus(204);
+
+		$this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+		$this->assertDatabaseMissing('replies', ['id' => $reply->id]);
 	}
 
 	public function publishThread($overrides = [])
