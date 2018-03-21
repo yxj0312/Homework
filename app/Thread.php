@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordsActivity;
+    
     protected  $guarded = [];
 
 
@@ -30,7 +32,7 @@ class Thread extends Model
         //     $builder->with('creator');
         // });
 
-        // Option 2nd, to prevent delete thread if replies exist.
+        // Option 2nd, to prevent delete thread if replies exist. 
         static::deleting(function ($thread){
             $thread->replies()->delete();
         });
