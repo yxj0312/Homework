@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use App\Activity;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -39,6 +40,37 @@ class ActivityTest extends TestCase
 
         // One for creating Thread, one for Reply.
         $this->assertEquals(2, Activity::count());
-                
+    }
+
+    /** @test */
+    function it_fetches_a_feed_for_any_user()
+    {
+        // Given we have a thread
+        $this->signIn();
+
+        create('App\Thread', ['user_id'=>auth()->id()], 2);
+
+        // And another thread from a week ago
+        // create('App\Thread', ['user_id' => auth()->id(), 'created_at' => Carbon::now()->subWeek()]);
+        auth()->user()->activity()->first()->update(['created_at' => Carbon::now()->subWeek()]);
+
+        // When we fetch their feed
+        $feed = Activity::feed(auth()->user());
+        
+        // dd($feed->toArray());
+
+        // Then, it should be returned in the proper format.
+        $this->assertTrue($feed->keys()->contains(
+            Carbon::now()->format('Y-m-d')
+        ));
+
+        /* This test didn't pass, because we do have a subject from a test ago,
+        but the date of the activity associated with it is still now.
+        That's because the way we created the trait.
+        That's fine in every situation, otherwise in our test.
+        So we should not create 2 threads with different date, instead, update one activity to a week ago(use above)*/ 
+        $this->assertTrue($feed->keys()->contains(
+            Carbon::now()->subWeek()->format('Y-m-d')
+        ));
     }
 }

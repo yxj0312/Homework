@@ -90,12 +90,8 @@ class ProfilesController extends Controller
         //
     }
 
-    public function getActivity(User $user)
-    {
-        /* The date include the date and time, in which are unique
-        So we pass a closure here to group date. */
-        return  $user->activity()->latest()->with('subject')->take(50)->get()->groupBy(function ($activity) {
-            return $activity->created_at->format('Y-m-d');
-        });
-    }
+    // public function getActivity(User $user)
+    // {
+        
+    // }
 }
