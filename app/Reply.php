@@ -21,6 +21,11 @@ class Reply extends Model
 	   return $this->belongsTo(User::class, 'user_id');
 	}
 
+	public function thread()
+	{
+		return $this->belongsTo(Thread::class);
+	}
+
 	// ##############################################################
     // Methods
     // ##############################################################

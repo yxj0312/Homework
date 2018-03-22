@@ -46,4 +46,9 @@ class User extends Authenticatable
         // latest() will be shown firstly. change the order
         return $this->hasMany(Thread::class)->latest();
     }
+
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }
