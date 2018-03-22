@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Activity;
 
 class ProfilesController extends Controller
 {
@@ -48,7 +49,10 @@ class ProfilesController extends Controller
     {
         return view('profiles.show', [
             'profileUser' => $user,
-            'threads' => $user->threads()->paginate(30)
+            // 'threads' => $user->threads()->paginate(30)
+            // 'activities' => $activities
+            // 'activities' => $this->getActivity($user)
+            'activities' => Activity::feed($user)
         ]);
     }
 
@@ -85,4 +89,9 @@ class ProfilesController extends Controller
     {
         //
     }
+
+    // public function getActivity(User $user)
+    // {
+        
+    // }
 }
