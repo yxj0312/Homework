@@ -20,6 +20,16 @@ trait RecordsActivity
                 $model->recordActivity($event);
             });
         }
+
+        /**
+         * Add new event listner
+         *
+         * @return void
+         */
+
+        static::deleting(function ($model){
+             $model->activity()->delete();
+        });
     }
 
     protected static function getActivityToRecord()

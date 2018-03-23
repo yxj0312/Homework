@@ -34,7 +34,12 @@ class Thread extends Model
 
         // Option 2nd, to prevent delete thread if replies exist. 
         static::deleting(function ($thread){
-            $thread->replies()->delete();
+            // $thread->replies()->delete();
+            // So that, deleting activity will be fired for every single reply.
+            $thread->replies->each->delete();
+            /* $thread->replies->each(function ($reply) {
+                $reply->delete();
+            }); */
         });
     }
 
