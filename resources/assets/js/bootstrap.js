@@ -39,18 +39,15 @@ if (token) {
 }
 
 /**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
+ * Assign window object.
+ * create a new Vue instance, because every vue instance already is a event bus.
  */
+window.events = new Vue(); // vue.$emit / vue.$on to listen a fire event
 
-// import Echo from 'laravel-echo'
-
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     encrypted: true
-// });
+// One more global
+// you call ur flash function:
+window.flash = function(message) {
+    // This will emit an event, and go to Flash.vue component. 
+    // $on listening for that event
+    window.events.$emit('flash', message);
+};
