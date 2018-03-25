@@ -1,4 +1,7 @@
 @component('profiles.activities.activity')
+    @slot('icon')
+        <i class="fa fa-commenting" aria-hidden="true"></i>
+    @endslot
     @slot('heading')
         {{ $profileUser->name }} published <a href="{{ $activity->subject->path() }}">{{ $activity->subject->title }}</a>
     @endslot

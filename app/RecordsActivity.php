@@ -20,6 +20,17 @@ trait RecordsActivity
                 $model->recordActivity($event);
             });
         }
+
+        /**
+         * Add new event listner. 
+         * If threads are deleted, their associated activities will be also deleted.
+         *
+         * @return void
+         */
+
+        static::deleting(function ($model){
+             $model->activity()->delete();
+        });
     }
 
     protected static function getActivityToRecord()

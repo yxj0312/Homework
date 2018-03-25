@@ -12,6 +12,14 @@ class Reply extends Model
 
 	/* Global Scopes */
 	protected $with = ['owner', 'favorites'];
+
+	/**
+	 * Whenever you cast an array oder cast JSON,
+	 * Any custom attributes that you want to append that.
+	 * 
+	 * @var array
+	 */
+	protected $appends = ['favoritesCount', 'isFavorited'];
 	
 	// ##############################################################
     // Relations
@@ -29,4 +37,10 @@ class Reply extends Model
 	// ##############################################################
     // Methods
     // ##############################################################
+
+	public function path()
+	{
+		// We do need a id to hook to, so that we can direct go the favorited reply.
+		return $this->thread->path() . "#reply-{$this->id}";
+	}
 }
