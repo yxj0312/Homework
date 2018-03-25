@@ -1,5 +1,13 @@
 let mix = require('laravel-mix');
 
+// Add the JS part of your libs
+var jslibs = [
+];
+
+// Add the CSS part of your libs
+var csslibs = [
+];
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -12,4 +20,7 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+   .combine(jslibs, './public/js/libs.js')
+   .sass('resources/assets/sass/app.scss', 'public/css')
+   .combine(csslibs, './public/css/libs.css')
+   .sourceMaps();

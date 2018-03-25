@@ -29,4 +29,10 @@ class Reply extends Model
 	// ##############################################################
     // Methods
     // ##############################################################
+
+	public function path()
+	{
+		// We do need a id to hook to, so that we can direct go the favorited reply.
+		return $this->thread->path() . "#reply-{$this->id}";
+	}
 }

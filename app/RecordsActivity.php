@@ -22,7 +22,8 @@ trait RecordsActivity
         }
 
         /**
-         * Add new event listner
+         * Add new event listner. 
+         * If threads are deleted, their associated activities will be also deleted.
          *
          * @return void
          */
