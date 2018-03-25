@@ -27,6 +27,14 @@ class ReplyController extends Controller
       return back()->with('flash', 'Your reply has been left.');
     }
 
+    public function update(Reply $reply)
+    {
+      $this->authorize('update', $reply);
+      // $reply->update(['body' => request('body')]);
+      $reply->update(request(['body']));
+      
+    } 
+
     public function destroy(Reply $reply)
     {
       $this->authorize('update', $reply);
@@ -40,4 +48,5 @@ class ReplyController extends Controller
 
       return back();
     }
+
 }

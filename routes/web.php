@@ -25,6 +25,7 @@ Route::get('threads/{channel}/{thread}','ThreadController@show')->name('threads.
 Route::delete('threads/{channel}/{thread}', 'ThreadController@destroy');
 Route::get('threads/{channel}','ThreadController@index' );
 Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('threads.replies');
+Route::patch('/replies/{reply}', 'ReplyController@update');
 Route::delete('/replies/{reply}','ReplyController@destroy');
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
 
