@@ -12,6 +12,14 @@ class Reply extends Model
 
 	/* Global Scopes */
 	protected $with = ['owner', 'favorites'];
+
+	/**
+	 * Whenever you cast an array oder cast JSON,
+	 * Any custom attributes that you want to append that.
+	 * 
+	 * @var array
+	 */
+	protected $appends = ['favoritesCount', 'isFavorited'];
 	
 	// ##############################################################
     // Relations
