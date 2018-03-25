@@ -5,6 +5,25 @@ use Illuminate\Database\Eloquent\Model;
 
 trait Favoritable
 {
+    protected static function bootFavoritable()
+    {   
+        /**
+         * When you are deleting the associated model(reply, thread),
+         * as part of that, I also want you to delete the favorites.
+         *
+         * @return void
+         */
+        static::deleting(function ($model) {
+            /**
+             * Remeber: we can't do it, cause it is a sql query.
+             * That means, there isn't any favorite instance to delete.
+             */
+            // $model->favorites()->delete();
+            $model->favorites->each->delete();
+
+        });
+    }
+
     // ##############################################################
     // Relations
     // ##############################################################
@@ -17,6 +36,7 @@ trait Favoritable
     {
         return $this->morphMany(Favorite::class, 'favorited');
     }
+
     // ##############################################################
     // Methods
     // ##############################################################
@@ -40,9 +60,19 @@ trait Favoritable
     {
         $attributes = ['user_id' => auth()->id()];
 
-        // Get the reply's favorites, ONLY the one, where ther user_id is the
-        // current users, and delete it.
-        $this->favorites()->where($attributes)->delete();
+        /* Get the reply's favorites, ONLY the one, where ther user_id is the
+        current users, and delete it. */
+        // $this->favorites()->where($attributes)->delete();
+        /* Rather than call a sql query, 
+        instead: get a collection of those models, and then u could do deleteing.
+         so that the deleting event can be picked up and fired. */
+        // $this->favorites()->where($attributes)->get()->each(function($favorite){
+        //     $favorite->delete();
+        // });
+       /*  A little bit clean up here: 
+       We can use a higher order collection, kind of fancy terms or some
+       syntax sugar, that laravle provices */
+        $this->favorites()->where($attributes)->get()->each->delete();
     }
 
     /**

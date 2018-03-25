@@ -25,6 +25,16 @@ trait RecordsActivity
          * Add new event listner. 
          * If threads are deleted, their associated activities will be also deleted.
          *
+         * This will ONLY fire on the model like $favorite->delete(). 
+         * If u have some sql query like unfavorite() method in favoritable,
+         * it won't be toggled.
+         * 
+         * Another bug: if we delete a reply, it will delete the activity of reply model,
+         * but not favorite model.
+         * 
+         * Solution: A reply can be favoritable(trait), we settle up a model event in the favoritable
+         * If the associated model is ever deleted, as part of that relation I also want you to delete 
+         * the favorites for the model
          * @return void
          */
 
