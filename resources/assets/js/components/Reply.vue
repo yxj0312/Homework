@@ -2,17 +2,19 @@
     import Favorite from './Favorite.vue';
 
     export default {
-        props: ['attributes'],
+        props: ['data'],
+
         components: { Favorite },
+        
         data() {
             return {
                 editing: false,
-                body: this.attributes.body
+                body: this.data.body
             };
         },
         methods: {
             update() {
-                axios.patch('/replies/' + this.attributes.id, {
+                axios.patch('/replies/' + this.data.id, {
                     body: this.body
                 });
 
@@ -22,7 +24,7 @@
             },
 
             destroy() {
-                axios.delete('/replies/' + this.attributes.id);
+                axios.delete('/replies/' + this.data.id);
                 
                 $(this.$el).fadeOut(300, ()=>{
                     flash('Your reply has been deleted.')
