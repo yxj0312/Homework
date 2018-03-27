@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<thread-view inline-template>
+<thread-view :initial-replies-count="{{ $thread->replies_count  }}" inline-template>
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -28,8 +28,11 @@
                     </div>
                 </div>
                 <br>
+                {{--  In replies component, the count is changed.
+                We wanna notify the parent, which be thread: we use custom events, same as reply to replies  --}}
+                <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
 
-                <replies :data="{{ $thread->replies }}"></replies>
+                {{--  Still have some comments in thread.reply, which need to review  --}}
                 {{--  @foreach ($replies as $reply)
                     @include('threads.reply')
                 @endforeach
@@ -60,7 +63,7 @@
                             This thread was published {{ $thread->created_at->diffForHumans()}} by
                             <a href="">{{$thread->creator->name}}</a>, and currently 
                             {{--  has {{$thread->replies()->count()}} comments.  --}}
-                            has {{$thread->replies_count}} {{ str_plural('comment',$thread->replies_count)}}.                        
+                            has <span v-text="repliesCount"></span> {{ str_plural('comment',$thread->replies_count)}}.                        
                         </p>
                     </div>
                 </div>

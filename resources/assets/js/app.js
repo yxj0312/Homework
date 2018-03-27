@@ -8,6 +8,13 @@
 window.Vue = require('vue');
 require('./bootstrap');
 
+Vue.prototype.authorize = function (handler) {
+    /* Additional admin privileges. */
+    let user = window.App.user;
+
+    return user ? handler(user) : false;
+};
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

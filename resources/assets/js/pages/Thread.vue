@@ -2,6 +2,15 @@
     import Replies from '../components/Replies.vue';
 
     export default {
-        components: { Replies } 
+        /* This props name can no longer be used in data() */
+        props: ['initialRepliesCount'],
+
+        components: { Replies },
+
+        data() {
+            return {
+                repliesCount: this.initialRepliesCount
+            };
+        } 
     }
 </script>
