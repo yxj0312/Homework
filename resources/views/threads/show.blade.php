@@ -30,7 +30,9 @@
                 <br>
                 {{--  In replies component, the count is changed.
                 We wanna notify the parent, which be thread: we use custom events, same as reply to replies  --}}
-                <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
+                <replies :data="{{ $thread->replies }}" 
+                    @added="repliesCount++"
+                    @removed="repliesCount--"></replies>
 
                 {{--  Still have some comments in thread.reply, which need to review  --}}
                 {{--  @foreach ($replies as $reply)
@@ -39,7 +41,7 @@
 
                 {{ $replies->links() }}  --}}
 
-                @if (auth()->check())
+                {{--  @if (auth()->check())
                     <form action={{ route('threads.replies',['channel'=>$thread->channel->slug,'thread'=>$thread->id])}} method="POST">
                         {{ csrf_field() }}
                         <label for="body">Body:</label>
@@ -50,7 +52,7 @@
                 @else
                     <br>
                     <p class="text-center">Please <a href={{route('login')}}>sign in</a> to participate in this discussion.</p>
-                @endif
+                @endif  --}}
             </div>
 
             <div class="col-md-4">

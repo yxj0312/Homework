@@ -5,24 +5,34 @@
       <reply :data="reply" @deleted="remove(index)"></reply>
       <br>
   </div>
+
+  <new-reply :endpoint="endpoint" @created="add"></new-reply>
 </div>
 </template>
 
 <script>
     import Reply from './Reply.vue';
+    import NewReply from './NewReply.vue'
      
     export default {
         props: ['data'],
 
-        components: { Reply },
+        components: { Reply, NewReply },
 
         data() {
             return {
-                items: this.data
+                items: this.data,
+                endpoint: location.pathname + '/replies'
             }
         },
 
         methods: {
+            add(reply){
+                this.items.push(reply);
+
+                this.$emit('added');
+            },
+
             remove(index) {
                 /* We gonna hook to the collection, and we gonna remove them entirely.Reply
                 Grap one item from that point and remove it from the collection */
