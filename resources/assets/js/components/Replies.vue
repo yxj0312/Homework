@@ -1,18 +1,18 @@
 <template>
-<div>
-  <div  v-for="(reply,index) in items">
-      <!-- Listen to the $emit from child -->
-      <reply :data="reply" @deleted="remove(index)"></reply>
-      <br>
-  </div>
+    <div>
+        <div  v-for="(reply,index) in items" :key="reply.id">
+            <!-- Listen to the $emit from child -->
+            <reply :data="reply" @deleted="remove(index)"></reply>
+            <br>
+        </div>
 
-  <new-reply :endpoint="endpoint" @created="add"></new-reply>
-</div>
+        <new-reply :endpoint="endpoint" @created="add"></new-reply>
+    </div>
 </template>
 
 <script>
     import Reply from './Reply.vue';
-    import NewReply from './NewReply.vue'
+    import NewReply from './NewReply.vue';
      
     export default {
         props: ['data'],

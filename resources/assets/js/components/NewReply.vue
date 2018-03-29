@@ -46,7 +46,7 @@
                     // .then(response => {
                     .then(({data}) => {
                         this.body = '';
-
+                        
                         flash('Your Reply has been posted.');
 
                         // this.$emit('created', response.data);
