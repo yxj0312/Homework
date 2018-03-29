@@ -11,7 +11,7 @@ class Activity extends Model
 
     public function subject()
     {
-        return $this->morphTo();    
+        return $this->morphTo();
     }
 
     public static function feed($user, $take = 50)

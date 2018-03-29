@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
     use RecordsActivity;
-    
-    protected  $guarded = [];
+
+    protected $guarded = [];
 
 
     // ##############################################################
     // Global Query Scopes
     // ##############################################################
 
-    protected $with =['creator', 'channel'];
+    protected $with = ['creator', 'channel'];
 
     //This can be used anywhere.
     // Compared to above, with this we can use i.e. App\Thread::withoutGlobalScopes()->first()
@@ -23,7 +23,7 @@ class Thread extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('replyCount',function($builder){
+        static::addGlobalScope('replyCount', function ($builder) {
             $builder->withCount('replies');
         });
 
@@ -33,7 +33,7 @@ class Thread extends Model
         // });
 
         // Option 2nd, to prevent delete thread if replies exist. 
-        static::deleting(function ($thread){
+        static::deleting(function ($thread) {
             // $thread->replies()->delete();
             // So that, deleting activity will be fired for every single reply.
             $thread->replies->each->delete();
@@ -52,7 +52,7 @@ class Thread extends Model
         /* Eager load: when we catch the replies for a thread
         as part of that process, I want to include the count of the
         favorites relationship */
-       return $this->hasMany(Reply::class);
+        return $this->hasMany(Reply::class);
         /**
          * Anytime I ever fetch a reply, I am gonna need access to the creator.
          * So it will be nice, if we just had a global scope, that said, yep,
@@ -64,12 +64,12 @@ class Thread extends Model
 
     public function creator()
     {
-       return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function channel()
     {
-       return $this->belongsTo(Channel::class);
+        return $this->belongsTo(Channel::class);
     }
 
     // ##############################################################
@@ -79,13 +79,13 @@ class Thread extends Model
     public function path()
     {
       //refactor
-      return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->id}";
     	// return '/threads/' . $this->channel->slug . '/' .  $this->id;   
     }
 
     public function addReply($reply)
     {
-        return $this->replies()->create($reply); 
+        return $this->replies()->create($reply);
     }
 
     // ##############################################################

@@ -10,7 +10,7 @@ class FavoritesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth'); 
+        $this->middleware('auth');
     }
 
     /**
@@ -41,7 +41,7 @@ class FavoritesController extends Controller
      */
     public function store(Request $request, Reply $reply)
     {
-        
+
         $reply->favorite();
 
         return back();

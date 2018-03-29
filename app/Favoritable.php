@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 trait Favoritable
 {
     protected static function bootFavoritable()
-    {   
+    {
         /**
          * When you are deleting the associated model(reply, thread),
          * as part of that, I also want you to delete the favorites.
