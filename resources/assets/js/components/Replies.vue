@@ -21,12 +21,33 @@
 
         data() {
             return {
-                items: this.data,
+                dataSet: false,
+                // items: this.data,
+                items: [],
                 endpoint: location.pathname + '/replies'
             }
         },
 
+        created() {
+            this.fetch();
+        },
+
         methods: {
+            fetch() {
+                axios.get(this.url())
+                    .then(this.refresh);
+            },
+
+            url() {
+                return location.pathname + '/replies';
+            },
+
+            refresh({data}) {
+                // console.log(data);
+                this.dataSet = data;
+                this.items = data.data;
+            },
+
             add(reply){
                 this.items.push(reply);
 

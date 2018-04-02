@@ -30,7 +30,8 @@
                 <br>
                 {{--  In replies component, the count is changed.
                 We wanna notify the parent, which be thread: we use custom events, same as reply to replies  --}}
-                <replies :data="{{ $thread->replies }}" 
+                {{--  <replies :data="{{ $thread->replies }}"   --}}
+                <replies
                     @added="repliesCount++"
                     @removed="repliesCount--"></replies>
 

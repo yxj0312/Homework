@@ -102,8 +102,9 @@ class ThreadController extends Controller
         // return $thread->load('replies');
         // return Thread::withCount('replies')->find($thread->id);
         // return $thread;
-        $replies = $thread->replies()->paginate(20);
-        return view('threads.show', compact('channel', 'thread', 'replies'));
+        // $replies = $thread->replies()->paginate(20);
+        // return view('threads.show', compact('channel', 'thread', 'replies'));
+        return view('threads.show', compact('thread'));
     }
 
     /**
