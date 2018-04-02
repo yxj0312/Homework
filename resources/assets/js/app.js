@@ -8,6 +8,7 @@
 window.Vue = require('vue');
 require('./bootstrap');
 
+/*global Vue*/
 Vue.prototype.authorize = function (handler) {
     /* Additional admin privileges. */
     let user = window.App.user;
@@ -26,6 +27,7 @@ Vue.component('flash', require('./components/Flash.vue'));
 
 Vue.component('thread-view', require('./pages/Thread.vue'));
 
+/* eslint-disable no-unused-vars*/
 const app = new Vue({
     el: '#app'
 });

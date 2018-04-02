@@ -12,8 +12,8 @@ class ThreadController extends Controller
     public function __construct()
     {
        // $this->middleware('auth')->only(['create','store']);
-       $this->middleware('auth')->except(['index','show']);
-       
+        $this->middleware('auth')->except(['index', 'show']);
+
     }
 
 
@@ -49,7 +49,7 @@ class ThreadController extends Controller
         // $threads = $threads->get();
 
 
-        if(request()->wantsJson()){
+        if (request()->wantsJson()) {
             return $threads;
         }
 
@@ -87,7 +87,7 @@ class ThreadController extends Controller
             'body' => request('body')
         ]);
 
-        return redirect(route('threads.show',['channel'=>$thread->channel->slug,'thread'  => $thread->id]))
+        return redirect(route('threads.show', ['channel' => $thread->channel->slug, 'thread' => $thread->id]))
             ->with('flash', 'Your thread has been published!');
     }
 
@@ -102,8 +102,9 @@ class ThreadController extends Controller
         // return $thread->load('replies');
         // return Thread::withCount('replies')->find($thread->id);
         // return $thread;
-        $replies = $thread->replies()->paginate(20);
-        return view('threads.show',compact('channel','thread','replies'));
+        // $replies = $thread->replies()->paginate(20);
+        // return view('threads.show', compact('channel', 'thread', 'replies'));
+        return view('threads.show', compact('thread'));
     }
 
     /**
@@ -124,10 +125,10 @@ class ThreadController extends Controller
         }
 
         // dd($threads->toSql());
-        
+
         return $threads->get();
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *

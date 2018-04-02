@@ -16,7 +16,7 @@ trait RecordsActivity
             /* static::created(function ($thread) {
                 $thread->recordActivity('created');
             }); */
-            static::$event(function ($model) use($event) {
+            static::$event(function ($model) use ($event) {
                 $model->recordActivity($event);
             });
         }
@@ -38,15 +38,15 @@ trait RecordsActivity
          * @return void
          */
 
-        static::deleting(function ($model){
-             $model->activity()->delete();
+        static::deleting(function ($model) {
+            $model->activity()->delete();
         });
     }
 
     protected static function getActivityToRecord()
     {
         // return ['created', 'deleted']; Or u can set a perporty and return them.
-        
+
         return ['created'];
     }
 
@@ -60,7 +60,7 @@ trait RecordsActivity
         // Activity::create([
         //     'user_id' => auth()->id(),
             // 1st Refactor: 'type' =>'created_thread' ,
-            /**getShortName example App\\Foo\\Thread -> Thread */
+        /**getShortName example App\\Foo\\Thread -> Thread */
             // 2nd Refactor:  'type' => 'created_' . strtolower((new \ReflectionClass($thread))->getShortName()),
             // 3rd Refactor'type' => $event . '_' . strtolower((new \ReflectionClass($this))->getShortName()),
         //     'type' => $this->getActivityType($event),
@@ -83,6 +83,6 @@ trait RecordsActivity
 
         // return $event . '_' . $type;
         return "{$event}_{$type}";
-        
+
     }
 }
