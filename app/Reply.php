@@ -20,6 +20,25 @@ class Reply extends Model
 	 * @var array
 	 */
 	protected $appends = ['favoritesCount', 'isFavorited'];
+
+
+	/**
+	 * Benefit of this approach, compare to increment in thread.php:
+	 * If use create('App\Reply'), it will automatically add replies_count to related thread.
+	 * @return void
+	 */
+	protected static function boot()
+	{
+		parent::boot();
+
+		static::created(function ($reply) {
+			$reply->thread->increment('replies_count');
+		});
+
+		static::deleted(function ($reply) {
+			$reply->thread->decrement('replies_count');
+		});
+	}
 	
 	// ##############################################################
     // Relations
