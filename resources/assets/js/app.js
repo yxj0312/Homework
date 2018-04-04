@@ -24,8 +24,11 @@ Vue.prototype.authorize = function (handler) {
  */
 
 Vue.component('flash', require('./components/Flash.vue'));
+Vue.component('paginator', require('./components/Paginator.vue'));
 
 Vue.component('thread-view', require('./pages/Thread.vue'));
+
+
 
 /* eslint-disable no-unused-vars*/
 const app = new Vue({

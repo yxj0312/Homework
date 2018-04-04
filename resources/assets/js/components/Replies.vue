@@ -6,25 +6,34 @@
             <br>
         </div>
 
-        <new-reply :endpoint="endpoint" @created="add"></new-reply>
+        <paginator :dataSet="dataSet" @changed="fetch"></paginator>
+
+        <!-- Move endpoint to newReply -->
+        <!-- <new-reply :endpoint="endpoint" @created="add"></new-reply> -->
+
+        <new-reply @created="add"></new-reply>
+        
     </div>
 </template>
 
 <script>
     import Reply from './Reply.vue';
     import NewReply from './NewReply.vue';
+    import collection from '../mixins/collection'
      
     export default {
-        props: ['data'],
-
+        // props: ['data'],
         components: { Reply, NewReply },
+
+        mixins: [collection],
 
         data() {
             return {
                 dataSet: false,
                 // items: this.data,
-                items: [],
-                endpoint: location.pathname + '/replies'
+                /* items are now store in the mixins, and this two data() object will be merged by Vue. we can get rid of that. */
+                // items: [],
+                // endpoint: location.pathname + '/replies'
             }
         },
 
@@ -33,36 +42,32 @@
         },
 
         methods: {
-            fetch() {
-                axios.get(this.url())
+            fetch(page) {
+                axios.get(this.url(page))
                     .then(this.refresh);
             },
 
-            url() {
-                return location.pathname + '/replies';
+            // Can not direct set default 1, because when u directly to url address like ?page=2. it will still go
+            // to page 1
+            // url(page = 1) {
+            url(page) {
+                if(!page) {
+                    let query = location.search.match(/page=(\d+)/);
+
+                    page = query ? query[1] : 1;
+                }
+                // return location.pathname + '/replies?page=' + page;
+
+                return `${location.pathname}/replies?page=${page}`;
             },
 
             refresh({data}) {
                 // console.log(data);
                 this.dataSet = data;
                 this.items = data.data;
+
+                window.scrollTo(0, 0);
             },
-
-            add(reply){
-                this.items.push(reply);
-
-                this.$emit('added');
-            },
-
-            remove(index) {
-                /* We gonna hook to the collection, and we gonna remove them entirely.Reply
-                Grap one item from that point and remove it from the collection */
-                this.items.splice(index, 1);
-
-                this.$emit('removed');
-
-                flash('Reply was deleted!');
-            }
         }
     }
 </script>

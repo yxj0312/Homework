@@ -23,9 +23,10 @@ class Thread extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('replyCount', function ($builder) {
-            $builder->withCount('replies');
-        });
+        /* Add a new table column: replies_count to thread table */
+        // static::addGlobalScope('replyCount', function ($builder) {
+        //     $builder->withCount('replies');
+        // });
 
 
         // static::addGlobalScope('creator', function ($builder) {
@@ -85,6 +86,12 @@ class Thread extends Model
 
     public function addReply($reply)
     {
+        // $reply = $this->replies()->create($reply);
+
+        // $this->increment('replies_count');
+        
+        // return $reply; 
+
         return $this->replies()->create($reply);
     }
 
