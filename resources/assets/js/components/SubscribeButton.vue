@@ -1,7 +1,7 @@
 <template>
     <!-- refactor, cause written in computed -->
     <!-- <button class="btn" :class="active ? 'btn-primary' : 'btn-default'" @click = "subscribe">Subscribe</button> -->
-    <button :class="classes" @click = "subscribe">Subscribe</button>
+    <button :class="classes" @click = "toggleSubscribe" v-text="toggle"></button>
 </template>
 
 <script>
@@ -11,33 +11,40 @@
         // components: {},
 
         // Git rid of this session entirely, cause we set props above
-        /* data() {
+        data() {
             return {
                 // Toogle this in Chrome console: $vm0.active = false;
-                active: false
-            }
-        }, */
-
-        computed: {
-            classes() {
-                return ['btn', this.active ? 'btn-primary' : 'btn-default'];
+                mutableActive: this.active,
+                
             }
         },
 
+        computed: {
+            classes() {
+                return ['btn', this.mutableActive ? 'btn-primary' : 'btn-default'];
+            },
+
+            toggle() {
+                return this.mutableActive ? 'UnSubscribe' : 'Subscribe'
+            }
+
+        },
+
         methods: {
-            subscribe() {
+            toggleSubscribe() {
                 /* let requestType = this.active ? 'delete' : 'post';
 
                 axios[requestType](location.pathname + '/subscriptions'); */
 
                 axios[
-                    (this.active ? 'delete' : 'post')
+                    (this.mutableActive ? 'delete' : 'post')
                     ](location.pathname + '/subscriptions');
                 
-
-                this.active = !this.active;
-                
+                this.mutableActive ? this.mutableActive = false : this.mutableActive = true
+                // this.active = !this.active;              
             }
+
+
         }
     }
 </script>
