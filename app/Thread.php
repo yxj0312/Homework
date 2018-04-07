@@ -17,6 +17,8 @@ class Thread extends Model
 
     protected $with = ['creator', 'channel'];
 
+    protected $appends =['isSubscribedTo'];
+
     //This can be used anywhere.
     // Compared to above, with this we can use i.e. App\Thread::withoutGlobalScopes()->first()
     protected static function boot()
@@ -124,5 +126,15 @@ class Thread extends Model
     public function scopeFilter($query, $filters)
     {
         return $filters->apply($query);
+    }
+
+    // ##############################################################
+    // Accessor
+    // ##############################################################
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()
+            ->where('user_id',auth()->id())
+            ->exists();
     }
 }
