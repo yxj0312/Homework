@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+// use App\Notifications\ThreadWasUpdated;
 
 class Thread extends Model
 {
@@ -16,6 +17,8 @@ class Thread extends Model
     // ##############################################################
 
     protected $with = ['creator', 'channel'];
+
+    protected $appends =['isSubscribedTo'];
 
     //This can be used anywhere.
     // Compared to above, with this we can use i.e. App\Thread::withoutGlobalScopes()->first()
@@ -73,6 +76,11 @@ class Thread extends Model
         return $this->belongsTo(Channel::class);
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
+    }
+
     // ##############################################################
     // Methods
     // ##############################################################
@@ -92,7 +100,43 @@ class Thread extends Model
         
         // return $reply; 
 
-        return $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+
+        // Prepare notifications for all subscribers.
+
+        // Refactor als collection below
+        /* foreach ($this->subscriptions as $subsciption) {
+            if($subsciption->user_id != $reply->user_id) {
+                $subsciption->user->notify(new ThreadWasUpdated($this, $reply));
+            } 
+        } */
+
+        $this->subscriptions
+            ->filter(function ($sub) use ($reply) {
+                return $sub->user_id != $reply->user_id;
+        })
+        // ->each(function ($sub) use($reply) {
+        //     $sub->user->notify(new ThreadWasUpdated($this, $reply));
+        // });
+        ->each->notify($reply);
+
+        return $reply;
+    }
+
+    public function subscribe($userId = null)
+    {
+        $this->subscriptions()->create([
+            'user_id' => $userId ? : auth()->id()
+        ]);
+
+        return $this;
+    }
+
+    public function unsubscribe($userId = null)
+    {
+        $this->subscriptions()
+            ->where('user_id', $userId ? : auth()->id())
+            ->delete();
     }
 
     // ##############################################################
@@ -107,4 +151,13 @@ class Thread extends Model
         return $filters->apply($query);
     }
 
+    // ##############################################################
+    // Accessor
+    // ##############################################################
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()
+            ->where('user_id',auth()->id())
+            ->exists();
+    }
 }
