@@ -15,7 +15,6 @@
             return {
                 // Toogle this in Chrome console: $vm0.active = false;
                 mutableActive: this.active,
-                
             }
         },
 
@@ -27,7 +26,6 @@
             toggle() {
                 return this.mutableActive ? 'UnSubscribe' : 'Subscribe'
             }
-
         },
 
         methods: {
