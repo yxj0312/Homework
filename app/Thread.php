@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 // use App\Notifications\ThreadWasUpdated;
+use App\Events\ThreadHasNewReply;
 
 class Thread extends Model
 {
@@ -110,17 +111,38 @@ class Thread extends Model
                 $subsciption->user->notify(new ThreadWasUpdated($this, $reply));
             } 
         } */
+        
+        /** 
+         * This ist the simplest approach of refactor
+         *  Better than make an event at this moment.
+         */
+        $this->notifySubscribers($reply);
 
-        $this->subscriptions
-            ->filter(function ($sub) use ($reply) {
-                return $sub->user_id != $reply->user_id;
-        })
-        // ->each(function ($sub) use($reply) {
-        //     $sub->user->notify(new ThreadWasUpdated($this, $reply));
-        // });
-        ->each->notify($reply);
+        /** Only refator codes to event, if u feel codes getting bigger */
+        // event(new ThreadHasNewReply($this, $reply));
+
+        //Move this to event listener.
+        // $this->subscriptions
+        // /* Refactor 2. */
+        //     ->where('user_id', '!=', $reply->user_id)
+        // //     ->filter(function ($sub) use ($reply) {
+        // //         return $sub->user_id != $reply->user_id;
+        // // })
+        // /* Refactor 1. */
+        // // ->each(function ($sub) use($reply) {
+        // //     $sub->user->notify(new ThreadWasUpdated($this, $reply));
+        // // });
+        // ->each->notify($reply);
 
         return $reply;
+    }
+
+    public function notifySubscribers($reply)
+    {
+        $this->subscriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each
+            ->notify($reply);
     }
 
     public function subscribe($userId = null)
