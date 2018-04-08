@@ -161,6 +161,25 @@ class Thread extends Model
             ->delete();
     }
 
+    // public function hasUpdatesFor($user = null)
+    public function hasUpdatesFor($user)
+    {
+        // $user = $user ?: auth()->user();
+
+        // Look in the cache for the proper key (maybe return a carbon instance).
+
+        // compare that carbon instance (reflect to the last time user visited page) with 
+        // the $thread->updated_at
+
+        // users.50.visits.1, unique key, that will be equal to a timestamp.
+        // $key = sprintf("users.%s.visits.%s", auth()->id(), $this->id);
+
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
+
+    }
+
     // ##############################################################
     // Query Scopes
     // ##############################################################
