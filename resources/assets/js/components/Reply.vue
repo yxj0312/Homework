@@ -65,7 +65,7 @@
 
             canUpdate() {
                 /* put an authorize method in _bootstrap.js */
-                return this.authorize(user => this.data.user_id === user.id);   
+                return this.authorize(user => this.data.user_id ===  user.id);   
                 /* As admin situation, you have to update everything, no good */
                 // return this.data.user_id == window.App.user.id;
             }
@@ -73,9 +73,13 @@
 
         methods: {
             update() {
-                axios.patch('/replies/' + this.data.id, {
-                    body: this.body
-                });
+                axios.patch(
+                    '/replies/' + this.data.id, {
+                        body: this.body
+                    })
+                    .catch(error => {
+                        flash(error.response.data, 'danger');
+                    });
 
                 this.editing = false;
 

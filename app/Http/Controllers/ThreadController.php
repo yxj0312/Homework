@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Filters\ThreadFilters;
+use App\Inspections\Spam;
 use App\Channel;
 use App\Thread;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ThreadController extends Controller
 {
@@ -72,13 +74,15 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Spam $spam)
     {
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
             'channel_id' => 'required|exists:channels,id'
         ]);
+
+        $spam->detect(request('body'));
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
@@ -104,6 +108,19 @@ class ThreadController extends Controller
         // return $thread;
         // $replies = $thread->replies()->paginate(20);
         // return view('threads.show', compact('channel', 'thread', 'replies'));
+
+        // Code duplicated, can be stored as const/method in user class or thread class.
+        if (auth()->check()) {
+            auth()->user()->read($thread);
+        }
+       /*  // Record that the user visited this page
+        $key = sprintf("users.%s.visits.%s", auth()->id(), $thread->id);
+
+        // Record a timestamp, when they did so. Make it equal to a current time.
+        cache()->forever($key, Carbon::now()); */
+
+        // Another aproach: create a visit table, and fetch from i.e. $user->visits()->create()
+
         return view('threads.show', compact('thread'));
     }
 
