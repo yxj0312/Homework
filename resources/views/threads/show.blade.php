@@ -68,10 +68,11 @@
                             {{--  has {{$thread->replies()->count()}} comments.  --}}
                             has <span v-text="repliesCount"></span> {{ str_plural('comment',$thread->replies_count)}}.                        
                         </p>
-
-                        <p>
-                            <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
-                        </p>
+                        @if (auth::check())
+                            <p>
+                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                            </p>
+                        @endif
                     </div>
                 </div>
             </div>
