@@ -38,7 +38,8 @@
                     (this.mutableActive ? 'delete' : 'post')
                     ](location.pathname + '/subscriptions');
                 
-                this.mutableActive ? this.mutableActive = false : this.mutableActive = true
+                this.mutableActive = !this.mutableActive;
+                // this.mutableActive ? this.mutableActive = false : this.mutableActive = true
                 // this.active = !this.active;              
             }
 
