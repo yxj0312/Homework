@@ -1,6 +1,12 @@
 <template>
-    <div class="alert alert-success  alert-flash fade show" role="alert" v-show="show">
-        <strong>Success!</strong> {{ body }}.
+    <!-- <div class="alert alert-success  alert-flash fade show" role="alert" v-show="show"> -->
+    <div class="alert alert-flash fade show" 
+        :class = "'alert-'+level" 
+        role="alert" 
+        v-show="show" 
+        v-text="body">
+        
+        <!-- <strong>Success!</strong> {{ body }}. -->
     </div>
 </template>
 
@@ -11,6 +17,7 @@
        data() {
            return {
                body: '',
+               level:'success',
                show: false
            }
        },
@@ -34,13 +41,21 @@
             * Usage: maybe a minute later, some javascript toggler changed, and it fires this 'flash' event,
             * So pick up this, and call flash which body with the new message, and view dynamicly rerenders. 
             */
-           window.events.$on('flash', message=>this.flash(message));
+           window.events.$on(
+               'flash', 
+            //    message=>this.flash(message));
+            data => this.flash(data)) ;
            
        },
 
        methods: {
-           flash(message) {
-               this.body = message;
+        //    flash(message) {
+           flash(data) {
+            //    this.body = message;
+               this.body = data.message;
+
+               this.level = data.level;
+            
                this.show = true;
 
                this.hide();

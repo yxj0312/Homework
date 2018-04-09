@@ -27,29 +27,46 @@ class ReplyController extends Controller
     //   'body' => 'required'
     // ]);
     // $spam->detect(request('body'));
+    try {
+      $this->validateReply();
 
-    $this->validateReply();
+      $reply = $thread->addReply([
+        'body' => request('body'),
+        'user_id' => auth()->id()
+      ]);
+    } catch (\Exception $e) {
+      return response(
+        'Sorry, your reply could not be saved at this time.',
+        422
+      );
+    }
 
-    $reply = $thread->addReply([
-      'body' => request('body'),
-      'user_id' => auth()->id()
-    ]);
-
-    if (request()->expectsJson()) {
+    /* if (request()->expectsJson()) {
       return $reply->load('owner');
     }
 
-    return back()->with('flash', 'Your reply has been left.');
+    return back()->with('flash', 'Your reply has been left.'); */
+
+    return $reply->load('owner');
   }
 
   public function update(Reply $reply)
   {
     $this->authorize('update', $reply);
 
-    $this->validateReply();
-    
+    try {
+
+      $this->validateReply();
+
       // $reply->update(['body' => request('body')]);
-    $reply->update(request(['body']));
+      $reply->update(request(['body']));
+    } catch (\Exception $e) {
+      return response(
+        'Sorry, your reply could not be saved at this time.',
+        422
+      );
+    }
+
 
       /* Refactoring from Visual Studio Code for PHP Developers: Ep 16 - PHP Full Workflow Review
       Feature of Laravel 5.5 */      
