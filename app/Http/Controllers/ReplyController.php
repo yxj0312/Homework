@@ -7,6 +7,7 @@ use App\Thread;
 use App\Reply;
 use App\Inspections\Spam;
 use Auth;
+use App\Rules\SpamFree;
 
 class ReplyController extends Controller
 {
@@ -28,7 +29,11 @@ class ReplyController extends Controller
     // ]);
     // $spam->detect(request('body'));
     try {
-      $this->validateReply();
+      // $this->validateReply();
+      // This is for laravel 5.4
+      // $this->validate(request(), ['body' => ['required', new SpamFree()]]);
+      // This is for 5.5
+      request()->validate(['body' => ['required', new SpamFree()]]);
 
       $reply = $thread->addReply([
         'body' => request('body'),
@@ -55,8 +60,8 @@ class ReplyController extends Controller
     $this->authorize('update', $reply);
 
     try {
-
-      $this->validateReply();
+      // $this->validateReply();
+      request()->validate(['body' => ['required', new SpamFree()]]);
 
       // $reply->update(['body' => request('body')]);
       $reply->update(request(['body']));
@@ -95,10 +100,10 @@ class ReplyController extends Controller
   /**
    * Validate the incoming reply.
    */
-  protected function validateReply()
-  {
-    $this->validate(request(), ['body' => 'required']);
-    resolve(Spam::class)->detect(request('body'));
-  }
+  // protected function validateReply()
+  // {
+  //   $this->validate(request(), ['body' => ['required', new SpamFree()]]);
+  //   // resolve(Spam::class)->detect(request('body'));
+  // }
 
 }
