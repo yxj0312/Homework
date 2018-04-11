@@ -8,6 +8,7 @@ use App\Reply;
 use App\Inspections\Spam;
 use Auth;
 use App\Rules\SpamFree;
+use Illuminate\Support\Facades\Gate; 
 
 class ReplyController extends Controller
 {
@@ -28,11 +29,19 @@ class ReplyController extends Controller
     //   'body' => 'required'
     // ]);
     // $spam->detect(request('body'));
+    if (Gate::denies('create', new Reply)) {
+      return response(
+        'You are posting too frequently. Please take a break. :)',
+        422
+      );
+    }
+
     try {
-      // $this->validateReply();
-      // This is for laravel 5.4
-      // $this->validate(request(), ['body' => ['required', new SpamFree()]]);
-      // This is for 5.5
+      // $this->authorize('create', new Reply);
+     /*  $this->validateReply();
+      This is for laravel 5.4
+      $this->validate(request(), ['body' => ['required', new SpamFree()]]);
+      This is for 5.5 */
       request()->validate(['body' => ['required', new SpamFree()]]);
 
       $reply = $thread->addReply([

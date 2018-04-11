@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 class Reply extends Model
 {
 	use Favoritable, RecordsActivity;
@@ -61,5 +61,11 @@ class Reply extends Model
 	{
 		// We do need a id to hook to, so that we can direct go the favorited reply.
 		return $this->thread->path() . "#reply-{$this->id}";
+	}
+
+	public function wasJustPublished()
+	{
+		// gt : greater than
+		return $this->created_at->gt(Carbon::now()->subMinute());
 	}
 }
