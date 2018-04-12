@@ -8,7 +8,8 @@ use App\Reply;
 use App\Inspections\Spam;
 use Auth;
 use App\Rules\SpamFree;
-use Illuminate\Support\Facades\Gate; 
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\CreatePostRequest; 
 
 class ReplyController extends Controller
 {
@@ -23,37 +24,40 @@ class ReplyController extends Controller
   }
 
   // public function store($channelId, Thread $thread, Spam $spam)
-  public function store($channelId, Thread $thread)
+  public function store($channelId, Thread $thread, CreatePostRequest $form)
   {
     // $this->validate(request(), [
     //   'body' => 'required'
     // ]);
     // $spam->detect(request('body'));
-    if (Gate::denies('create', new Reply)) {
-      return response(
-        'You are posting too frequently. Please take a break. :)',
-        422
-      );
-    }
 
-    try {
+    // if (Gate::denies('create', new Reply)) {
+    //   return response(
+    //     'You are posting too frequently. Please take a break. :)',
+    //     422
+    //   );
+    // }
+
+    // try {
       // $this->authorize('create', new Reply);
      /*  $this->validateReply();
       This is for laravel 5.4
       $this->validate(request(), ['body' => ['required', new SpamFree()]]);
       This is for 5.5 */
-      request()->validate(['body' => ['required', new SpamFree()]]);
+      /**Move to CreatePostRequest */
+      // request()->validate(['body' => ['required', new SpamFree()]]);
 
-      $reply = $thread->addReply([
-        'body' => request('body'),
-        'user_id' => auth()->id()
-      ]);
-    } catch (\Exception $e) {
-      return response(
-        'Sorry, your reply could not be saved at this time.',
-        422
-      );
-    }
+    // return $form->persist($thread);
+    return $reply = $thread->addReply([
+      'body' => request('body'),
+      'user_id' => auth()->id()
+    ])->load('owner');
+    // } catch (\Exception $e) {
+    //   return response(
+    //     'Sorry, your reply could not be saved at this time.',
+    //     422
+    //   );
+    // }
 
     /* if (request()->expectsJson()) {
       return $reply->load('owner');
@@ -61,7 +65,7 @@ class ReplyController extends Controller
 
     return back()->with('flash', 'Your reply has been left.'); */
 
-    return $reply->load('owner');
+    // return $reply->load('owner');
   }
 
   public function update(Reply $reply)
