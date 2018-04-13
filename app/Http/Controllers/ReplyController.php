@@ -50,28 +50,12 @@ class ReplyController extends Controller
       // request()->validate(['body' => ['required', new SpamFree()]]);
 
     // return $form->persist($thread);
+    
     $reply = $thread->addReply([
       'body' => request('body'),
       'user_id' => auth()->id()
-    ]);
-    
-    // Inspect the body of the reply for username mentions
-    // We need some regular expensions: goto https://regexr.com/
-    // Compare rege with body, and save to $matches
-    preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
+    ])->load('owner');
 
-    $names = $matches[1];
-
-    // And then for each mentioned user, notify them
-    foreach ($names as $name) {
-        $user = User::whereName($name)->first();
-
-        if($user) {
-          $user->notify(new YouWereMentioned($reply));
-        }
-    }
-
-    return $reply->load('owner');
     // } catch (\Exception $e) {
     //   return response(
     //     'Sorry, your reply could not be saved at this time.',
