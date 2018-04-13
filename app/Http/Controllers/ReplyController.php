@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
+use App\User; 
 use App\Inspections\Spam;
 use Auth;
 use App\Rules\SpamFree;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Requests\CreatePostRequest; 
+use App\Http\Requests\CreatePostRequest;
+use App\Notifications\YouWereMentioned;
 
 class ReplyController extends Controller
 {
@@ -48,10 +50,28 @@ class ReplyController extends Controller
       // request()->validate(['body' => ['required', new SpamFree()]]);
 
     // return $form->persist($thread);
-    return $reply = $thread->addReply([
+    $reply = $thread->addReply([
       'body' => request('body'),
       'user_id' => auth()->id()
-    ])->load('owner');
+    ]);
+    
+    // Inspect the body of the reply for username mentions
+    // We need some regular expensions: goto https://regexr.com/
+    // Compare rege with body, and save to $matches
+    preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
+
+    $names = $matches[1];
+
+    // And then for each mentioned user, notify them
+    foreach ($names as $name) {
+        $user = User::whereName($name)->first();
+
+        if($user) {
+          $user->notify(new YouWereMentioned($reply));
+        }
+    }
+
+    return $reply->load('owner');
     // } catch (\Exception $e) {
     //   return response(
     //     'Sorry, your reply could not be saved at this time.',
