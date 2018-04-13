@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
+use App\User; 
 use App\Inspections\Spam;
 use Auth;
+use App\Rules\SpamFree;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\CreatePostRequest;
+use App\Notifications\YouWereMentioned;
 
 class ReplyController extends Controller
 {
@@ -21,25 +26,42 @@ class ReplyController extends Controller
   }
 
   // public function store($channelId, Thread $thread, Spam $spam)
-  public function store($channelId, Thread $thread)
+  public function store($channelId, Thread $thread, CreatePostRequest $form)
   {
     // $this->validate(request(), [
     //   'body' => 'required'
     // ]);
     // $spam->detect(request('body'));
-    try {
-      $this->validateReply();
 
-      $reply = $thread->addReply([
-        'body' => request('body'),
-        'user_id' => auth()->id()
-      ]);
-    } catch (\Exception $e) {
-      return response(
-        'Sorry, your reply could not be saved at this time.',
-        422
-      );
-    }
+    // if (Gate::denies('create', new Reply)) {
+    //   return response(
+    //     'You are posting too frequently. Please take a break. :)',
+    //     422
+    //   );
+    // }
+
+    // try {
+      // $this->authorize('create', new Reply);
+     /*  $this->validateReply();
+      This is for laravel 5.4
+      $this->validate(request(), ['body' => ['required', new SpamFree()]]);
+      This is for 5.5 */
+      /**Move to CreatePostRequest */
+      // request()->validate(['body' => ['required', new SpamFree()]]);
+
+    // return $form->persist($thread);
+    
+    $reply = $thread->addReply([
+      'body' => request('body'),
+      'user_id' => auth()->id()
+    ])->load('owner');
+
+    // } catch (\Exception $e) {
+    //   return response(
+    //     'Sorry, your reply could not be saved at this time.',
+    //     422
+    //   );
+    // }
 
     /* if (request()->expectsJson()) {
       return $reply->load('owner');
@@ -47,7 +69,7 @@ class ReplyController extends Controller
 
     return back()->with('flash', 'Your reply has been left.'); */
 
-    return $reply->load('owner');
+    // return $reply->load('owner');
   }
 
   public function update(Reply $reply)
@@ -55,8 +77,8 @@ class ReplyController extends Controller
     $this->authorize('update', $reply);
 
     try {
-
-      $this->validateReply();
+      // $this->validateReply();
+      request()->validate(['body' => ['required', new SpamFree()]]);
 
       // $reply->update(['body' => request('body')]);
       $reply->update(request(['body']));
@@ -95,10 +117,10 @@ class ReplyController extends Controller
   /**
    * Validate the incoming reply.
    */
-  protected function validateReply()
-  {
-    $this->validate(request(), ['body' => 'required']);
-    resolve(Spam::class)->detect(request('body'));
-  }
+  // protected function validateReply()
+  // {
+  //   $this->validate(request(), ['body' => ['required', new SpamFree()]]);
+  //   // resolve(Spam::class)->detect(request('body'));
+  // }
 
 }

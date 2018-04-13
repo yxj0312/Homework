@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 // use App\Notifications\ThreadWasUpdated;
 use App\Events\ThreadHasNewReply;
+use App\Events\ThreadReceiveNewReply;
 
 class Thread extends Model
 {
@@ -37,7 +38,7 @@ class Thread extends Model
         //     $builder->with('creator');
         // });
 
-        // Option 2nd, to prevent delete thread if replies exist. 
+        // Option 2nd, to prevent delete thread if replies exist.
         static::deleting(function ($thread) {
             // $thread->replies()->delete();
             // So that, deleting activity will be fired for every single reply.
@@ -88,9 +89,9 @@ class Thread extends Model
 
     public function path()
     {
-      //refactor
+        //refactor
         return "/threads/{$this->channel->slug}/{$this->id}";
-    	// return '/threads/' . $this->channel->slug . '/' .  $this->id;   
+        // return '/threads/' . $this->channel->slug . '/' .  $this->id;
     }
 
     public function addReply($reply)
@@ -99,24 +100,27 @@ class Thread extends Model
 
         // $this->increment('replies_count');
         
-        // return $reply; 
+        // return $reply;
 
         $reply = $this->replies()->create($reply);
 
-        // Prepare notifications for all subscribers.
+        /* Prepare notifications for all subscribers.
 
-        // Refactor als collection below
-        /* foreach ($this->subscriptions as $subsciption) {
-            if($subsciption->user_id != $reply->user_id) {
-                $subsciption->user->notify(new ThreadWasUpdated($this, $reply));
-            } 
-        } */
+        Refactor als collection below */
+        // foreach ($this->subscriptions as $subsciption) {
+        //     if($subsciption->user_id != $reply->user_id) {
+        //         $subsciption->user->notify(new ThreadWasUpdated($this, $reply));
+        //     }
+        // }
         
-        /** 
+        event(new ThreadReceiveNewReply($reply));
+
+        /**
          * This ist the simplest approach of refactor
-         *  Better than make an event at this moment.
+         * Better than make an event at this moment. Ep 46
+         * Refactor to aboved event at Ep 57.
          */
-        $this->notifySubscribers($reply);
+        // $this->notifySubscribers($reply);
 
         /** Only refator codes to event, if u feel codes getting bigger */
         // event(new ThreadHasNewReply($this, $reply));
@@ -137,13 +141,17 @@ class Thread extends Model
         return $reply;
     }
 
-    public function notifySubscribers($reply)
-    {
-        $this->subscriptions
-            ->where('user_id', '!=', $reply->user_id)
-            ->each
-            ->notify($reply);
-    }
+    /**
+     * Refactor to listener at Ep 57
+     *
+     */
+    // public function notifySubscribers($reply)
+    // {
+    //     $this->subscriptions
+    //         ->where('user_id', '!=', $reply->user_id)
+    //         ->each
+    //         ->notify($reply);
+    // }
 
     public function subscribe($userId = null)
     {
@@ -168,7 +176,7 @@ class Thread extends Model
 
         // Look in the cache for the proper key (maybe return a carbon instance).
 
-        // compare that carbon instance (reflect to the last time user visited page) with 
+        // compare that carbon instance (reflect to the last time user visited page) with
         // the $thread->updated_at
 
         // users.50.visits.1, unique key, that will be equal to a timestamp.
@@ -177,7 +185,6 @@ class Thread extends Model
         $key = $user->visitedThreadCacheKey($this);
 
         return $this->updated_at > cache($key);
-
     }
 
     // ##############################################################
@@ -198,7 +205,7 @@ class Thread extends Model
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()
-            ->where('user_id',auth()->id())
+            ->where('user_id', auth()->id())
             ->exists();
     }
 }
