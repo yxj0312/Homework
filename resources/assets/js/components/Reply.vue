@@ -7,7 +7,8 @@
     
                 <div class="flex">
     
-                    <a :href="'/profiles/'+data.owner.name" v-text="data.owner.name">
+                    <a :href="'/profiles/'+data.owner.name" 
+                        v-text="data.owner.name">
     
                     </a> said <span v-text="ago"></span>
     
