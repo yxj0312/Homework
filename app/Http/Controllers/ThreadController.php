@@ -12,6 +12,9 @@ use App\Rules\SpamFree;
 
 class ThreadController extends Controller
 {
+    /**
+     * Create a new ThreadController instance. 
+     */
     public function __construct()
     {
        // $this->middleware('auth')->only(['create','store']);
@@ -77,13 +80,13 @@ class ThreadController extends Controller
      */
     public function store(Request $request, Spam $spam)
     {
-        $this->validate($request, [
+        $request->validate([
             'title' => ['required', new SpamFree()],
             'body' => ['required', new SpamFree()],
             'channel_id' => 'required|exists:channels,id'
         ]);
 
-        $spam->detect(request('body'));
+        // $spam->detect(request('body'));
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
