@@ -54,7 +54,7 @@ class ReplyController extends Controller
         $reply = $thread->addReply([
           'body' => request('body'),
           'user_id' => auth()->id()
-        ])->load('owner');
+        ]);
 
         // } catch (\Exception $e) {
     //   return response(
@@ -69,7 +69,7 @@ class ReplyController extends Controller
 
     return back()->with('flash', 'Your reply has been left.'); */
 
-    // return $reply->load('owner');
+    return $reply->load('owner');
     }
 
     public function update(Reply $reply)
