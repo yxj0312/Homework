@@ -72,8 +72,31 @@ class Reply extends Model
 
     public function mentionedUsers()
     {
-        preg_match_all('/\@([^\s\.]+)/', $this->body, $matches);
+        preg_match_all('/@([\w\-]+)/', $this->body, $matches);
 
         return $matches[1];
+    }
+
+    public function setBodyAttribute($body)
+    {
+        // We look for a reg exp of some sorts('/@[^\s]+/') to find a username,
+        // We wrap that with an anchor tag ('<a href="#"></a>')
+        // Then, lastly, we are looking to the $body
+        // /@([^\s]+) means: 
+        // @: after @ symbol; [^]: Anything; \s that is not space; +: find one or more
+        // (): wrap everything we matched, excluding the @ symbol,
+        // otherwise u will get @JaneDoe ($0); $1: JaneDoe
+        
+        /* $this->attributes['body'] = preg_replace('/@([^\s\.]+)/', '<a href="/profiles/$1">$0</a>', $body); */
+
+        // Hey @JaneDoe.
+        // Hey @Jane.Doe!
+        // Hey @Jane-Doe?
+        // @Jane Doe, help me.
+        // /@[\w]+/ means:
+        // \w: Give me word character; + one or more;
+        // \- : And a dash; \s: And a space
+        $this->attributes['body'] = preg_replace('/@([\w\-]+)/', '<a href="/profiles/$1">$0</a>', $body);
+        
     }
 }

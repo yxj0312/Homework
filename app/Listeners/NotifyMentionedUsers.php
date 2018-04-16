@@ -33,9 +33,14 @@ class NotifyMentionedUsers
 
         /* $mentionedUsers = $event->reply->mentionedUsers(); */
 
+        // Give me all of the user u have, just as long as the name calling exist in this array
+        User::whereIn('name', $event->reply->mentionedUsers())->get()
+             ->each(function ($user) use ($event) {
+                $user->notify(new YouWereMentioned($event->reply));
+            });
 
         // Foreach mentionedUsers, map of them and return name of user.
-        collect($event->reply->mentionedUsers())
+       /*  collect($event->reply->mentionedUsers())
             ->map(function ($name) {
                 return  User::whereName($name)->first();
             })
@@ -45,7 +50,7 @@ class NotifyMentionedUsers
             // Foreach one of those, notify the user.
             ->each(function ($user) use ($event) {
                 $user->notify(new YouWereMentioned($event->reply));
-            });
+            }); */
 
         // And then for each mentioned user, notify them
         /* foreach ($mentionedUsers as $name) {
