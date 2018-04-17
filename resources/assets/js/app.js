@@ -11,8 +11,12 @@ require('./bootstrap');
 /*global Vue*/
 Vue.prototype.authorize = function (handler) {
     /* Additional admin privileges. */
+    // Add this from backend Auth::user() in the app.blade.php
     let user = window.App.user;
 
+    // If u not signed in, it returns false
+    // Otherwise, it triggers that callback function - handler, and pass in with 'user'
+    // And whatever u returned from that function, determine if the user is authorized.
     return user ? handler(user) : false;
 };
 
@@ -26,6 +30,8 @@ Vue.prototype.authorize = function (handler) {
 Vue.component('flash', require('./components/Flash.vue'));
 Vue.component('paginator', require('./components/Paginator.vue'));
 Vue.component("user-notifications", require("./components/UserNotifications.vue"));
+Vue.component('avatar-form', require("./components/AvatarForm.vue"));
+
 
 Vue.component('thread-view', require('./pages/Thread.vue'));
 

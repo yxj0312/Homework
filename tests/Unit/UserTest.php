@@ -26,7 +26,7 @@ class UserTest extends TestCase
     {
         $user = create('App\User');
 
-        $this->assertEquals(asset('storage/avatars/default.jpg'), $user->avatar());
+        $this->assertEquals(asset('images/avatars/default.png'), $user->avatar());
         
         $user->avatar_path = 'avatars/me.jpg';
 
