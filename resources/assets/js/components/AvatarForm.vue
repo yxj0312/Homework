@@ -1,28 +1,32 @@
 <template>
     <div>
-        <h1 v-text="user.name"></h1>
+        <div class="level">
+            <img :src="avatar" width="50"  height="50" class="mr-1">
+            
+            <h1 v-text="user.name"></h1>
+        </div>
 
-        
         <form v-if="canUpdate" method="POST" enctype="multipart/form-data">
-            <input type="file" name="avatar" accept="image/*" @change="onChange">
-             
-            <button type="submit" class="btn btn-primary">Add Avatar</button>
+            <!-- name and class will auto merged to input -->
+            <image-upload name="avatar" class="mr-1" @loaded="onLoad"></image-upload>
+            <!-- <button type="submit" class="btn btn-primary">Add Avatar</button> -->
         </form>
         
 
-        <img :src="avatar" width="50"  height="50">
     </div>
 </template>
 
 <script>
+    import ImageUpload from './ImageUpload.vue';
+
     export default {
         props: ['user'],
 
-        components: {},
+        components: { ImageUpload },
 
         data() {
             return {
-                avatar: ''
+                avatar: this.user.avatar_path
             }
         },
 
@@ -33,19 +37,26 @@
         },
 
         methods: {
-            onChange(e) {
-                if (!e.target.files.length) return;
+            // Accept the payload of event: avatar = { src, file} in ImageUpload
+            onLoad(avatar) {
+                this.avatar = avatar.src;
+                // Persist to the server
+                // avatar is the file itself, not data url!
+                // Jeff, why u name them in the same..
+                this.persist(avatar.file);
+            },
 
-                let file = e.target.files[0];
+            persist(avatar) {
+                // Simulate multipart/form-data (FormData: JS API), 
+                // we should give the actual file, 
+                // not as dataURL: this.avatar(string)
+                let data = new FormData();
 
-                let reader = new FileReader;
+                data.append('avatar', avatar);
 
-                reader.readAsDataURL(file);
-
-                reader.onload = e => {
-                    this.avatar = e.target.result;
-                };
+                axios.post(`/api/users/${this.user.name}/avatar`, data)
+                    .then(() => flash('Avatar uploaded!'));
             }
         }
     }
-</script>
+</script> 
