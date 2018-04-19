@@ -1,25 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Filters\ThreadFilters;
-use App\Inspections\Spam;
-use App\Channel;
 use App\Thread;
-use Illuminate\Http\Request;
+use App\Channel;
+use App\Trending;
 use Carbon\Carbon;
 use App\Rules\SpamFree;
+use App\Inspections\Spam;
+use Illuminate\Http\Request;
+use App\Filters\ThreadFilters;
+
 
 class ThreadController extends Controller
 {
     /**
-     * Create a new ThreadController instance. 
+     * Create a new ThreadController instance.
      */
     public function __construct()
     {
-       // $this->middleware('auth')->only(['create','store']);
+        // $this->middleware('auth')->only(['create','store']);
         $this->middleware('auth')->except(['index', 'show']);
-
     }
 
 
@@ -28,7 +28,7 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadFilters $filters)
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
         // $threads = Thread::filter($filters)->get();
 
@@ -41,13 +41,13 @@ class ThreadController extends Controller
         } */
 
         /**
-         * When we called the filter method on Thread.php, 
+         * When we called the filter method on Thread.php,
          * that will ask our thread filter to apply(See scopeFilter) itself to the query
          * in ThreadFilters, when we accept our request, and call the apply method
-         * we will find the user or failed, and apply the user-id to the query 
+         * we will find the user or failed, and apply the user-id to the query
          */
-        /* $threads = $threads->filter($filters)->get();  */   
-        // if ($username = request('by')) { 
+        /* $threads = $threads->filter($filters)->get();  */
+        // if ($username = request('by')) {
         //     $user = \App\User::where('name', $username)->firstOrFail();
         //     $threads->where('user_id', $user->id);
         // }
@@ -59,7 +59,12 @@ class ThreadController extends Controller
             return $threads;
         }
 
-        return view('threads.index', compact('threads'));
+        // $trending = array_map('json_decode', Redis::zrevrange('trending_threads', 0, 4));
+
+        return view('threads.index', [
+            'threads' => $threads, 
+            'trending' => $trending->get()
+        ]);
     }
 
     /**
@@ -105,7 +110,7 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show($channel, Thread $thread)
+    public function show($channel, Thread $thread, Trending $trending)
     {
         // return $thread->load('replies');
         // return Thread::withCount('replies')->find($thread->id);
@@ -117,7 +122,16 @@ class ThreadController extends Controller
         if (auth()->check()) {
             auth()->user()->read($thread);
         }
-       /*  // Record that the user visited this page
+
+        // Throw all things into redis, in this way, u will never need to query in the DB.
+        $trending->push($thread);
+
+        /* Redis::zincrby('trending_threads', 1, json_encode([
+            'title' => $thread->title,
+            'path' => $thread->path()
+        ])); */
+
+        /*  // Record that the user visited this page
         $key = sprintf("users.%s.visits.%s", auth()->id(), $thread->id);
 
         // Record a timestamp, when they did so. Make it equal to a current time.
@@ -189,11 +203,11 @@ class ThreadController extends Controller
         
         // if ($thread->user_id != auth()->id()) {
         //     abort(403, 'You do not have permission to do this.');
-            /* if (request()->wantsJson()) {
-                return response(['status' => 'Permission Denied'], 403);
-            }
+        /* if (request()->wantsJson()) {
+            return response(['status' => 'Permission Denied'], 403);
+        }
 
-            return redirect('/login'); */
+        return redirect('/login'); */
         // }
 
         // Option 3rd, overwrite the delete() method.
