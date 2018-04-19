@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 use App\Thread;
 use App\Channel;
+use App\Trending;
 use Carbon\Carbon;
 use App\Rules\SpamFree;
 use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
-use Illuminate\Support\Facades\Redis;
+
 
 class ThreadController extends Controller
 {
@@ -27,7 +28,7 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadFilters $filters)
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
         // $threads = Thread::filter($filters)->get();
 
@@ -58,9 +59,12 @@ class ThreadController extends Controller
             return $threads;
         }
 
-        $trending = array_map('json_decode', Redis::zrevrange('trending_threads', 0, 4));
+        // $trending = array_map('json_decode', Redis::zrevrange('trending_threads', 0, 4));
 
-        return view('threads.index', compact('threads', 'trending'));
+        return view('threads.index', [
+            'threads' => $threads, 
+            'trending' => $trending->get()
+        ]);
     }
 
     /**
@@ -106,7 +110,7 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show($channel, Thread $thread)
+    public function show($channel, Thread $thread, Trending $trending)
     {
         // return $thread->load('replies');
         // return Thread::withCount('replies')->find($thread->id);
@@ -120,10 +124,12 @@ class ThreadController extends Controller
         }
 
         // Throw all things into redis, in this way, u will never need to query in the DB.
-        Redis::zincrby('trending_threads', 1, json_encode([
+        $trending->push($thread);
+
+        /* Redis::zincrby('trending_threads', 1, json_encode([
             'title' => $thread->title,
             'path' => $thread->path()
-        ]));
+        ])); */
 
         /*  // Record that the user visited this page
         $key = sprintf("users.%s.visits.%s", auth()->id(), $thread->id);
