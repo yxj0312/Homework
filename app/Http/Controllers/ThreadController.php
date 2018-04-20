@@ -131,6 +131,8 @@ class ThreadController extends Controller
             'path' => $thread->path()
         ])); */
 
+        $thread->recordVisit();
+
         /*  // Record that the user visited this page
         $key = sprintf("users.%s.visits.%s", auth()->id(), $thread->id);
 

@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use App\Events\ThreadHasNewReply;
 use App\Events\ThreadReceiveNewReply;
 
+
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, RecordsVisits;
 
     protected $guarded = [];
 
@@ -208,4 +209,5 @@ class Thread extends Model
             ->where('user_id', auth()->id())
             ->exists();
     }
+
 }
