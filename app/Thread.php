@@ -10,7 +10,9 @@ use App\Events\ThreadReceiveNewReply;
 
 class Thread extends Model
 {
-    use RecordsActivity, RecordsVisits;
+    // use RecordsActivity, RecordsVisits;
+    use RecordsActivity;
+    
 
     protected $guarded = [];
 
@@ -186,6 +188,13 @@ class Thread extends Model
         $key = $user->visitedThreadCacheKey($this);
 
         return $this->updated_at > cache($key);
+    }
+
+    public function visits()
+    {
+        // If u hat anything, return; otherwise, default to 0.
+        /* return Redis::get($this->visitsCacheKey()) ?? 0; */
+        return new Visits($this);
     }
 
     // ##############################################################

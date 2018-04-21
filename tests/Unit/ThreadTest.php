@@ -159,17 +159,24 @@ class ThreadTest extends TestCase
 
     // Redis::del("threads.{$thread->id}.visits");
 
-    $thread->resetVisits();
+    /* $thread->resetVisits(); */
+
+    $thread->visits()->reset();
 
     // Exactly same, if use assertEquals, 0 will be equal to null.
-    $this->assertSame(0, $thread->visits());
+    /* $this->assertSame(0, $thread->visits()); */
+
+    $this->assertSame(0, $thread->visits()->count());
     
-    $thread->recordVisit();
+    
+    /* $thread->recordVisit(); */
 
-    $this->assertEquals(1, $thread->visits());
+    $thread->visits()->record();
 
-    $thread->recordVisit();
+    // $this->assertEquals(1, $thread->visits());
 
-    $this->assertEquals(2, $thread->visits());
+    // $thread->recordVisit();
+
+    // $this->assertEquals(2, $thread->visits());
   }
 }
