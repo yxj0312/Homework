@@ -16,7 +16,8 @@
        
        data() {
            return {
-               body: '',
+            //    body: '',
+               body: this.message,
                level:'success',
                show: false
            }
@@ -28,7 +29,10 @@
             * we flash() message.
             */
            if (this.message) {
-               this.flash(this.message);
+            //    Then data is an optional
+               this.flash();
+            //    this.flash(this.message);
+
             //    this.body = this.message;
             //    this.show = true;
            }
@@ -50,12 +54,16 @@
 
        methods: {
         //    flash(message) {
+        // flash expect here a object.
+        //  but in Ep 71, we passed a string at first, caust it was flashing from sever side.
            flash(data) {
             //    this.body = message;
-               this.body = data.message;
+               if(data) {
+                    this.body = data.message;
 
-               this.level = data.level;
-            
+                    this.level = data.level;
+               }
+               
                this.show = true;
 
                this.hide();
