@@ -152,7 +152,7 @@ class ThreadTest extends TestCase
     });
   }
 
-  /** @test */
+  /**No more needed */
   function a_thread_records_each_visit()
   {
     $thread = make('App\Thread', ['id' => 1]);

@@ -133,7 +133,9 @@ class ThreadController extends Controller
 
         // $thread->recordVisit();
 
-        $thread->visits()->record();
+        // $thread->visits()->record();
+
+        $thread->increment('visits');
 
         /*  // Record that the user visited this page
         $key = sprintf("users.%s.visits.%s", auth()->id(), $thread->id);

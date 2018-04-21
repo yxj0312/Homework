@@ -190,12 +190,12 @@ class Thread extends Model
         return $this->updated_at > cache($key);
     }
 
-    public function visits()
-    {
-        // If u hat anything, return; otherwise, default to 0.
-        /* return Redis::get($this->visitsCacheKey()) ?? 0; */
-        return new Visits($this);
-    }
+    // public function visits()
+    // {
+    //     // If u hat anything, return; otherwise, default to 0.
+    //     /* return Redis::get($this->visitsCacheKey()) ?? 0; */
+    //     return new Visits($this);
+    // }
 
     // ##############################################################
     // Query Scopes
