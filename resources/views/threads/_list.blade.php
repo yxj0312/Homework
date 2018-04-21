@@ -25,6 +25,9 @@
             <div class="body">{{ $thread->body }}</div>
             <br>
         </div>
+        <div class="card-footer">
+            {{ $thread->visits }} Visits
+        </div>
     </div>
     <br> 
 @empty {{-- if there is no record at all --}}

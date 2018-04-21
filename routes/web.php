@@ -22,7 +22,7 @@ Route::get('threads', 'ThreadController@index')->name('threads.index');
 Route::get('threads/create', 'ThreadController@create')->name('threads.create');
 Route::get('threads/{channel}/{thread}','ThreadController@show')->name('threads.show');
 Route::delete('threads/{channel}/{thread}', 'ThreadController@destroy');
-Route::post('threads', 'ThreadController@store')->name('threads.store');
+Route::post('threads', 'ThreadController@store')->name('threads.store')->middleware('must-be-confirmed');
 Route::get('threads/{channel}','ThreadController@index' );
 Route::get('/threads/{channel}/{thread}/replies', 'ReplyController@index');
 Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('threads.replies');

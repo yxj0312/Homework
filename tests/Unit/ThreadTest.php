@@ -3,11 +3,11 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Redis;
 use App\Notifications\ThreadWasUpdated;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 class ThreadTest extends TestCase
 {
   use RefreshDatabase;
@@ -150,7 +150,33 @@ class ThreadTest extends TestCase
       ); */
       $this->assertFalse($thread->hasUpdatesFor($user));
     });
+  }
 
+  /**No more needed */
+  function a_thread_records_each_visit()
+  {
+    $thread = make('App\Thread', ['id' => 1]);
 
+    // Redis::del("threads.{$thread->id}.visits");
+
+    /* $thread->resetVisits(); */
+
+    $thread->visits()->reset();
+
+    // Exactly same, if use assertEquals, 0 will be equal to null.
+    /* $this->assertSame(0, $thread->visits()); */
+
+    $this->assertSame(0, $thread->visits()->count());
+    
+    
+    /* $thread->recordVisit(); */
+
+    $thread->visits()->record();
+
+    // $this->assertEquals(1, $thread->visits());
+
+    // $thread->recordVisit();
+
+    // $this->assertEquals(2, $thread->visits());
   }
 }

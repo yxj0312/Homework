@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Events\ThreadHasNewReply;
 use App\Events\ThreadReceiveNewReply;
 
+
 class Thread extends Model
 {
+    // use RecordsActivity, RecordsVisits;
     use RecordsActivity;
+    
 
     protected $guarded = [];
 
@@ -187,6 +190,13 @@ class Thread extends Model
         return $this->updated_at > cache($key);
     }
 
+    // public function visits()
+    // {
+    //     // If u hat anything, return; otherwise, default to 0.
+    //     /* return Redis::get($this->visitsCacheKey()) ?? 0; */
+    //     return new Visits($this);
+    // }
+
     // ##############################################################
     // Query Scopes
     // ##############################################################
@@ -208,4 +218,5 @@ class Thread extends Model
             ->where('user_id', auth()->id())
             ->exists();
     }
+
 }

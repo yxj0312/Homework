@@ -120,4 +120,19 @@ class ReadThreadsTest extends TestCase
         $this->assertCount(2, $response['data']);
         $this->assertEquals(2, $response['total']);
     }
+
+    /** @test */
+    function we_record_a_new_visit_each_time_the_thread_is_read()
+    {
+        $thread = create('App\Thread');
+
+        $this->assertSame(0, $thread->visits);
+        
+        // A get request to the thread path
+        $this->call('GET', $thread->path());
+
+        // visits is pre-loaded at the time we made a request, 
+        // so get a fresh copy from the DB using a fresh()
+        $this->assertEquals(1, $thread->fresh()->visits);
+    }
 }

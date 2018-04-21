@@ -85,6 +85,10 @@ class ThreadController extends Controller
      */
     public function store(Request $request, Spam $spam)
     {
+        /* if(! auth()->user()->confirmed) {
+            return redirect('/threads')->with('flash','You must first confirm your email address.');
+        } */
+
         $request->validate([
             'title' => ['required', new SpamFree()],
             'body' => ['required', new SpamFree()],
@@ -130,6 +134,12 @@ class ThreadController extends Controller
             'title' => $thread->title,
             'path' => $thread->path()
         ])); */
+
+        // $thread->recordVisit();
+
+        // $thread->visits()->record();
+
+        $thread->increment('visits');
 
         /*  // Record that the user visited this page
         $key = sprintf("users.%s.visits.%s", auth()->id(), $thread->id);
