@@ -21,13 +21,13 @@ class SendEmailConfirmationRequest
     }
 
     /**
-     * Handle the event.
+     * Handle the event. Move to RegisterController
      *
      * @param  Registered  $event
      * @return void
      */
-    public function handle(Registered $event)
-    {
-        Mail::to($event->user)->send(new PleaseConfirmYourEmail($event->user));
-    }
+    // public function handle(Registered $event)
+    // {
+    //     Mail::to($event->user)->send(new PleaseConfirmYourEmail($event->user));
+    // }
 }

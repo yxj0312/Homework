@@ -6,7 +6,6 @@ use App\User;
 use Tests\TestCase;
 use App\Mail\PleaseConfirmYourEmail;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -19,17 +18,32 @@ class RegistrationTest extends TestCase
     {
         Mail::fake();
 
-        event(new Registered(create('App\User')));
+        // event(new Registered(create('App\User')));
+
+        $this->post(route('register'), [
+            'name' => 'John',
+            'email' => 'john@example.com',
+            'password' => 'foobar',
+            'password_confirmation' => 'foobar'
+        ]);
+
 
         // php artisan make:mail PleaseConfirmYourEmail --makedown="emails.confirm-email"
         // Mailtrap.io
-        Mail::assertSent(PleaseConfirmYourEmail::class);
+        Mail::assertQueued(PleaseConfirmYourEmail::class);
     }
 
     /** @test */
     function user_can_fully_confirm_their_email_addresses()
     {
-        $this->post('/register', [
+        /**
+         * This Test takes a long time, because it is sending a email, using mailtrap
+         * For faster speed, because no one cares if u are sending a real email
+         * In this case, u can still use Mail::fake()
+         */
+        Mail::fake();
+
+        $this->post(route('register'), [
             'name' => 'John',
             'email' => 'john@example.com',
             'password' => 'foobar',
@@ -42,10 +56,17 @@ class RegistrationTest extends TestCase
         $this->assertNotNull($user->confirmation_token);
 
         // Let the user confirm their account.
-        $response = $this->get('/register/confirm?token=' . $user->confirmation_token);
+        $response = $this->get(route('register.confirm', ['token' => $user->confirmation_token]))
+                        ->assertRedirect(route('threads'));
 
         $this->assertTrue($user->fresh()->confirmed);
+    }
 
-        $response->assertRedirect('/threads');
+    /** @test */
+    function confirming_an_invalid_token()
+    {
+        $this->get(route('register.confirm', ['token' => 'invalid']))
+            ->assertRedirect(route('threads'))
+            ->assertSessionHas('flash', 'Unknown token.');
     }
 }

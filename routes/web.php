@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');  
-Route::get('threads', 'ThreadController@index')->name('threads.index');
+Route::get('threads', 'ThreadController@index')->name('threads');
 Route::get('threads/create', 'ThreadController@create')->name('threads.create');
 Route::get('threads/{channel}/{thread}','ThreadController@show')->name('threads.show');
 Route::delete('threads/{channel}/{thread}', 'ThreadController@destroy');
@@ -39,7 +39,7 @@ Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index');
 Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy');
 
-Route::get('/register/confirm', 'Api\RegisterConfirmationController@index');
+Route::get('/register/confirm', 'Api\RegisterConfirmationController@index')->name('register.confirm');
 
 Route::get('api/users', 'Api\UsersController@index');
 Route::post('api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');
