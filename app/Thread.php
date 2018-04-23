@@ -93,7 +93,7 @@ class Thread extends Model
     public function path()
     {
         //refactor
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
         // return '/threads/' . $this->channel->slug . '/' .  $this->id;
     }
 
@@ -219,4 +219,9 @@ class Thread extends Model
             ->exists();
     }
 
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }
