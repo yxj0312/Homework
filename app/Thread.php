@@ -197,6 +197,34 @@ class Thread extends Model
     //     return new Visits($this);
     // }
 
+    public function incrementSlug($slug)
+    {
+        // i.e. give u help-me-8 (maxium for the title)
+        // but after 10, it will not work.
+        /* static::whereTitle($this->title)->max('slug'); */
+        // Instead:
+        /* static::whereTitle($this->title)->max('id'); */
+        // Or:
+        /* static::whereTitle($this->title)->latest('id')->first(); */#
+        $max = static::whereTitle($this->title)->latest('id')->value('slug');
+        
+        /* if(substr($max, -1, 1)) */
+        // $max is actually an array, and we fetch the last char (-1)
+        // i.e 'laracasts'[-1] = s
+        if(is_numeric($max[-1])) {
+            // look for a digit(\d)
+            // one or more(+)
+            // thats needs to occur at the end of the string($)
+            return preg_replace_callback('/(\d+)$/', function ($matches) {
+                // if u find one, then trigger the callback function here
+                return $matches[1] + 1;
+                // we are searching through $max
+            }, $max);
+        }
+
+        return "{$slug}-2";
+    }
+
     // ##############################################################
     // Query Scopes
     // ##############################################################
@@ -223,5 +251,14 @@ class Thread extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function setSlugAttribute($value)
+    {
+        if(static::whereSlug($slug = str_slug($value))->exists()) {
+            $slug = $this->incrementSlug($slug);
+        }
+
+        $this->attributes['slug'] = $slug;
     }
 }
