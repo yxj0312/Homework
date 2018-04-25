@@ -123,18 +123,53 @@ class CreateThreadsTest extends TestCase
 	function a_thread_requires_a_unique_slug()
 	{
 		$this->signIn();
-
-		$thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
-
-		$this->assertEquals($thread->fresh()->slug, 'foo-title');
 		
-		$this->post(route('threads'), $thread->toArray());
+		// Create two random threads. 
+		// For assurance that we can pass all situation, cause it always create from id= 1 without this assurance
+		// comment it again after all passed.
+		/* create('App\Thread', [], 2); */
 
-		$this->assertTrue(Thread::whereSlug('foo-title-2')->exists());
+		$thread = create('App\Thread', ['title' => 'Foo Title']);
+		
+		// Refactor: using a model event to instead of using model factory to assign the slug
+		// See boot method in Thread.php
+		$this->assertEquals($thread->fresh()->slug, 'foo-title');
 
-		$this->post(route('threads'), $thread->toArray());
+		/* $thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
+		$this->assertEquals($thread->fresh()->slug, 'foo-title'); */
+		
+		// If slug not nullable, it will be fail, cause we are not setting slug in modelfactory, when $thread is created.
+		/* $this->post(route('threads'), $thread->toArray()); */
 
-		$this->assertTrue(Thread::whereSlug('foo-title-3')->exists());				
+		// We could do Thread::latest('id')
+		// or
+		$thread = $this->postJson(route('threads'), $thread->toArray())->json();
+
+		// dd($thread['id']);
+		/* $this->assertTrue(Thread::whereSlug('foo-title-2')->exists()); */
+		$this->assertEquals("foo-title-{$thread['id']}", $thread['slug']);
+
+		// $this->post(route('threads'), $thread->toArray());
+
+		// $this->assertTrue(Thread::whereSlug('foo-title-3')->exists());
+
+					
+	}
+
+	/** @test */
+	function a_thread_with_a_title_that_ends_in_a_number_should_generate_the_proper_slug()
+	{
+		$this->signIn();
+
+        /* $thread = create('App\Thread', ['title' => 'Some Title 24', 'slug' => 'some-title-24']); */
+        $thread = create('App\Thread', ['title' => 'Some Title 24']);
+		
+		/* $this->post(route('threads'), $thread->toArray());
+		$this->assertTrue(Thread::whereSlug('some-title-24-2')->exists()); */
+
+		$thread = $this->postJson(route('threads'), $thread->toArray())->json();
+		$this->assertEquals("some-title-24-{$thread['id']}", $thread['slug']);
+
 	}
 
 	/** @test */

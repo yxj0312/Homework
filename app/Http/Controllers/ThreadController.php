@@ -102,8 +102,13 @@ class ThreadController extends Controller
             'channel_id' => request('channel_id'),
             'title' => request('title'),
             'body' => request('body'),
-            'slug' => str_slug(request('title'))
+            // No longer need to, happened automatically by the model event
+            /* 'slug' => str_slug(request('title')) */
         ]);
+
+        if (request()->wantsJson()) {
+            return response($thread, 201);
+        }
 
         // return redirect(route('threads.show', ['channel' => $thread->channel->slug, 'thread' => $thread->id]))
         return redirect($thread->path())
