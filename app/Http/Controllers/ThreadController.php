@@ -101,10 +101,17 @@ class ThreadController extends Controller
             'user_id' => auth()->id(),
             'channel_id' => request('channel_id'),
             'title' => request('title'),
-            'body' => request('body')
+            'body' => request('body'),
+            // No longer need to, happened automatically by the model event
+            /* 'slug' => str_slug(request('title')) */
         ]);
 
-        return redirect(route('threads.show', ['channel' => $thread->channel->slug, 'thread' => $thread->id]))
+        if (request()->wantsJson()) {
+            return response($thread, 201);
+        }
+
+        // return redirect(route('threads.show', ['channel' => $thread->channel->slug, 'thread' => $thread->id]))
+        return redirect($thread->path())
             ->with('flash', 'Your thread has been published!');
     }
 

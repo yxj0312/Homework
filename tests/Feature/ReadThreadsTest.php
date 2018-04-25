@@ -33,7 +33,7 @@ class ReadThreadsTest extends TestCase
     {
         // $thread = factory('App\Thread')->create();
 
-        $this->get('/threads/' . $this->thread->channel->slug . '/' . $this->thread->id)
+        $this->get($this->thread->path())
 
             ->assertSee($this->thread->title);
     }

@@ -50,6 +50,11 @@ class Thread extends Model
                 $reply->delete();
             }); */
         });
+
+        static::created(function ($thread){
+            $thread->update(['slug' => $thread->title]);
+            // Then it is going to hit setSlugAttribute method.
+        });
     }
 
     // ##############################################################
@@ -93,7 +98,7 @@ class Thread extends Model
     public function path()
     {
         //refactor
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
         // return '/threads/' . $this->channel->slug . '/' .  $this->id;
     }
 
@@ -197,6 +202,53 @@ class Thread extends Model
     //     return new Visits($this);
     // }
 
+    /**
+     * Refactored: move to setSlugAttribute
+     *
+     * @param [type] $slug
+     * @param integer $count
+     * @return void
+     */
+    public function incrementSlug($slug, $count = 2)
+    {
+        $original = $slug; 
+        // $count = 2;
+
+        while (static::whereSlug($slug)->exists()) {
+            $slug = "{$original}-" . $count++;
+        }
+
+        return $slug;
+
+        // i.e. give u help-me-8 (maxium for the title)
+        // but after 10, it will not work.
+        /* static::whereTitle($this->title)->max('slug'); */
+        // Instead:
+        /* static::whereTitle($this->title)->max('id'); */
+        // Or:
+        /* static::whereTitle($this->title)->latest('id')->first(); */#
+        
+        // Redesign
+        /* $max = static::whereTitle($this->title)->latest('id')->value('slug'); */
+        
+        /* if(substr($max, -1, 1)) */
+        // $max is actually an array, and we fetch the last char (-1)
+        // i.e 'laracasts'[-1] = s
+        // Redesign
+        /* if(is_numeric($max[-1])) { */
+            // look for a digit(\d)
+            // one or more(+)
+            // thats needs to occur at the end of the string($)
+            /* return preg_replace_callback('/(\d+)$/', function ($matches) { */
+                // if u find one, then trigger the callback function here
+                /* return $matches[1] + 1; */
+                // we are searching through $max
+            /* }, $max); */
+        /* }
+
+        return "{$slug}-2"; */
+    }
+
     // ##############################################################
     // Query Scopes
     // ##############################################################
@@ -219,4 +271,36 @@ class Thread extends Model
             ->exists();
     }
 
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function setSlugAttribute($value)
+    {
+        $slug = str_slug($value);
+        $original = $slug;
+        // $count = 2;
+
+        // 1. n number of queries.
+        // 2. Help Me => help-me
+        // 3. If help-me is deleted, and someone else create a new one with the same name
+        // 4. This could be a total different component with same link
+        // 5. To solve this, we can use primary key instead of count
+
+        // Another way: /threads/channel/89/the-slug-of-the-thread
+
+        while (static::whereSlug($slug)->exists()) {
+            // $slug = "{$original}-" . $count++;
+            // Maybe u can md5 the id
+            $slug = "{$original}-" . $this->id;
+        }
+        
+        // if(static::whereSlug($slug = str_slug($value))->exists()) {
+        //     $slug = $this->incrementSlug($slug);
+        // }
+
+        $this->attributes['slug'] = $slug;
+    }
 }
