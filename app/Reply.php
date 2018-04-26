@@ -77,6 +77,11 @@ class Reply extends Model
         return $matches[1];
     }
 
+    public function isBest()
+    {
+        return $this->thread->best_reply_id == $this->id;
+    }
+
     public function setBodyAttribute($body)
     {
         // We look for a reg exp of some sorts('/@[^\s]+/') to find a username,
