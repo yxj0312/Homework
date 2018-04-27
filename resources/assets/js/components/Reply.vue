@@ -63,7 +63,7 @@
     
         <div class="card-footer level">
             
-            <div v-if="canUpdate">
+            <div v-if="authorize('updateReply', reply)">
 
                 <button class="btn btn-xs mr-1" @click="editing = true">Edit</button>
         
@@ -113,7 +113,9 @@
     
                 body: this.data.body,
 
-                isBest: false
+                isBest: false,
+
+                reply: this.data
             };
     
         },
@@ -129,26 +131,26 @@
             },
     
     
-    
-            signedIn() {
+            // Refactor to global : Vue.prototype.signedIn = window.App.signedIn in app.js;
+            /* signedIn() {
     
                 return window.App.signedIn;
     
-            },
+            }, */
     
     
+            /** Refactor to authorizations.js */
+            // canUpdate() {
     
-            canUpdate() {
+            //     /* put an authorize method in _bootstrap.js */
     
-                /* put an authorize method in _bootstrap.js */
+            //     return this.authorize(user => this.data.user_id === user.id);
     
-                return this.authorize(user => this.data.user_id === user.id);
+            //     /* As admin situation, you have to update everything, no good */
     
-                /* As admin situation, you have to update everything, no good */
+            //     // return this.data.user_id == window.App.user.id;
     
-                // return this.data.user_id == window.App.user.id;
-    
-            }
+            // }
     
         },
     

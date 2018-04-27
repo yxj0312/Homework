@@ -8,17 +8,32 @@
 window.Vue = require('vue');
 require('./bootstrap');
 
+let authorizations = require('./authorizations');
+
 /*global Vue*/
-Vue.prototype.authorize = function (handler) {
+// Vue.prototype.authorize = function (handler) {
+Vue.prototype.authorize = function (...params) {
     /* Additional admin privileges. */
     // Add this from backend Auth::user() in the app.blade.php
-    let user = window.App.user;
+    
+    // let user = window.App.user;
+
+    if (! window.App.signedIn) return false;
+
+    if (typeof params[0] === "string") {
+      return authorizations[params[0]](params[1]);
+    }
 
     // If u not signed in, it returns false
     // Otherwise, it triggers that callback function - handler, and pass in with 'user'
     // And whatever u returned from that function, determine if the user is authorized.
-    return user ? handler(user) : false;
+    
+    // return user ? handler(user) : false;
+    
+    return params[0](window.App.user);
 };
+
+Vue.prototype.signedIn = window.App.signedIn;
 
 
 /**
