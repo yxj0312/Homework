@@ -20,7 +20,9 @@ class Reply extends Model
      *
      * @var array
      */
-    protected $appends = ['favoritesCount', 'isFavorited'];
+    protected $appends = ['favoritesCount', 'isFavorited', 'isBest'];
+    // protected $appends = ['favoritesCount', 'isFavorited'];
+    
 
 
     /**
@@ -37,6 +39,11 @@ class Reply extends Model
         });
 
         static::deleted(function ($reply) {
+            // We can do it in the DB level.
+            /* if ($reply->isBest()) {
+                $reply->thread->update(['best_reply_id' => null]);
+            } */
+
             $reply->thread->decrement('replies_count');
         });
     }
@@ -75,6 +82,16 @@ class Reply extends Model
         preg_match_all('/@([\w\-]+)/', $this->body, $matches);
 
         return $matches[1];
+    }
+
+    public function isBest()
+    {
+        return $this->thread->best_reply_id == $this->id;
+    }
+
+    public function getIsBestAttribute()
+    {
+        return $this->isBest();
     }
 
     public function setBodyAttribute($body)

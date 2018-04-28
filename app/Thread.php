@@ -249,6 +249,15 @@ class Thread extends Model
         return "{$slug}-2"; */
     }
 
+    public function  MarkBestReply(Reply $reply)
+    {
+        $this->update(['best_reply_id' => $reply->id]);
+
+        // $this->best_reply_id = $reply->id; 
+
+        $this->save();
+    }
+
     // ##############################################################
     // Query Scopes
     // ##############################################################

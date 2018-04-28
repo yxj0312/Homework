@@ -1,7 +1,7 @@
 <template>
-    <div :id="'reply-'+id" class="card card-default">
+    <div :id="'reply-'+id" class="card">
     
-        <div class="card-header">
+        <div class="card-header" :class="isBest ? 'bg-success': '' ">
     
             <div class="level">
     
@@ -61,11 +61,17 @@
     
             @can('update', $reply)     -->
     
-        <div class="card-footer level" v-if="canUpdate">
-    
-            <button class="btn btn-xs mr-1" @click="editing = true">Edit</button>
-    
-            <button class="btn btn-xs btn-danger mr-1" @click="destroy">Delete</button>
+        <div class="card-footer level">
+            
+            <div v-if="authorize('updateReply', reply)">
+
+                <button class="btn btn-xs mr-1" @click="editing = true">Edit</button>
+        
+                <button class="btn btn-xs btn-danger mr-1" @click="destroy">Delete</button>
+
+            </div>
+
+            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-show="! isBest">Best Reply?</button>
     
         </div>
     
@@ -105,8 +111,14 @@
     
                 id: this.data.id,
     
-                body: this.data.body
-    
+                body: this.data.body,
+
+                isBest: this.data.isBest,
+
+                reply: this.data,
+
+                // Tell Vue to track this, or u can use Vuex
+                // thread: window.thread
             };
     
         },
@@ -114,6 +126,12 @@
     
     
         computed: {
+            // Ep 81
+            /* isBest() {
+
+                return this.thread.best_reply_id === this.id;
+            
+            }, */
     
             ago() {
     
@@ -122,27 +140,35 @@
             },
     
     
-    
-            signedIn() {
+            // Refactor to global : Vue.prototype.signedIn = window.App.signedIn in app.js;
+            /* signedIn() {
     
                 return window.App.signedIn;
     
-            },
+            }, */
     
     
+            /** Refactor to authorizations.js */
+            // canUpdate() {
     
-            canUpdate() {
+            //     /* put an authorize method in _bootstrap.js */
     
-                /* put an authorize method in _bootstrap.js */
+            //     return this.authorize(user => this.data.user_id === user.id);
     
-                return this.authorize(user => this.data.user_id === user.id);
+            //     /* As admin situation, you have to update everything, no good */
     
-                /* As admin situation, you have to update everything, no good */
+            //     // return this.data.user_id == window.App.user.id;
     
-                // return this.data.user_id == window.App.user.id;
+            // }
     
-            }
-    
+        },
+
+        created() {
+            // Listen event here.
+            window.events.$on('best-reply-selected', id => {
+                // Update isBest property here.
+                this.isBest = (id === this.id) 
+            });
         },
     
     
@@ -199,6 +225,17 @@
     
                 // });
     
+            },
+
+            markBestReply() {
+                // this.isBest = true;
+
+                axios.post('/replies/' + this.id + '/best');
+
+                //Fire a global event, pass through the id.
+                window.events.$emit('best-reply-selected', this.id);
+
+                // this.thread.best_reply_id = this.id;
             }
     
         }
