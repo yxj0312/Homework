@@ -39,6 +39,11 @@ class Reply extends Model
         });
 
         static::deleted(function ($reply) {
+            // We can do it in the DB level.
+            /* if ($reply->isBest()) {
+                $reply->thread->update(['best_reply_id' => null]);
+            } */
+
             $reply->thread->decrement('replies_count');
         });
     }

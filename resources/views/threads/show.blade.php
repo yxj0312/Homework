@@ -4,9 +4,9 @@
     <link rel="stylesheet" href="{{ asset('css/vendor/jquery.atwho.css') }}"> 
 
     {{-- Ep 81 --}}
-    {{-- <script>
+    <script>
         window.thread = <?= json_encode($thread);?>
-    </script>   --}}
+    </script>  
 @endsection
 
 @section('content')
