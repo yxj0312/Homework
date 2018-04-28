@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('header')
-    <link rel="stylesheet" href="{{ asset('css/vendor/jquery.atwho.css') }}">    
+    <link rel="stylesheet" href="{{ asset('css/vendor/jquery.atwho.css') }}"> 
+
+    {{-- Ep 81 --}}
+    {{-- <script>
+        window.thread = <?= json_encode($thread);?>
+    </script>   --}}
 @endsection
 
 @section('content')

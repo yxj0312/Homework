@@ -113,9 +113,12 @@
     
                 body: this.data.body,
 
-                isBest: false,
+                isBest: this.data.isBest,
 
-                reply: this.data
+                reply: this.data,
+
+                // Tell Vue to track this, or u can use Vuex
+                // thread: window.thread
             };
     
         },
@@ -123,6 +126,12 @@
     
     
         computed: {
+            // Ep 81
+            /* isBest() {
+
+                return this.thread.best_reply_id === this.id;
+            
+            }, */
     
             ago() {
     
@@ -152,6 +161,14 @@
     
             // }
     
+        },
+
+        created() {
+            // Listen event here.
+            window.events.$on('best-reply-selected', id => {
+                // Update isBest property here.
+                this.isBest = (id === this.id) 
+            });
         },
     
     
@@ -211,7 +228,14 @@
             },
 
             markBestReply() {
-                this.isBest = true;
+                // this.isBest = true;
+
+                axios.post('/replies/' + this.id + '/best');
+
+                //Fire a global event, pass through the id.
+                window.events.$emit('best-reply-selected', this.id);
+
+                // this.thread.best_reply_id = this.id;
             }
     
         }
