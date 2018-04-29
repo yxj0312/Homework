@@ -7,8 +7,8 @@
     
                 <div class="flex">
     
-                    <a :href="'/profiles/'+data.owner.name" 
-                        v-text="data.owner.name">
+                    <a :href="'/profiles/'+reply.owner.name" 
+                        v-text="reply.owner.name">
     
                     </a> said <span v-text="ago"></span>
     
@@ -18,7 +18,7 @@
     
                 <div v-if="signedIn">
     
-                    <favorite :reply="data"></favorite>
+                    <favorite :reply="reply"></favorite>
     
                 </div>
     
@@ -61,9 +61,9 @@
     
             @can('update', $reply)     -->
     
-        <div class="card-footer level">
+        <div class="card-footer level" v-if="authorize('owns', reply) || authorize('owns', reply.thread)">
             
-            <div v-if="authorize('updateReply', reply)">
+            <div v-if="authorize('owns', reply)">
 
                 <button class="btn btn-xs mr-1" @click="editing = true">Edit</button>
         
@@ -71,7 +71,7 @@
 
             </div>
 
-            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-show="! isBest">Best Reply?</button>
+            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-if="authorize('owns', reply.thread)" v-show="! isBest">Best Reply?</button>
     
         </div>
     
@@ -91,7 +91,7 @@
     
     export default {
     
-        props: ['data'],
+        props: ['reply'],
     
     
     
@@ -109,13 +109,11 @@
     
                 editing: false,
     
-                id: this.data.id,
+                id: this.reply.id,
     
-                body: this.data.body,
+                body: this.reply.body,
 
-                isBest: this.data.isBest,
-
-                reply: this.data,
+                isBest: this.reply.isBest,
 
                 // Tell Vue to track this, or u can use Vuex
                 // thread: window.thread
@@ -135,7 +133,7 @@
     
             ago() {
     
-                return moment(this.data.created_at).fromNow() + '...';
+                return moment(this.reply.created_at).fromNow() + '...';
     
             },
     
@@ -179,7 +177,7 @@
     
                 axios.patch(
     
-                        '/replies/' + this.data.id, {
+                        '/replies/' + this.id, {
     
                             body: this.body
     
@@ -205,7 +203,7 @@
     
             destroy() {
     
-                axios.delete('/replies/' + this.data.id);
+                axios.delete('/replies/' + this.id);
     
     
     
@@ -215,7 +213,7 @@
     
                 */
     
-                this.$emit('deleted', this.data.id);
+                this.$emit('deleted', this.id);
     
     
     

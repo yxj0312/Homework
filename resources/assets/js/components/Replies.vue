@@ -2,7 +2,7 @@
     <div>
         <div  v-for="(reply,index) in items" :key="reply.id">
             <!-- Listen to the $emit from child -->
-            <reply :data="reply" @deleted="remove(index)"></reply>
+            <reply :reply="reply" @deleted="remove(index)"></reply>
             <br>
         </div>
 
