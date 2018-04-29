@@ -50,26 +50,39 @@ class ReplyController extends Controller
         // request()->validate(['body' => ['required', new SpamFree()]]);
 
         // return $form->persist($thread);
-    
-        $reply = $thread->addReply([
-          'body' => request('body'),
-          'user_id' => auth()->id()
-        ]);
+
+      if ($thread->locked) {
+        return response('Thread is locked', 422);
+      }
+
+        // try { 
+      return $thread->addReply([
+        'body' => request('body'),
+        'user_id' => auth()->id()
+      ])->load('owner');
+            // Could also see Handler.php from Exception
+        // } catch(\Exception $e) {
+        //     return response('Locked', 422);
+        // }
 
         // } catch (\Exception $e) {
-    //   return response(
-    //     'Sorry, your reply could not be saved at this time.',
-    //     422
-    //   );
-    // }
+        //   return response(
+        //     'Sorry, your reply could not be saved at this time.',
+        //     422
+        //   );
+        // }
 
-    /* if (request()->expectsJson()) {
-      return $reply->load('owner');
-    }
+        /* if (request()->expectsJson()) {
+          return $reply->load('owner');
+        }
 
-    return back()->with('flash', 'Your reply has been left.'); */
+        return back()->with('flash', 'Your reply has been left.'); */
 
-    return $reply->load('owner');
+        // $reply = $thread->addReply([
+        //   'body' => request('body'),
+        //   'user_id' => auth()->id()
+        // ])
+        // return $reply->load('owner');
     }
 
     public function update(Reply $reply)

@@ -8,6 +8,7 @@ class RedirectIfEmailNotConfirmed
 {
     /**
      * Handle an incoming request.
+     * Don't forget registet in Kernl.php
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next

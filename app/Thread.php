@@ -104,6 +104,12 @@ class Thread extends Model
 
     public function addReply($reply)
     {
+        /* if ($this->locked) {
+            // can return response here like controller.
+            // Then go Handler.php of Exception
+            throw new \Exception('Thread is locked');
+        } */
+
         // $reply = $this->replies()->create($reply);
 
         // $this->increment('replies_count');
@@ -147,6 +153,11 @@ class Thread extends Model
         // ->each->notify($reply);
 
         return $reply;
+    }
+
+    public function lock()
+    {
+        $this->update(['locked' => true]);
     }
 
     /**
@@ -249,7 +260,7 @@ class Thread extends Model
         return "{$slug}-2"; */
     }
 
-    public function  MarkBestReply(Reply $reply)
+    public function MarkBestReply(Reply $reply)
     {
         $this->update(['best_reply_id' => $reply->id]);
 
