@@ -4,11 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class RedirectIfEmailNotConfirmed
+class Administrator
 {
     /**
      * Handle an incoming request.
-     * Don't forget registet in Kernl.php
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -16,10 +15,11 @@ class RedirectIfEmailNotConfirmed
      */
     public function handle($request, Closure $next)
     {
-        if (! $request->user()->confirmed) {
-            return redirect('/threads')->with('flash', 'You must first confirm your email address.');
+        if (auth()->check() && auth()->user()->isAdmin()) {
+            return $next($request);
         }
 
-        return $next($request);
+        // return redirect(route('threads'));
+        abort(403, 'You do not have permission to perform this action.');
     }
 }
