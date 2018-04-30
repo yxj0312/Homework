@@ -1,6 +1,6 @@
 let user = window.App.user;
 
-let authorizations = {
+module.exports = {
 /*     updateReply (reply) {
         return reply.user_id === user.id;
     },
@@ -11,8 +11,12 @@ let authorizations = {
 
     owns(model, prop="user_id") {
         return model[prop] === user.id;
+    },
+
+    isAdmin() {
+        return ['JohnDoe', 'JaneDoe'].includes(user.name);
     }
 };
 
 
-module.exports = authorizations;
+// module.exports = authorizations;

@@ -11,7 +11,7 @@
         <!-- Move endpoint to newReply -->
         <!-- <new-reply :endpoint="endpoint" @created="add"></new-reply> -->
 
-        <new-reply @created="add"></new-reply>
+        <new-reply @created="add" v-if="! $parent.locked"></new-reply>
         
     </div>
 </template>
