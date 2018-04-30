@@ -10,9 +10,11 @@
 
         <!-- Move endpoint to newReply -->
         <!-- <new-reply :endpoint="endpoint" @created="add"></new-reply> -->
+        <p v-if="$parent.locked">
+            This thread has been locked. No more replies are allowed.
+        </p>
 
-        <new-reply @created="add" v-if="! $parent.locked"></new-reply>
-        
+        <new-reply @created="add" v-else></new-reply> 
     </div>
 </template>
 

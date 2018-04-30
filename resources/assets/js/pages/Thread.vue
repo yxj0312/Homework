@@ -5,14 +5,14 @@
 
     export default {
         /* This props name can no longer be used in data() */
-        props: ['initialRepliesCount'],
+        props: ['dataRepliesCount', 'dataLocked'],
 
         components: { Replies, SubscribeButton },
 
         data() {
             return {
-                repliesCount: this.initialRepliesCount,
-                locked: false
+                repliesCount: this.dataRepliesCount,
+                locked: this.dataLocked
             };
         } 
     }
