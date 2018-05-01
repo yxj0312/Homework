@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Zttp\Zttp;
 use App\Thread;
 use App\Channel;
 use App\Trending;
 use Carbon\Carbon;
 use App\Rules\SpamFree;
+use App\Rules\Recaptcha;
 use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
@@ -84,7 +84,7 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Spam $spam)
+    public function store(Request $request, Spam $spam, Recaptcha $recaptcha)
     {
         /* if(! auth()->user()->confirmed) {
             return redirect('/threads')->with('flash','You must first confirm your email address.');
@@ -93,23 +93,12 @@ class ThreadController extends Controller
         $request->validate([
             'title' => ['required', new SpamFree()],
             'body' => ['required', new SpamFree()],
-            'channel_id' => 'required|exists:channels,id'
+            'channel_id' => 'required|exists:channels,id',
+            'g-recaptcha-response' => ['required', $recaptcha]
         ]);
 
         // $spam->detect(request('body'));
         
-        // Guzzle or zttp
-
-        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret'),
-            'response' => $request->input('g-recaptcha-response'),
-            'remoteip' => $_SERVER['REMOTE_ADDR']
-        ]);
-
-        if (!$response->json()['success']) {
-            throw new \Exception('Recaptcha failed');
-        }
-
         $thread = Thread::create([
             'user_id' => auth()->id(),
             'channel_id' => request('channel_id'),
