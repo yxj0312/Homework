@@ -14,6 +14,13 @@ class LockedThreadsController extends Controller
         //     return response('You do not have permission to lock this thread.', 403);
         // }
 
-        $thread->lock();
+        // $thread->lock();
+        $thread->update(['locked' => true]);
+    }
+
+    public function destroy(Thread $thread)
+    {
+        // $thread->unlock();
+        $thread->update(['locked' => false]);
     }
 }

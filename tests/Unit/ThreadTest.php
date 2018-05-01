@@ -180,7 +180,7 @@ class ThreadTest extends TestCase
     // $this->assertEquals(2, $thread->visits());
   }
 
-  /** @test */
+  /** No longer defining that method */
   function a_thread_may_be_locked()
   {
     $this->assertFalse($this->thread->locked);
