@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Zttp\Zttp;
 use App\Thread;
 use App\Channel;
 use App\Trending;
@@ -96,6 +97,18 @@ class ThreadController extends Controller
         ]);
 
         // $spam->detect(request('body'));
+        
+        // Guzzle or zttp
+
+        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => $request->input('g-recaptcha-response'),
+            'remoteip' => $_SERVER['REMOTE_ADDR']
+        ]);
+
+        if (!$response->json()['success']) {
+            throw new \Exception('Recaptcha failed');
+        }
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
@@ -105,6 +118,8 @@ class ThreadController extends Controller
             // No longer need to, happened automatically by the model event
             /* 'slug' => str_slug(request('title')) */
         ]);
+
+        
 
         if (request()->wantsJson()) {
             return response($thread, 201);

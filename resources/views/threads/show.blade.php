@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('header')
+@section('head')
     <link rel="stylesheet" href="{{ asset('css/vendor/jquery.atwho.css') }}"> 
 
     {{-- Ep 81 Add a json_encode here to fetch thread--}}     
