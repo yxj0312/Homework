@@ -1,16 +1,14 @@
 @extends('layouts.app')
 
-@section('header')
+@section('head')
     <link rel="stylesheet" href="{{ asset('css/vendor/jquery.atwho.css') }}"> 
 
-    {{-- Ep 81 --}}
-    <script>
-        window.thread = <?= json_encode($thread);?>
-    </script>  
+    {{-- Ep 81 Add a json_encode here to fetch thread--}}     
 @endsection
 
 @section('content')
-<thread-view :initial-replies-count="{{ $thread->replies_count  }}" inline-template>
+{{-- <thread-view :data-replies-count="{{ $thread->replies_count  }}" :data-locked="{{ $thread->locked }}" inline-template> --}}
+<thread-view :thread = "{{ $thread }}" inline-template>    
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -79,11 +77,16 @@
                             {{--  has {{$thread->replies()->count()}} comments.  --}}
                             has <span v-text="repliesCount"></span> {{ str_plural('comment',$thread->replies_count)}}.                        
                         </p>
-                        @if (auth::check())
+                        {{-- @if (auth::check()) --}}
                             <p>
-                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button>
+
+                                <button class="btn btn-default" 
+                                        v-if="authorize('isAdmin')"
+                                        @click="toggleLock"
+                                        v-text="locked ? 'Unlock' : 'Lock'"></button>
                             </p>
-                        @endif
+                        {{-- @endif --}}
                     </div>
                 </div>
             </div>

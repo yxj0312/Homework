@@ -49,7 +49,7 @@
         }
     </style>
 
-    @yield('header')
+    @yield('head')
 </head>
 
 <body>

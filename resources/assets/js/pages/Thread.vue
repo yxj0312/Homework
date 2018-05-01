@@ -5,14 +5,25 @@
 
     export default {
         /* This props name can no longer be used in data() */
-        props: ['initialRepliesCount'],
+        // props: ['dataRepliesCount', 'dataLocked'],
+        props: ['thread'],        
 
         components: { Replies, SubscribeButton },
 
         data() {
             return {
-                repliesCount: this.initialRepliesCount
+                repliesCount: this.thread.replies_count,
+                locked: this.thread.locked
             };
-        } 
+        },
+
+        methods: {
+            toggleLock() {
+                // ajax
+                axios[this.locked ? 'delete' : 'post']('/locked-threads/'+ this.thread.slug);
+
+                this.locked = ! this.locked;
+            }
+        }
     }
 </script>

@@ -6,6 +6,7 @@ use App\Channel;
 use App\Trending;
 use Carbon\Carbon;
 use App\Rules\SpamFree;
+use App\Rules\Recaptcha;
 use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
@@ -83,7 +84,7 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Spam $spam)
+    public function store(Request $request, Spam $spam, Recaptcha $recaptcha)
     {
         /* if(! auth()->user()->confirmed) {
             return redirect('/threads')->with('flash','You must first confirm your email address.');
@@ -92,11 +93,12 @@ class ThreadController extends Controller
         $request->validate([
             'title' => ['required', new SpamFree()],
             'body' => ['required', new SpamFree()],
-            'channel_id' => 'required|exists:channels,id'
+            'channel_id' => 'required|exists:channels,id',
+            'g-recaptcha-response' => ['required', $recaptcha]
         ]);
 
         // $spam->detect(request('body'));
-
+        
         $thread = Thread::create([
             'user_id' => auth()->id(),
             'channel_id' => request('channel_id'),
@@ -105,6 +107,8 @@ class ThreadController extends Controller
             // No longer need to, happened automatically by the model event
             /* 'slug' => str_slug(request('title')) */
         ]);
+
+        
 
         if (request()->wantsJson()) {
             return response($thread, 201);

@@ -25,6 +25,10 @@ class Thread extends Model
 
     protected $appends =['isSubscribedTo'];
 
+    protected $casts = [
+        'locked' => 'boolean'
+    ];
+
     //This can be used anywhere.
     // Compared to above, with this we can use i.e. App\Thread::withoutGlobalScopes()->first()
     protected static function boot()
@@ -155,10 +159,22 @@ class Thread extends Model
         return $reply;
     }
 
-    public function lock()
-    {
-        $this->update(['locked' => true]);
-    }
+    /**
+     * Remove the following two, cause there is a lock method in laravel QueryBuild,
+     * 
+     * which is overwritten  the here.
+     *
+     * @return void
+     */
+    // public function lock()
+    // {
+    //     $this->update(['locked' => true]);
+    // }
+
+    // public function unlock()
+    // {
+    //     $this->update(['locked' => false]);
+    // }
 
     /**
      * Refactor to listener at Ep 57

@@ -28,6 +28,7 @@ Route::get('threads/{channel}','ThreadController@index' );
 
 
 Route::post('locked-threads/{thread}', 'LockedThreadsController@store')->name('locked-threads.store')->middleware('admin');
+Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy')->middleware('admin');
 
 
 Route::get('/threads/{channel}/{thread}/replies', 'ReplyController@index');
