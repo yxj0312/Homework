@@ -203,17 +203,36 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    /* public function update($channel, Thread $thread)
+    public function update($channel, Thread $thread)
     {
-        if (request()->has('locked')) {
+        // Refactored: move to LockedThreadsController
+        /* if (request()->has('locked')) {
             // authorization
             if (! auth()->user()->isAdmin()) {
                 return response('', 403);
             }
 
             $thread->lock();
-        }
-    } */
+        } */
+
+        // This is good, but a little bit confusing.
+        // You need to know tap and HigherOrderTapProxy
+        /* return tap($thread)->update(request()->validate([
+            'title' => ['required', new SpamFree()],
+            'body' => ['required', new SpamFree()],
+        ])); */
+        $this->authorize('update', $thread);
+
+        $thread->update(request()->validate([
+            'title' => ['required', new SpamFree()],
+            'body' => ['required', new SpamFree()],
+        ]));
+
+        // wrap them above will return a boolean of updated or not.
+        return $thread;
+
+        // $thread->update(request(['title', 'body']));
+    }
 
     /**
      * Remove the specified resource from storage.
