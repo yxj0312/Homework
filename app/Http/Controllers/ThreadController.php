@@ -84,13 +84,13 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Spam $spam, Recaptcha $recaptcha)
+    public function store(Spam $spam, Recaptcha $recaptcha)
     {
         /* if(! auth()->user()->confirmed) {
             return redirect('/threads')->with('flash','You must first confirm your email address.');
         } */
 
-        $request->validate([
+        request()->validate([
             'title' => ['required', new SpamFree()],
             'body' => ['required', new SpamFree()],
             'channel_id' => 'required|exists:channels,id',

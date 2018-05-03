@@ -88,7 +88,7 @@ class ReplyController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
-        $this->validate(request(), ['body' => ['required', new SpamFree()]]);
+        request()->validate(['body' => ['required', new SpamFree()]]);
         $reply->update(['body' => request('body')]);
 
         /* try {

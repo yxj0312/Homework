@@ -14,7 +14,9 @@ class UserAvatarController extends Controller
     // {
     //     $this->middleware('auth');   
     // }
-    
+    /**
+     * Store a new user avatar.
+     */
     public function store()
     {
         request()->validate([
