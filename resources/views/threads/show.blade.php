@@ -11,7 +11,7 @@
 <thread-view :thread = "{{ $thread }}" inline-template>    
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8" v-cloak>
                 @include('threads._question')
                 <br>
                 {{--  In replies component, the count is changed.
@@ -42,7 +42,7 @@
                 @endif  --}}
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4" v-cloak>
                 <div class="card card-default">
                 
                     {{--  Careful: when u call a relationship as a property, it gonna perform a SQL-query behind the scenes.
