@@ -51,9 +51,13 @@
                 let uri = `/threads/${this.thread.channel.slug}/${this.thread.slug}`;
 
                 axios.patch(uri, this.form).then(()=>{
+                    // console.log(result.data);
                     this.editing = false;
                     this.title = this.form.title;
                     this.body = this.form.body;
+
+                    // this.title = result.data.title;
+                    // this.body = result.data.body;
                     flash('Your thread has been updated.');
                 });
             },
@@ -63,7 +67,6 @@
                     title: this.thread.title,
                     body: this.thread.body,
                 };
-
                 this.editing = false;
             }
         }
