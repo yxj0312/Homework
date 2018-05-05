@@ -7,6 +7,7 @@
     "jquery":true
   },
   "extends": [
+    "prettier",
     "eslint:recommended",
     "plugin:vue/essential"],
   "parserOptions": {

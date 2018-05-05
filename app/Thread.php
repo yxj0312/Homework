@@ -2,16 +2,17 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 // use App\Notifications\ThreadWasUpdated;
+use Laravel\Scout\Searchable;
 use App\Events\ThreadHasNewReply;
 use App\Events\ThreadReceiveNewReply;
+use Illuminate\Database\Eloquent\Model;
 
 
 class Thread extends Model
 {
     // use RecordsActivity, RecordsVisits;
-    use RecordsActivity;
+    use RecordsActivity, Searchable;
     
 
     protected $guarded = [];

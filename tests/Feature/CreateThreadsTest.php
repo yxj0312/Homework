@@ -182,8 +182,6 @@ class CreateThreadsTest extends TestCase
 		// $this->post(route('threads'), $thread->toArray());
 
 		// $this->assertTrue(Thread::whereSlug('foo-title-3')->exists());
-
-					
 	}
 
 	/** @test */
