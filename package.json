@@ -14,11 +14,13 @@
     "bootstrap": "^4.0.0",
     "cross-env": "^5.1",
     "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-vue": "^4.4.0",
     "jquery": "^3.2",
     "laravel-mix": "^2.0",
     "lodash": "^4.17.4",
     "popper.js": "^1.12",
+    "stylelint-config-standard": "^18.2.0",
     "vue": "^2.5.7"
   },
   "dependencies": {
