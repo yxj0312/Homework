@@ -286,6 +286,17 @@ class Thread extends Model
         $this->save();
     }
 
+    /**
+     * Overwrite toSearchableArray
+     * Use php artisan scout:import "App\Thread" after overwrite
+     * 
+     * @return void
+     */
+    public function toSearchableArray()
+    {
+        return $this->toArray() + ['path' => $this->path()];
+    }
+
     // ##############################################################
     // Query Scopes
     // ##############################################################
