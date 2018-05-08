@@ -9,7 +9,9 @@
     <div class="card-body">
         <div class="form-group">
             {{-- <textarea class="form-control" rows="10" v-model="form.body"></textarea> --}}
-            <wysiwyg v-model="form.body" :value="form.body"></wysiwyg>
+            {{-- U dont need to do that(:value), it will be passed by v-model automatically --}}
+            {{-- <wysiwyg v-model="form.body" :value="form.body"></wysiwyg> --}}
+            <wysiwyg v-model="form.body"></wysiwyg>            
         </div>
     </div>
 

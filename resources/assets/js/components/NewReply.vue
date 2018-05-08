@@ -2,17 +2,24 @@
     <div>
         <div v-if="signedIn">
             <div class="form-group">
-                <textarea name="body" 
-                            id="body" 
-                            class="form-control" 
-                            placeholder="Have something to say?" 
-                            cols="30" 
+                <wysiwyg name="body"
+                    v-model="body"
+                    placeholder="Have something to say?"
+                    ref="trix"
+                    :shouldClear= "completed"
+                    @inputCleared="resetState"
+                ></wysiwyg>
+                <!-- <textarea name="body"
+                            id="body"
+                            class="form-control"
+                            placeholder="Have something to say?"
+                            cols="30"
                             rows="5"
-                            required 
-                            v-model="body"></textarea>
+                            required
+                            v-model="body"></textarea> -->
             </div>
             <br>
-            <button type="submit" 
+            <button type="submit"
                     class="btn btn-default"
                     @click="addReply">Post</button>
         </div>
@@ -26,7 +33,6 @@
     import 'jquery';
     import 'jquery.caret';
     import 'at.js';
-    
 
     export default {
         /* No longer need to accept that */
@@ -36,7 +42,8 @@
 
         data() {
             return {
-                body: ''
+                body: '',
+                completed: false
             }
         },
 
@@ -71,12 +78,20 @@
                     // .then(response => {
                     .then(({data}) => {
                         this.body = '';
-                        
+
+                        this.completed = true;
+
                         flash('Your Reply has been posted.');
+                        /** One Approach to clear the trix editor */
+                        // this.$refs.trix.$refs.trix.value='';
 
                         // this.$emit('created', response.data);
                         this.$emit('created', data);
                     });
+            },
+
+            resetState() {
+                this.completed = false;
             }
         }
     }
