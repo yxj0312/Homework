@@ -89,6 +89,12 @@
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
+
+                {{-- @php
+                    $body = '<script>alert("gotcha")</script><h3>Heading Three Is Allowed</h3><a href="#" title="Some Anchor" onclick="alert(\'gotcha\')">Click Me</a>';
+                @endphp
+
+                {!! Purify::clean($body) !!} --}}
             </div>
         </div>
     </body>
