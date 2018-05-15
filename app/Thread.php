@@ -325,6 +325,11 @@ class Thread extends Model
         return 'slug';
     }
 
+    public function getBodyAttribute($body)
+    {
+        return \Purify::clean($body);
+    }
+
     public function setSlugAttribute($value)
     {
         $slug = str_slug($value);
