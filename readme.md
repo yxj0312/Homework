@@ -32,6 +32,4 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-ToDo
-
 
