@@ -31,7 +31,12 @@ DB_DATABASE=homework
 DB_USERNAME=root
 DB_PASSWORD=
 ```
+### Step 4.
 
-ToDo
+Channel related
+
+### Step 5.
+
+Use your forum! Visit `http://homework.loc/threads` to create a new account and publish your first thread.
 
 
