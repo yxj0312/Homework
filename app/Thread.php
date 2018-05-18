@@ -59,6 +59,8 @@ class Thread extends Model
         static::created(function ($thread){
             $thread->update(['slug' => $thread->title]);
             // Then it is going to hit setSlugAttribute method.
+
+            $thread->creator->increment('reputation', 10);
         });
     }
 
@@ -281,9 +283,10 @@ class Thread extends Model
     {
         $this->update(['best_reply_id' => $reply->id]);
 
+        $reply->owner->increment('reputation', 50);
         // $this->best_reply_id = $reply->id; 
 
-        $this->save();
+        // $this->save();
     }
 
     /**
