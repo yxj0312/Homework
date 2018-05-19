@@ -2,8 +2,10 @@
     <div>
         <div class="level">
             <img :src="avatar" width="50"  height="50" class="mr-1">
-            
-            <h1 v-text="user.name"></h1>
+            <h1>
+                {{ user.name }}
+                <small v-text="reputation"></small>
+            </h1>
         </div>
 
         <form v-if="canUpdate" method="POST" enctype="multipart/form-data">
@@ -11,8 +13,6 @@
             <image-upload name="avatar" class="mr-1" @loaded="onLoad"></image-upload>
             <!-- <button type="submit" class="btn btn-primary">Add Avatar</button> -->
         </form>
-        
-
     </div>
 </template>
 
@@ -32,7 +32,11 @@
 
         computed: {
             canUpdate() {
-                return this.authorize(user => user.id === this.user.id)
+                return this.authorize(user => user.id === this.user.id);
+            },
+
+            reputation() {
+                return this.user.reputation + 'XP';
             }
         },
 
@@ -47,8 +51,8 @@
             },
 
             persist(avatar) {
-                // Simulate multipart/form-data (FormData: JS API), 
-                // we should give the actual file, 
+                // Simulate multipart/form-data (FormData: JS API),
+                // we should give the actual file,
                 // not as dataURL: this.avatar(string)
                 let data = new FormData();
 
@@ -59,4 +63,4 @@
             }
         }
     }
-</script> 
+</script>
