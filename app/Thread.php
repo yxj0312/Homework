@@ -8,6 +8,8 @@ use App\Events\ThreadHasNewReply;
 use App\Events\ThreadReceiveNewReply;
 use Illuminate\Database\Eloquent\Model;
 
+// U can wrapper Facades before path to use a real time facade.
+// use Facades\App\Reputation;
 
 class Thread extends Model
 {
@@ -60,7 +62,9 @@ class Thread extends Model
             $thread->update(['slug' => $thread->title]);
             // Then it is going to hit setSlugAttribute method.
 
-            $thread->creator->increment('reputation', 10);
+            // $thread->creator->increment('reputation', 10);
+            // $thread->creator->increment('reputation', Reputation::THREAD_WAS_PUBLISHED);
+            Reputation::award($thread->creator, Reputation::THREAD_WAS_PUBLISHED);           
         });
     }
 
@@ -283,7 +287,9 @@ class Thread extends Model
     {
         $this->update(['best_reply_id' => $reply->id]);
 
-        $reply->owner->increment('reputation', 50);
+        // $reply->owner->increment('reputation', 50);
+        Reputation::award($reply->owner, Reputation::BEST_REPLY_AWARDED);
+
         // $this->best_reply_id = $reply->id; 
 
         // $this->save();
