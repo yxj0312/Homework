@@ -13,7 +13,7 @@
         <tr>
             <th>Name</th>
             <th>Slug</th>
-            {{-- <th>Description</th> --}}
+            <th>Description</th>
             <th>Threads</th>
         </tr>
     </thead>
@@ -22,7 +22,7 @@
         <tr>
             <td>{{$channel->name}}</td>
             <td>{{$channel->slug}}</td>
-            {{-- <td>{{$channel->description}}</td> --}}
+            <td>{{$channel->description}}</td>
             <td>{{ count($channel->threads()) }}</td>
         </tr>
         @empty
