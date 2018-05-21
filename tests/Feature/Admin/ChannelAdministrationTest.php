@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Channel;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -36,5 +37,24 @@ class ChannelAdministrationTest extends TestCase
         // $this->actingAs($regularUser)
         //     ->get(route('admin.channels.create'))
         //     ->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /** @test */
+    public function an_administrator_can_create_a_channel()
+    {
+        $response = $this->createChannel([
+            'name' => 'php',
+            'description' => 'This is the channel for discussing all things PHP.',
+        ]);
+        $this->get($response->headers->get('Location'))
+            ->assertSee('php')
+            ->assertSee('This is the channel for discussing all things PHP.');
+    }
+
+    protected function createChannel($overrides = [])
+    {
+        $this->signInAdmin();
+        $channel = make(Channel::class, $overrides);
+        return $this->post(route('admin.channels.store'), $channel->toArray());
     }
 }

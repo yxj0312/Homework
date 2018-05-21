@@ -14,4 +14,24 @@ class ChannelsController extends Controller
 
         return view('admin.channels.index', compact('channels'));
     }
+
+    
+    public function store()
+    {
+        $channel = Channel::create(
+            request()->validate([
+                'name' => 'required|unique:channels',
+                'description' => 'required',
+            ])
+        );
+
+        cache()->forget('channels');
+
+        if (request()->wantsJson()) {
+            return response($channel, 201);
+        }
+
+        return redirect(route('admin.channels.index'))
+            ->with('flash', 'Your channel has been created!');
+    }
 }
