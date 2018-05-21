@@ -56,6 +56,7 @@ class Thread extends Model
             /* $thread->replies->each(function ($reply) {
                 $reply->delete();
             }); */
+            Reputation::reduce($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
 
         static::created(function ($thread){
@@ -64,7 +65,7 @@ class Thread extends Model
 
             // $thread->creator->increment('reputation', 10);
             // $thread->creator->increment('reputation', Reputation::THREAD_WAS_PUBLISHED);
-            Reputation::award($thread->creator, Reputation::THREAD_WAS_PUBLISHED);           
+            Reputation::award($thread->creator, Reputation::THREAD_WAS_PUBLISHED);         
         });
     }
 

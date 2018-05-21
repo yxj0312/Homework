@@ -48,6 +48,8 @@ class Reply extends Model
             } */
 
             $reply->thread->decrement('replies_count');
+
+            Reputation::reduce($reply->owner, Reputation::REPLY_POSTED);
         });
     }
     

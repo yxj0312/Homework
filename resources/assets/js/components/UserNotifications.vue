@@ -1,17 +1,17 @@
 <template>
     <li class="nav-item dropdown" v-if="notifications.length">
-        <a class="nav-link dropdown-toggle" 
-            href="#" 
-            role="button" 
-            data-toggle="dropdown" 
-            aria-haspopup="true" 
+        <a class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
             aria-expanded="false"
         >
             <span class="fa fa-bell"></span>
             <!-- <span class="caret"></span> -->
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-             <a class="dropdown-item" 
+             <a class="dropdown-item"
                 v-for="notification in notifications" :key="notification.id"
                 :href="notification.data.link"
                 v-text="notification.data.message"
@@ -32,18 +32,14 @@
         data() {
             return {
                /* $vm0.notifications = ['one', 'two', 'three'] */
-               notifications: false 
+               notifications: false
             }
         },
 
         created() {
             axios.get('/profiles/' + window.App.user.name + '/notifications')
             // U have a response, we are going to save them
-                .then(response => this.notifications = response.data); 
-        },
-
-        computed: {
-            
+                .then(response => this.notifications = response.data);
         },
 
         methods: {
