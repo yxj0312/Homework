@@ -31,6 +31,18 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
+    protected function signInAdmin($admin = null)
+    {
+
+        $admin = $admin ? : create('App\User');
+
+        config(['homework.administrators' => [$admin->email]]);
+        
+        $this->actingAs($admin);
+
+        return $this;
+    }
+
      // Hat tip, @adamwathan.
     protected function disableExceptionHandling()
     {
