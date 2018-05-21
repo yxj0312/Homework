@@ -41,10 +41,25 @@
                 @else
                 <user-notifications></user-notifications>
 
+                @if (Auth::user()->isAdmin())
+                    <li>
+                        <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
+                            <span class="fa fa-cog" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                @endif
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+                    <a class="nav-link dropdown-toggle" 
+                       href="#"
+                       role="button"
+                       data-toggle="dropdown" 
+                       aria-haspopup="true" 
+                       aria-expanded="false"
+                    >
+                        {{ Auth::user()->name }} <span class="caret"></span>
+                    </a>
+
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('profile', Auth::user())}}">My Profile</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
