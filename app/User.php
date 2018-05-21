@@ -19,6 +19,15 @@ class User extends Authenticatable
         'name', 'email', 'password', 'avatar_path'
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'isAdmin'
+    ];
+
     protected $casts = [
         'confirmed' => 'boolean'
     ];

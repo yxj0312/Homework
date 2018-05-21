@@ -25,6 +25,9 @@ class ChannelAdministrationTest extends TestCase
         $this->signInAdmin()
             ->get(route('admin.channels.index'))
             ->assertStatus(Response::HTTP_OK);
+            
+        $this->get(route('admin.channels.create'))
+            ->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */
@@ -34,9 +37,9 @@ class ChannelAdministrationTest extends TestCase
         $this->actingAs($regularUser)
             ->get(route('admin.channels.index'))
             ->assertStatus(Response::HTTP_FORBIDDEN);
-        // $this->actingAs($regularUser)
-        //     ->get(route('admin.channels.create'))
-        //     ->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->actingAs($regularUser)
+            ->get(route('admin.channels.create'))
+            ->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /** @test */
@@ -49,6 +52,19 @@ class ChannelAdministrationTest extends TestCase
         $this->get($response->headers->get('Location'))
             ->assertSee('php')
             ->assertSee('This is the channel for discussing all things PHP.');
+    }
+
+    /** @test */
+    public function a_channel_requires_a_name()
+    {
+        $this->createChannel(['name' => null])
+            ->assertSessionHasErrors('name');
+    }
+    /** @test */
+    public function a_channel_requires_a_description()
+    {
+        $this->createChannel(['description' => null])
+            ->assertSessionHasErrors('description');
     }
 
     protected function createChannel($overrides = [])
