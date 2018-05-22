@@ -37,7 +37,7 @@ Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->nam
 
 
 Route::get('/threads/{channel}/{thread}/replies', 'ReplyController@index');
-Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('threads.replies');
+Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('threads.replies')->middleware('must-be-confirmed');
 Route::patch('/replies/{reply}', 'ReplyController@update');
 Route::delete('/replies/{reply}','ReplyController@destroy')->name('replies.destroy');
 
@@ -49,8 +49,8 @@ Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsCon
 Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->middleware('auth');
 
 
-Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
-Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy');
+Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->name('replies.favorite');
+Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy')->name('replies.unfavorite');
 
 
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');

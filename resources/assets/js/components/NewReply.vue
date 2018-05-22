@@ -5,9 +5,6 @@
                 <wysiwyg name="body"
                     v-model="body"
                     placeholder="Have something to say?"
-                    ref="trix"
-                    :shouldClear= "completed"
-                    @inputCleared="resetState"
                 ></wysiwyg>
                 <!-- <textarea name="body"
                             id="body"
@@ -23,6 +20,7 @@
                     class="btn btn-default"
                     @click="addReply">Post</button>
         </div>
+
         <p class="text-center" v-else>
             Please <a href="/login">sign in</a> to participate in this discussion.
         </p>
@@ -42,8 +40,8 @@
 
         data() {
             return {
-                body: '',
-                completed: false
+                body: ''
+                // completed: false
             }
         },
 
@@ -79,7 +77,7 @@
                     .then(({data}) => {
                         this.body = '';
 
-                        this.completed = true;
+                        // this.completed = true;
 
                         flash('Your Reply has been posted.');
                         /** One Approach to clear the trix editor */
@@ -90,9 +88,9 @@
                     });
             },
 
-            resetState() {
-                this.completed = false;
-            }
+            // resetState() {
+            //     this.completed = false;
+            // }
         }
     }
 </script>

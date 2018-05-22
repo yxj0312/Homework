@@ -73,7 +73,7 @@ $factory->define(App\Reply::class,function(Faker $faker){
 /*$threads->each(function($thread){factory('App\Reply',10)->create(['thread_id'=>$thread->id]);});*/
 
 $factory->define(App\Channel::class,function(Faker $faker){
-	$name = $faker->word;
+	$name = $faker->unique()->word;
 
 	return [
 		'name' => $name,

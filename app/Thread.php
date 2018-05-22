@@ -56,7 +56,7 @@ class Thread extends Model
             /* $thread->replies->each(function ($reply) {
                 $reply->delete();
             }); */
-            Reputation::reduce($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
+            Reputation::lose($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
 
         static::created(function ($thread){
@@ -65,7 +65,7 @@ class Thread extends Model
 
             // $thread->creator->increment('reputation', 10);
             // $thread->creator->increment('reputation', Reputation::THREAD_WAS_PUBLISHED);
-            Reputation::award($thread->creator, Reputation::THREAD_WAS_PUBLISHED);         
+            Reputation::gain($thread->creator, Reputation::THREAD_WAS_PUBLISHED);         
         });
     }
 
@@ -112,6 +112,16 @@ class Thread extends Model
         //refactor
         return "/threads/{$this->channel->slug}/{$this->slug}";
         // return '/threads/' . $this->channel->slug . '/' .  $this->id;
+    }
+
+    /**
+     * A thread can have a best reply.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function bestReply()
+    {
+        return $this->hasOne(Reply::class, 'thread_id');
     }
 
     public function addReply($reply)
@@ -286,10 +296,14 @@ class Thread extends Model
 
     public function MarkBestReply(Reply $reply)
     {
+        if ($this->hasBestReply()) {
+            Reputation::lose($this->bestReply->owner, Reputation::BEST_REPLY_AWARDED);
+        }
+
         $this->update(['best_reply_id' => $reply->id]);
 
         // $reply->owner->increment('reputation', 50);
-        Reputation::award($reply->owner, Reputation::BEST_REPLY_AWARDED);
+        Reputation::gain($reply->owner, Reputation::BEST_REPLY_AWARDED);
 
         // $this->best_reply_id = $reply->id; 
 
@@ -305,6 +319,16 @@ class Thread extends Model
     public function toSearchableArray()
     {
         return $this->toArray() + ['path' => $this->path()];
+    }
+
+    /**
+     * Determine if the thread has a current best reply.
+     *
+     * @return bool
+     */
+    public function hasBestReply()
+    {
+        return !is_null($this->best_reply_id);
     }
 
     // ##############################################################
