@@ -101,6 +101,8 @@ class ReputationTest extends TestCase
     /** @test */
     function a_user_loses_points_when_their_favorited_reply_is_unfavorited()
     {
+        $reply = create('App\Reply', ['user_id' => create('App\User')]);
+
         $this->signIn();
 
         $reply = create('App\Reply', ['user_id' => auth()->id()]);
@@ -115,6 +117,8 @@ class ReputationTest extends TestCase
 
         $total = Reputation::REPLY_POSTED + Reputation::REPLY_FAVORITED - Reputation::REPLY_FAVORITED;
         
-        $this->assertEquals($total, $reply->owner->fresh()->reputation);        
+        $this->assertEquals($total, $reply->owner->fresh()->reputation);
+
+        $this->assertEquals(0, auth()->user()->reputation);      
     }
 }
