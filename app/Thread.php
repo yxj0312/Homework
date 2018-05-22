@@ -56,7 +56,7 @@ class Thread extends Model
             /* $thread->replies->each(function ($reply) {
                 $reply->delete();
             }); */
-            Reputation::reduce($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
+            Reputation::lose($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
 
         static::created(function ($thread){
@@ -65,7 +65,7 @@ class Thread extends Model
 
             // $thread->creator->increment('reputation', 10);
             // $thread->creator->increment('reputation', Reputation::THREAD_WAS_PUBLISHED);
-            Reputation::award($thread->creator, Reputation::THREAD_WAS_PUBLISHED);         
+            Reputation::gain($thread->creator, Reputation::THREAD_WAS_PUBLISHED);         
         });
     }
 
@@ -297,13 +297,13 @@ class Thread extends Model
     public function MarkBestReply(Reply $reply)
     {
         if ($this->hasBestReply()) {
-            Reputation::reduce($this->bestReply->owner, Reputation::BEST_REPLY_AWARDED);
+            Reputation::lose($this->bestReply->owner, Reputation::BEST_REPLY_AWARDED);
         }
 
         $this->update(['best_reply_id' => $reply->id]);
 
         // $reply->owner->increment('reputation', 50);
-        Reputation::award($reply->owner, Reputation::BEST_REPLY_AWARDED);
+        Reputation::gain($reply->owner, Reputation::BEST_REPLY_AWARDED);
 
         // $this->best_reply_id = $reply->id; 
 
