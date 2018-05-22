@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Reply;
 use App\Favorite;
+use App\Reputation;
+use Illuminate\Http\Request;
 
 class FavoritesController extends Controller
 {
@@ -43,6 +44,8 @@ class FavoritesController extends Controller
     {
 
         $reply->favorite();
+
+        Reputation::award($reply->owner, Reputation::REPLY_FAVORITED);
 
         return back();
         /* $reply->favorites()->create(['user_id' => auth()->id()]); */
@@ -97,5 +100,7 @@ class FavoritesController extends Controller
     public function destroy(Reply $reply)
     {
         $reply->unfavorite();
+
+        Reputation::reduce($reply->owner, Reputation::REPLY_FAVORITED);
     }
 }
