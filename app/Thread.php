@@ -114,6 +114,16 @@ class Thread extends Model
         // return '/threads/' . $this->channel->slug . '/' .  $this->id;
     }
 
+    /**
+     * A thread can have a best reply.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function bestReply()
+    {
+        return $this->hasOne(Reply::class, 'thread_id');
+    }
+
     public function addReply($reply)
     {
         /* if ($this->locked) {
@@ -286,6 +296,10 @@ class Thread extends Model
 
     public function MarkBestReply(Reply $reply)
     {
+        if ($this->hasBestReply()) {
+            Reputation::reduce($this->bestReply->owner, Reputation::BEST_REPLY_AWARDED);
+        }
+
         $this->update(['best_reply_id' => $reply->id]);
 
         // $reply->owner->increment('reputation', 50);
@@ -305,6 +319,16 @@ class Thread extends Model
     public function toSearchableArray()
     {
         return $this->toArray() + ['path' => $this->path()];
+    }
+
+    /**
+     * Determine if the thread has a current best reply.
+     *
+     * @return bool
+     */
+    public function hasBestReply()
+    {
+        return !is_null($this->best_reply_id);
     }
 
     // ##############################################################
