@@ -1,4 +1,4 @@
-# Homework
+# Homework [![Build Status](https://travis-ci.org/yxj0312/Homework.svg?branch=master)](https://travis-ci.org/yxj0312/Homework)
 
 We are moving to the brand new series [How to Manage an Open Source Project](https://laracasts.com/series/how-to-manage-an-open-source-project)!
 
