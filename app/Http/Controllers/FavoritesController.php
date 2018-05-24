@@ -42,14 +42,13 @@ class FavoritesController extends Controller
      */
     public function store(Request $request, Reply $reply)
     {
-
         $reply->favorite();
 
         Reputation::gain($reply->owner, Reputation::REPLY_FAVORITED);
 
         return back();
         /* $reply->favorites()->create(['user_id' => auth()->id()]); */
-        
+
         /* Favorite::create([
             'user_id' => auth()->id(),
             'favorited_id' => $reply->id,

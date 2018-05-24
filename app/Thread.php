@@ -15,10 +15,8 @@ class Thread extends Model
 {
     // use RecordsActivity, RecordsVisits;
     use RecordsActivity, Searchable;
-    
 
     protected $guarded = [];
-
 
     // ##############################################################
     // Global Query Scopes
@@ -26,7 +24,7 @@ class Thread extends Model
 
     protected $with = ['creator', 'channel'];
 
-    protected $appends =['isSubscribedTo'];
+    protected $appends = ['isSubscribedTo'];
 
     protected $casts = [
         'locked' => 'boolean'
@@ -43,7 +41,6 @@ class Thread extends Model
         //     $builder->withCount('replies');
         // });
 
-
         // static::addGlobalScope('creator', function ($builder) {
         //     $builder->with('creator');
         // });
@@ -59,13 +56,13 @@ class Thread extends Model
             Reputation::lose($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
 
-        static::created(function ($thread){
+        static::created(function ($thread) {
             $thread->update(['slug' => $thread->title]);
             // Then it is going to hit setSlugAttribute method.
 
             // $thread->creator->increment('reputation', 10);
             // $thread->creator->increment('reputation', Reputation::THREAD_WAS_PUBLISHED);
-            Reputation::gain($thread->creator, Reputation::THREAD_WAS_PUBLISHED);         
+            Reputation::gain($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
     }
 
@@ -79,7 +76,7 @@ class Thread extends Model
         as part of that process, I want to include the count of the
         favorites relationship */
         return $this->hasMany(Reply::class);
-        /**
+        /*
          * Anytime I ever fetch a reply, I am gonna need access to the creator.
          * So it will be nice, if we just had a global scope, that said, yep,
          * for every single reply query, I want you to eager the owner.
@@ -135,7 +132,7 @@ class Thread extends Model
         // $reply = $this->replies()->create($reply);
 
         // $this->increment('replies_count');
-        
+
         // return $reply;
 
         $reply = $this->replies()->create($reply);
@@ -148,17 +145,17 @@ class Thread extends Model
         //         $subsciption->user->notify(new ThreadWasUpdated($this, $reply));
         //     }
         // }
-        
+
         event(new ThreadReceiveNewReply($reply));
 
-        /**
+        /*
          * This ist the simplest approach of refactor
          * Better than make an event at this moment. Ep 46
          * Refactor to aboved event at Ep 57.
          */
         // $this->notifySubscribers($reply);
 
-        /** Only refator codes to event, if u feel codes getting bigger */
+        /* Only refator codes to event, if u feel codes getting bigger */
         // event(new ThreadHasNewReply($this, $reply));
 
         //Move this to event listener.
@@ -178,8 +175,8 @@ class Thread extends Model
     }
 
     /**
-     * Remove the following two, cause there is a lock method in laravel QueryBuild,
-     * 
+     * Remove the following two, cause there is a lock method in laravel QueryBuild,.
+     *
      * which is overwritten  the here.
      *
      * @return void
@@ -195,8 +192,7 @@ class Thread extends Model
     // }
 
     /**
-     * Refactor to listener at Ep 57
-     *
+     * Refactor to listener at Ep 57.
      */
     // public function notifySubscribers($reply)
     // {
@@ -209,7 +205,7 @@ class Thread extends Model
     public function subscribe($userId = null)
     {
         $this->subscriptions()->create([
-            'user_id' => $userId ? : auth()->id()
+            'user_id' => $userId ?: auth()->id()
         ]);
 
         return $this;
@@ -218,7 +214,7 @@ class Thread extends Model
     public function unsubscribe($userId = null)
     {
         $this->subscriptions()
-            ->where('user_id', $userId ? : auth()->id())
+            ->where('user_id', $userId ?: auth()->id())
             ->delete();
     }
 
@@ -248,19 +244,19 @@ class Thread extends Model
     // }
 
     /**
-     * Refactored: move to setSlugAttribute
+     * Refactored: move to setSlugAttribute.
      *
      * @param [type] $slug
-     * @param integer $count
+     * @param int $count
      * @return void
      */
     public function incrementSlug($slug, $count = 2)
     {
-        $original = $slug; 
+        $original = $slug;
         // $count = 2;
 
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
+            $slug = "{$original}-".$count++;
         }
 
         return $slug;
@@ -271,11 +267,11 @@ class Thread extends Model
         // Instead:
         /* static::whereTitle($this->title)->max('id'); */
         // Or:
-        /* static::whereTitle($this->title)->latest('id')->first(); */#
-        
+        /* static::whereTitle($this->title)->latest('id')->first(); *///
+
         // Redesign
         /* $max = static::whereTitle($this->title)->latest('id')->value('slug'); */
-        
+
         /* if(substr($max, -1, 1)) */
         // $max is actually an array, and we fetch the last char (-1)
         // i.e 'laracasts'[-1] = s
@@ -305,15 +301,15 @@ class Thread extends Model
         // $reply->owner->increment('reputation', 50);
         Reputation::gain($reply->owner, Reputation::BEST_REPLY_AWARDED);
 
-        // $this->best_reply_id = $reply->id; 
+        // $this->best_reply_id = $reply->id;
 
         // $this->save();
     }
 
     /**
      * Overwrite toSearchableArray
-     * Use php artisan scout:import "App\Thread" after overwrite
-     * 
+     * Use php artisan scout:import "App\Thread" after overwrite.
+     *
      * @return void
      */
     public function toSearchableArray()
@@ -328,15 +324,16 @@ class Thread extends Model
      */
     public function hasBestReply()
     {
-        return !is_null($this->best_reply_id);
+        return ! is_null($this->best_reply_id);
     }
 
     // ##############################################################
     // Query Scopes
     // ##############################################################
+
     /**
      * We want set this filter to current running query
-     * so we also set an query scope
+     * so we also set an query scope.
      */
     public function scopeFilter($query, $filters)
     {
@@ -352,7 +349,6 @@ class Thread extends Model
             ->where('user_id', auth()->id())
             ->exists();
     }
-
 
     public function getRouteKeyName()
     {
@@ -381,9 +377,9 @@ class Thread extends Model
         while (static::whereSlug($slug)->exists()) {
             // $slug = "{$original}-" . $count++;
             // Maybe u can md5 the id
-            $slug = "{$original}-" . $this->id;
+            $slug = "{$original}-".$this->id;
         }
-        
+
         // if(static::whereSlug($slug = str_slug($value))->exists()) {
         //     $slug = $this->incrementSlug($slug);
         // }

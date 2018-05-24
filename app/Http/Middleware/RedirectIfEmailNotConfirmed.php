@@ -8,7 +8,7 @@ class RedirectIfEmailNotConfirmed
 {
     /**
      * Handle an incoming request.
-     * Don't forget registet in Kernl.php
+     * Don't forget registet in Kernl.php.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -18,7 +18,7 @@ class RedirectIfEmailNotConfirmed
     {
         $user = $request->user();
 
-        if (!$user->confirmed && !$user->isAdmin()) {
+        if (! $user->confirmed && ! $user->isAdmin()) {
             return redirect('/threads')->with('flash', 'You must first confirm your email address.');
         }
 

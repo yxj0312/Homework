@@ -28,7 +28,7 @@ class InstallCommand extends Command
     public function handle()
     {
         $this->intro();
-        if (!file_exists('.env')) {
+        if (! file_exists('.env')) {
             exec('mv .env.example .env');
             $this->line("\r\n.env file successfully created\r\n");
         }
@@ -47,11 +47,10 @@ class InstallCommand extends Command
         }
         // TODO: master user creation (might be useful in case of future ACL implementation)
         $this->outro();
-
     }
 
     /**
-     * Update .env file from an array of $key => $value pairs
+     * Update .env file from an array of $key => $value pairs.
      *
      * @param array $updatedValues
      * @return void
@@ -61,7 +60,7 @@ class InstallCommand extends Command
         foreach ($updatedValues as $key => $value) {
             file_put_contents($this->laravel->environmentFilePath(), preg_replace(
                 "/{$key}=(.*)/",
-                $key . '=' . $value,
+                $key.'='.$value,
                 file_get_contents($this->laravel->environmentFilePath())
             ));
         }
@@ -71,7 +70,7 @@ class InstallCommand extends Command
     {
         $this->info("\r\n>> Welcome to the Council installation process <<\r\n");
     }
-    
+
     protected function outro()
     {
         $this->info("\r\n>> The installation process is complete. Enjoy your new forum! <<\r\n");

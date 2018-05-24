@@ -12,9 +12,9 @@ class Favorite extends Model
 
     /**
      * Favorite is assoicated with reply.
-     * 
+     *
      * If we use 'tinker' to get App\Favorite::latest()->first()->favorited
-     * 
+     *
      * We can see: we loaded this Reply as well as any relvant date for favorite.
      *
      * @return void

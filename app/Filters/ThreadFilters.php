@@ -10,7 +10,7 @@ class ThreadFilters extends Filters
 
     /**
      * Filter the query by a given username.
-     * Extrac0t from above
+     * Extrac0t from above.
      *
      * @param  string $username
      * @return Builder
@@ -30,12 +30,12 @@ class ThreadFilters extends Filters
     protected function popular()
     {
         $this->builder->getQuery()->orders = [];
-        
-        return $this->builder->orderBy('replies_count', 'desc');        
+
+        return $this->builder->orderBy('replies_count', 'desc');
     }
 
     protected function unanswered()
     {
-        return $this->builder->where('replies_count', 0);        
+        return $this->builder->where('replies_count', 0);
     }
 }

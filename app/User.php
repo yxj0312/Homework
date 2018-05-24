@@ -49,6 +49,7 @@ class User extends Authenticatable
     {
         return 'name';
     }
+
     /**
      * Fetch all threads that were created by the user.
      *
@@ -79,7 +80,7 @@ class User extends Authenticatable
     {
         $this->confirmed = true;
         $this->confirmation_token = null;
-        
+
         $this->save();
     }
 
@@ -118,11 +119,11 @@ class User extends Authenticatable
 
     public function getAvatarPathAttribute($avatar)
     {
-        return asset(($avatar ? 'storage/' . $avatar : 'images/avatars/default.png'));
+        return asset(($avatar ? 'storage/'.$avatar : 'images/avatars/default.png'));
     }
 
     public function visitedThreadCacheKey($thread)
     {
-        return sprintf("users.%s.visits.%s", $this->id, $thread->id);
+        return sprintf('users.%s.visits.%s', $this->id, $thread->id);
     }
 }

@@ -11,8 +11,8 @@ class ReplyPolicy
     use HandlesAuthorization;
 
     /**
-     * php artisan make:policy ReplyPolicy --model=Reply
-     * 
+     * php artisan make:policy ReplyPolicy --model=Reply.
+     *
      * Don't forget go to 'AuthServiceProvider' and register this.
      */
 
@@ -36,10 +36,11 @@ class ReplyPolicy
      */
     public function create(User $user)
     {
-        if (!$lastReply = $user->fresh()->lastReply) {
+        if (! $lastReply = $user->fresh()->lastReply) {
             return true;
         }
-        return !$lastReply->wasJustPublished();
+
+        return ! $lastReply->wasJustPublished();
     }
 
     /**

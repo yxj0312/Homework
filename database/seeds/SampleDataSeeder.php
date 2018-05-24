@@ -1,12 +1,11 @@
 <?php
 
-use App\Activity;
-use App\Channel;
-use App\Favorite;
 use App\Reply;
 use App\Thread;
+use App\Channel;
+use App\Activity;
+use App\Favorite;
 use App\ThreadSubscription;
-use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
@@ -24,12 +23,14 @@ class SampleDataSeeder extends Seeder
         $this->threads();
         Schema::enableForeignKeyConstraints();
     }
+
     protected function channels()
     {
         Channel::truncate();
         factory(Channel::class, 10)
             ->create();
     }
+
     protected function threads()
     {
         Thread::truncate();

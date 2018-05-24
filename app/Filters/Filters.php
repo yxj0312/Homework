@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 abstract class Filters
 {
-    protected $request, $builder;
+    protected $request;
+    protected $builder;
 
     protected $filters = [];
 
@@ -17,8 +18,9 @@ abstract class Filters
     {
         $this->request = $request;
     }
+
     /**
-     * Accept the query builder
+     * Accept the query builder.
      */
     public function apply($builder)
     {
@@ -28,7 +30,7 @@ abstract class Filters
             if (method_exists($this, $filter)) {
                 $this->$filter($value);
             }
-        // 7th Refactor
+            // 7th Refactor
         /* foreach ($this->filters as $filter) { */
             //8th
             /* if (!$this->hasFilter($filter))  return;  */
@@ -50,7 +52,7 @@ abstract class Filters
 
         //3rd Refactor
         /* return $this->by($username); */
-        
+
         //2nd Refactor
         /* return $this->by($builder, $username); */
 
@@ -59,7 +61,6 @@ abstract class Filters
         //All Thread where 'user_id' is equal to this one.
         return $builder->where('user_id', $user->id); */
     }
-
 
     public function getFilters()
     {

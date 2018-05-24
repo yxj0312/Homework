@@ -8,7 +8,7 @@ class KeyHeldDown
 {
     public function detect($body)
     {
-        /** Tinker */
+        /* Tinker */
         // Look for any char what so ever, try to find full matches of that exacted char act
 
         // wrapping so that it will be included as a match, and I can refer back to that match using \1 and 4 one more of those:

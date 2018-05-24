@@ -9,7 +9,7 @@ class Visits
     protected $thread;
 
     /**
-     * $thread can be replaced by $relation, which can be more generic
+     * $thread can be replaced by $relation, which can be more generic.
      *
      * @param [type] $thread
      */

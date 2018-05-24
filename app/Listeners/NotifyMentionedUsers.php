@@ -2,8 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Events\ThreadReceiveNewReply;
 use App\User;
+use App\Events\ThreadReceiveNewReply;
 use App\Notifications\YouWereMentioned;
 
 class NotifyMentionedUsers
@@ -36,8 +36,8 @@ class NotifyMentionedUsers
         // Give me all of the user u have, just as long as the name calling exist in this array
         User::whereIn('name', $event->reply->mentionedUsers())->get()
              ->each(function ($user) use ($event) {
-                $user->notify(new YouWereMentioned($event->reply));
-            });
+                 $user->notify(new YouWereMentioned($event->reply));
+             });
 
         // Foreach mentionedUsers, map of them and return name of user.
        /*  collect($event->reply->mentionedUsers())

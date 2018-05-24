@@ -2,26 +2,26 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Channel;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     * Here means, wenn a view is loaded, we always get a channel variable. 
-     * 
+     * Here means, wenn a view is loaded, we always get a channel variable.
+     *
      * Alternatively, you can create a new serviceprovider like ViewServiceProvider
-     * 
+     *
      * @return void
      */
     public function boot()
     {
         // \View::composer(['threads.create','threads.index'], function ($view) {
-        
+
         //This Query will be toggled until view loaded.
-        \View::composer('*', function($view){
-            $channels = \Cache::rememberForever('channels', function(){
+        \View::composer('*', function ($view) {
+            $channels = \Cache::rememberForever('channels', function () {
                 return Channel::all();
             });
 
@@ -30,7 +30,6 @@ class AppServiceProvider extends ServiceProvider
 
         //equal to above, but it gonna run before 'RefreshDatabase' by test.
         // \View::share('channels', Channel::all());
-
     }
 
     /**
