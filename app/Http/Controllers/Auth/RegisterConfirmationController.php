@@ -22,16 +22,16 @@ class RegisterConfirmationController extends Controller
         } */
 
         $user = User::where('confirmation_token', request('token'))->first();
-                
-        if (!$user) {
+
+        if (! $user) {
             return redirect(route('threads'))->with('flash', 'Unknown token.');
         }
 
         $user->confirm();
-        
+
         /* $user->confirmed = true;
         $user->save(); */
-        
+
         // Or you can add confirmed to fillable column and use:
         // ->update(['confirmed' => true]);
 

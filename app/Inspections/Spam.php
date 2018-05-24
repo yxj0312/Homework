@@ -2,7 +2,6 @@
 
 namespace App\Inspections;
 
-
 class Spam
 {
     protected $inspections = [
@@ -26,7 +25,7 @@ class Spam
         return false;
     }
 
-    /** Refactored */
+    /* Refactored */
     // protected function detectInvalidKeywords($body)
     // {
     //     $invalidKeywords = [

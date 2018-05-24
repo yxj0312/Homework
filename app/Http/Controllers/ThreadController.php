@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Thread;
 use App\Channel;
 use App\Trending;
@@ -10,7 +11,6 @@ use App\Rules\Recaptcha;
 use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
-
 
 class ThreadController extends Controller
 {
@@ -22,7 +22,6 @@ class ThreadController extends Controller
         // $this->middleware('auth')->only(['create','store']);
         $this->middleware('auth')->except(['index', 'show']);
     }
-
 
     /**
      * Display a listing of the resource.
@@ -41,7 +40,7 @@ class ThreadController extends Controller
             $threads = Thread::latest();
         } */
 
-        /**
+        /*
          * When we called the filter method on Thread.php,
          * that will ask our thread filter to apply(See scopeFilter) itself to the query
          * in ThreadFilters, when we accept our request, and call the apply method
@@ -55,7 +54,6 @@ class ThreadController extends Controller
 
         // $threads = $threads->get();
 
-
         if (request()->wantsJson()) {
             return $threads;
         }
@@ -63,7 +61,7 @@ class ThreadController extends Controller
         // $trending = array_map('json_decode', Redis::zrevrange('trending_threads', 0, 4));
 
         return view('threads.index', [
-            'threads' => $threads, 
+            'threads' => $threads,
             'trending' => $trending->get()
         ]);
     }
@@ -98,7 +96,7 @@ class ThreadController extends Controller
         ]);
 
         // $spam->detect(request('body'));
-        
+
         $thread = Thread::create([
             'user_id' => auth()->id(),
             'channel_id' => request('channel_id'),
@@ -107,8 +105,6 @@ class ThreadController extends Controller
             // No longer need to, happened automatically by the model event
             /* 'slug' => str_slug(request('title')) */
         ]);
-
-        
 
         if (request()->wantsJson()) {
             return response($thread, 201);
@@ -173,7 +169,7 @@ class ThreadController extends Controller
     protected function getThreads(Channel $channel, ThreadFilters $filters)
     {
         $threads = Thread::latest()->filter($filters);
-        
+
         //Queries reduction: eager load with 'with'
         // $threads = Thread::with('channel')->latest()->filter($filters);
         if ($channel->exists) {
@@ -247,7 +243,7 @@ class ThreadController extends Controller
         /* $thread->replies()->delete(); */
 
         $this->authorize('update', $thread);
-        
+
         // if ($thread->user_id != auth()->id()) {
         //     abort(403, 'You do not have permission to do this.');
         /* if (request()->wantsJson()) {

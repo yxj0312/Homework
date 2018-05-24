@@ -22,8 +22,8 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\NotifyMentionedUsers',
             'App\Listeners\NotifySubscribers'
         ],
-        
-        /** Single Listener is not good */
+
+        /* Single Listener is not good */
         // Registered::class => [
         //     'App\Listeners\SendEmailConfirmationRequest'
         // ]

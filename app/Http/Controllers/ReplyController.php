@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Thread;
-use App\Reply;
-use App\User;
-use App\Inspections\Spam;
 use Auth;
+use App\Reply;
+use App\Thread;
 use App\Rules\SpamFree;
+use App\Inspections\Spam;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\CreatePostRequest;
-use App\Notifications\YouWereMentioned;
 
 class ReplyController extends Controller
 {
@@ -51,16 +49,16 @@ class ReplyController extends Controller
 
         // return $form->persist($thread);
 
-      if ($thread->locked) {
-        return response('Thread is locked', 422);
-      }
+        if ($thread->locked) {
+            return response('Thread is locked', 422);
+        }
 
-        // try { 
-      return $thread->addReply([
+        // try {
+        return $thread->addReply([
         'body' => request('body'),
         'user_id' => auth()->id()
       ])->load('owner');
-            // Could also see Handler.php from Exception
+        // Could also see Handler.php from Exception
         // } catch(\Exception $e) {
         //     return response('Locked', 422);
         // }
@@ -102,7 +100,6 @@ class ReplyController extends Controller
           );
         } */
 
-
       /* Refactoring from Visual Studio Code for PHP Developers: Ep 16 - PHP Full Workflow Review
       Feature of Laravel 5.5 */
       // $validated = request()->validate(['body' => 'required']);
@@ -124,10 +121,11 @@ class ReplyController extends Controller
         if (request()->expectsJson()) {
             return response(['status' => 'Reply deleted']);
         }
+
         return back();
     }
 
-    /**
+    /*
      * Validate the incoming reply.
      */
   // protected function validateReply()

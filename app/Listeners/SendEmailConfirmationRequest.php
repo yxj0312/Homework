@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Mail\PleaseConfirmYourEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendEmailConfirmationRequest
 {
@@ -20,7 +18,7 @@ class SendEmailConfirmationRequest
         //
     }
 
-    /**
+    /*
      * Handle the event. Move to RegisterController
      *
      * @param  Registered  $event

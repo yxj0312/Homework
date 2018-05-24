@@ -9,6 +9,7 @@ class ThreadReceiveNewReply
     use SerializesModels;
 
     public $reply;
+
     /**
      * Create a new event instance.
      *
@@ -18,5 +19,4 @@ class ThreadReceiveNewReply
     {
         $this->reply = $reply;
     }
-
 }

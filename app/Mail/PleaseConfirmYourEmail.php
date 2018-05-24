@@ -12,7 +12,7 @@ class PleaseConfirmYourEmail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var [type]
      */
@@ -25,7 +25,7 @@ class PleaseConfirmYourEmail extends Mailable implements ShouldQueue
      */
     public function __construct($user)
     {
-        $this->user = $user;    
+        $this->user = $user;
     }
 
     /**

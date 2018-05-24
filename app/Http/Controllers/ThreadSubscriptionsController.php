@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Thread;
 
 class ThreadSubscriptionsController extends Controller
@@ -12,7 +11,7 @@ class ThreadSubscriptionsController extends Controller
         $thread->subscribe();
     }
 
-    public function destroy($channelId,  Thread $thread)
+    public function destroy($channelId, Thread $thread)
     {
         $thread->unsubscribe();
     }

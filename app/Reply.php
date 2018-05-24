@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
@@ -22,8 +22,6 @@ class Reply extends Model
      */
     protected $appends = ['favoritesCount', 'isFavorited', 'isBest'];
     // protected $appends = ['favoritesCount', 'isFavorited'];
-    
-
 
     /**
      * Benefit of this approach, compare to increment in thread.php:
@@ -52,7 +50,7 @@ class Reply extends Model
             Reputation::lose($reply->owner, Reputation::REPLY_POSTED);
         });
     }
-    
+
     // ##############################################################
     // Relations
     // ##############################################################
@@ -73,7 +71,7 @@ class Reply extends Model
     public function path()
     {
         // We do need a id to hook to, so that we can direct go the favorited reply.
-        return $this->thread->path() . "#reply-{$this->id}";
+        return $this->thread->path()."#reply-{$this->id}";
     }
 
     public function wasJustPublished()
@@ -104,11 +102,11 @@ class Reply extends Model
         // We look for a reg exp of some sorts('/@[^\s]+/') to find a username,
         // We wrap that with an anchor tag ('<a href="#"></a>')
         // Then, lastly, we are looking to the $body
-        // /@([^\s]+) means: 
+        // /@([^\s]+) means:
         // @: after @ symbol; [^]: Anything; \s that is not space; +: find one or more
         // (): wrap everything we matched, excluding the @ symbol,
         // otherwise u will get @JaneDoe ($0); $1: JaneDoe
-        
+
         /* $this->attributes['body'] = preg_replace('/@([^\s\.]+)/', '<a href="/profiles/$1">$0</a>', $body); */
 
         // Hey @JaneDoe.
@@ -119,7 +117,6 @@ class Reply extends Model
         // \w: Give me word character; + one or more;
         // \- : And a dash; \s: And a space
         $this->attributes['body'] = preg_replace('/@([\w\-]+)/', '<a href="/profiles/$1">$0</a>', $body);
-        
     }
 
     public function getBodyAttribute($body)

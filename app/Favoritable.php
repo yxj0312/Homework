@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -14,19 +15,19 @@ trait Favoritable
          * @return void
          */
         static::deleting(function ($model) {
-            /**
+            /*
              * Remeber: we can't do it, cause it is a sql query.
              * That means, there isn't any favorite instance to delete.
              */
             // $model->favorites()->delete();
             $model->favorites->each->delete();
-
         });
     }
 
     // ##############################################################
     // Relations
     // ##############################################################
+
     /**
      * A reply can be favorited.
      *
@@ -40,6 +41,7 @@ trait Favoritable
     // ##############################################################
     // Methods
     // ##############################################################
+
     /**
      * Favorite the current reply.
      *
@@ -48,7 +50,7 @@ trait Favoritable
     public function favorite()
     {
         $attributes = ['user_id' => auth()->id()];
-        if (!$this->favorites()->where($attributes)->exists()) {
+        if (! $this->favorites()->where($attributes)->exists()) {
             return $this->favorites()->create($attributes);
         }
     }
@@ -63,26 +65,26 @@ trait Favoritable
         /* Get the reply's favorites, ONLY the one, where ther user_id is the
         current users, and delete it. */
         // $this->favorites()->where($attributes)->delete();
-        /* Rather than call a sql query, 
+        /* Rather than call a sql query,
         instead: get a collection of those models, and then u could do deleteing.
          so that the deleting event can be picked up and fired. */
         // $this->favorites()->where($attributes)->get()->each(function($favorite){
         //     $favorite->delete();
         // });
-       /*  A little bit clean up here: 
-       We can use a higher order collection, kind of fancy terms or some
-       syntax sugar, that laravle provices */
+        /*  A little bit clean up here:
+        We can use a higher order collection, kind of fancy terms or some
+        syntax sugar, that laravle provices */
         $this->favorites()->where($attributes)->get()->each->delete();
     }
 
     /**
      * Determine if the current reply has been favorited.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFavorited()
     {
-        return !!$this->favorites->where('user_id', auth()->id())->count();
+        return (bool) $this->favorites->where('user_id', auth()->id())->count();
     }
 
     // ##############################################################
@@ -92,7 +94,7 @@ trait Favoritable
     /**
      * Get the number of favorites for the reply.
      *
-     * @return integer
+     * @return int
      */
     public function getFavoritesCountAttribute()
     {

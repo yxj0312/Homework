@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\SpamFree;
 use Illuminate\Support\Facades\Gate;
 use App\Exceptions\ThrottleException;
-use App\Rules\SpamFree;
+use Illuminate\Foundation\Http\FormRequest;
 
 // class CreatePostForm extends FormRequest
 class CreatePostRequest extends FormRequest
@@ -39,7 +39,7 @@ class CreatePostRequest extends FormRequest
         ];
     }
 
-    /**
+    /*
      * Persist:存留. use $form->persist in contoller
      *
      * @return void

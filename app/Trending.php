@@ -18,7 +18,7 @@ class Trending
             'path' => $thread->path()
         ]));
     }
-    
+
     /**
      * Prevent resetting Redis after running test.
      */
