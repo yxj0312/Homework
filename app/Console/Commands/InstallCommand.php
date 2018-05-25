@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -17,6 +18,7 @@ class InstallCommand extends Command
      * @var string
      */
     protected $description = 'Simplify installation process';
+
     /**
      * Execute the console command.
      *
@@ -38,6 +40,7 @@ class InstallCommand extends Command
         $this->call('cache:clear');
         $this->goodbye();
     }
+
     /**
      * Update the .env file from an array of $key => $value pairs.
      *
@@ -55,6 +58,7 @@ class InstallCommand extends Command
             ));
         }
     }
+
     /**
      * Display the welcome message.
      */
@@ -62,6 +66,7 @@ class InstallCommand extends Command
     {
         $this->info('>> Welcome to the Homework installation process! <<');
     }
+
     /**
      * Display the completion message.
      */
@@ -69,6 +74,7 @@ class InstallCommand extends Command
     {
         $this->info('>> The installation process is complete. Enjoy your new forum! <<');
     }
+
     /**
      * Request the local database details from the user.
      *
@@ -83,12 +89,13 @@ class InstallCommand extends Command
             'DB_PASSWORD' => $this->secret('Database password ("null" for no password)'),
         ];
     }
+
     /**
      * Create the initial .env file.
      */
     protected function createEnvFile()
     {
-        if (!file_exists('.env')) {
+        if (! file_exists('.env')) {
             copy('.env.example', '.env');
             $this->line('.env file successfully created');
         }
