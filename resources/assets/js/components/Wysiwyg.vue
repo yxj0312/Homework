@@ -20,13 +20,11 @@
 
     export default {
         props: ['name', 'value', 'placeholder'],
-
         methods: {
             change({target}) {
                 this.$emit('input', target.value)
             }
         },
-
         watch: {
             value(val) {
                 if (val === '') {
