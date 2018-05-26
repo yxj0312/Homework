@@ -20,7 +20,7 @@
         computed: {
             classes() {
                 return [
-                    'btn', 
+                    'btn',
                     this.active ? 'btn-primary': 'btn-default'
                 ];
             },
@@ -36,7 +36,6 @@
                 /* if (this.isFavorited) {
                     // Unfavorited
                     this.destroy();
-                    
                 } else {
                     this.create();
                 } */
@@ -44,7 +43,6 @@
 
             create() {
                 axios.post(this.endpoint);
-                    
                 this.active = true;
                 this.count++;
             },

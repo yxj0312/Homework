@@ -46,7 +46,8 @@
         </div>
     </div>
 
-    <div class="card-body" v-html="body">
+    <div ref="question" class="panel-body">
+        <highlight :content="body"></highlight>
     </div>
 
     <div class="card-footer" v-if="authorize('owns',thread)">

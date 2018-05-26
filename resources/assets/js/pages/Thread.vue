@@ -1,13 +1,14 @@
 <script>
     import Replies from '../components/Replies.vue';
     import SubscribeButton from '../components/SubscribeButton.vue';
+    import Highlight from '../components/Highlight.vue';
 
     export default {
         /* This props name can no longer be used in data() */
         // props: ['dataRepliesCount', 'dataLocked'],
         props: ['thread'],
 
-        components: { Replies, SubscribeButton },
+        components: { Replies, SubscribeButton, Highlight},
 
         data() {
             return {

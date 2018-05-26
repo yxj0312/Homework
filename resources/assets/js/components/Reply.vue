@@ -47,8 +47,10 @@
 
             </div>
 
-            <div v-else v-html="body"></div>
-
+            <!-- <div v-else v-html="body"></div> -->
+            <div ref="body" v-else>
+                <highlight :content="body"></highlight>
+            </div>
         </div>
 
 
@@ -79,14 +81,14 @@
 
 <script>
 import Favorite from './Favorite.vue';
-
+import Highlight from './Highlight.vue';
 import moment from 'moment';
 
 export default {
   props: ['reply'],
 
   components: {
-    Favorite
+    Favorite, Highlight
   },
 
   data() {
@@ -158,16 +160,16 @@ export default {
     },
 
     cancel() {
-        this.editing = false;
-        this.body = this.reply.body;
+      this.editing = false;
+      this.body = this.reply.body;
     },
 
     destroy() {
       axios.delete('/replies/' + this.id);
 
-        /* Here is how child communicate with the parent component
-           Hey, I've been deleted!
-        */
+      /* Here is how child communicate with the parent component
+        Hey, I've been deleted!
+      */
 
       this.$emit('deleted', this.id);
 
