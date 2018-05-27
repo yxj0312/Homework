@@ -21,7 +21,7 @@
                     </div>
                 </li>
                 <li class="nav-item"><a class="nav-link" href={{route( 'threads.create')}}>New Thread</a></li>
-                <li class="nav-item dropdown">
+                {{-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                                 Channels 
@@ -30,7 +30,8 @@
                         @foreach ($channels as $channel)
                         <a class="dropdown-item" href="/threads/{{ $channel->slug }}">{{ $channel->name }}</a> @endforeach
                     </div>
-                </li>
+                </li> --}}
+                <channel-dropdown :channels="{{ $channels }}"></channel-dropdown>
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
