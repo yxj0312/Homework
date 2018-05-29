@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Thread;
@@ -14,6 +15,7 @@ class PinnedThreadsController extends Controller
     {
         $thread->update(['pinned' => true]);
     }
+
     /**
      * Un-Pin the given thread.
      *
