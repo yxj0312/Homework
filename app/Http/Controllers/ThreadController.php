@@ -168,7 +168,8 @@ class ThreadController extends Controller
      */
     protected function getThreads(Channel $channel, ThreadFilters $filters)
     {
-        $threads = Thread::latest()->filter($filters);
+        // $threads = Thread::latest()->filter($filters);
+        $threads = Thread::latest('pinned')->latest()->filter($filters);
 
         //Queries reduction: eager load with 'with'
         // $threads = Thread::with('channel')->latest()->filter($filters);
