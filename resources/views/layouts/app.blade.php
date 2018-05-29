@@ -18,7 +18,7 @@
     <script>
         window.App = {!!json_encode([
             'signedIn' => \Auth::check(),
-            'user' => \Auth::user()
+            'user' => \Auth::user(),
         ])  !!}
     </script>
 

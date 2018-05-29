@@ -31,7 +31,6 @@ Vue.prototype.authorize = function(...params) {
   // And whatever u returned from that function, determine if the user is authorized.
 
   // return user ? handler(user) : false;
-
   return params[0](window.App.user);
 };
 

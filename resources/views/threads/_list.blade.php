@@ -5,7 +5,10 @@
                 <div class="flex">
                     <h4>
                         {{-- <a href={{route( 'threads.show',[ 'channel'=>$thread->channel->slug,'thread'=>$thread->id])}}> --}}
-                        <a href={{$thread->path()}}>                        
+                        <a href={{$thread->path()}}>
+                            @if($thread->pinned)
+                               <span class="fa fa-map-pin" aria-hidden="true"></span>
+                            @endif                     
                             @if (auth()->check() && $thread->hasUpdatesFor(auth()->user()))
                                 <strong>
                                     {{ $thread->title }}
