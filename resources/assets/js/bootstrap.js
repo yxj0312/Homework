@@ -35,7 +35,7 @@ let token = document.head.querySelector('meta[name="csrf-token"]');
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+    Console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
 /**
@@ -47,7 +47,7 @@ window.events = new Vue(); // vue.$emit / vue.$on to listen a fire event
 // One more global
 // you call ur flash function:
 window.flash = function(message, level = "success") {
-    // This will emit an event, and go to Flash.vue component. 
+    // This will emit an event, and go to Flash.vue component.
     // $on listening for that event
     window.events.$emit('flash', { message, level });
 };
