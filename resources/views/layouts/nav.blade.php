@@ -31,7 +31,8 @@
                         <a class="dropdown-item" href="/threads/{{ $channel->slug }}">{{ $channel->name }}</a> @endforeach
                     </div>
                 </li> --}}
-                <channel-dropdown :channels="{{ $channels }}"></channel-dropdown>
+                {{-- <channel-dropdown :channels="{{ $channels }}"></channel-dropdown> --}}
+                <channel-dropdown></channel-dropdown>                
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
