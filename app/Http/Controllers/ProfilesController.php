@@ -62,6 +62,7 @@ class ProfilesController extends Controller
         if (request()->expectsJson()) {
             return $data;
         }
+
         return view('profiles.show', $data);
     }
 
