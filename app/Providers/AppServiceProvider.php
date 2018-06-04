@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Channel;
+// use App\Channel;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,16 +20,18 @@ class AppServiceProvider extends ServiceProvider
         // \View::composer(['threads.create','threads.index'], function ($view) {
 
         //This Query will be toggled until view loaded.
-        \View::composer('*', function ($view) {
-            $channels = \Cache::rememberForever('channels', function () {
-                return Channel::all();
-            });
+        // \View::composer('*', function ($view) {
+        //     $channels = \Cache::rememberForever('channels', function () {
+        //         return Channel::all();
+        //     });
 
-            $view->with('channels', $channels);
-        });
+        //     $view->with('channels', $channels);
+        // });
 
         //equal to above, but it gonna run before 'RefreshDatabase' by test.
         // \View::share('channels', Channel::all());
+
+        \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');
     }
 
     /**

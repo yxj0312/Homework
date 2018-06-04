@@ -15,8 +15,11 @@ class ProfilesTest extends TestCase
     {
         $user = create('App\User');
    
-        $this->get("/profiles/{$user->name}")
-            ->assertSee($user->name);
+        // $this->get("/profiles/{$user->name}")
+        //     ->assertSee($user->name);
+        $response = $this->getJson("/profiles/{$user->name}")->json();
+        
+        $this->assertEquals($response['profileUser']['name'], $user->name);
     }
 
     /** @test */

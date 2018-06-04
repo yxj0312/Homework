@@ -31,7 +31,8 @@
                         <a class="dropdown-item" href="/threads/{{ $channel->slug }}">{{ $channel->name }}</a> @endforeach
                     </div>
                 </li> --}}
-                <channel-dropdown :channels="{{ $channels }}"></channel-dropdown>
+                {{-- <channel-dropdown :channels="{{ $channels }}"></channel-dropdown> --}}
+                <channel-dropdown></channel-dropdown>                
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
@@ -63,13 +64,14 @@
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('profile', Auth::user())}}">My Profile</a>
-                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        {{-- <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         Logout
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
-                        </form>
+                        </form> --}}
+                        <logout-button route="{{ route('logout') }}">Logout</logout-button>
                     </div>
                 </li>
                 @endguest

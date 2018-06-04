@@ -2,7 +2,8 @@
 
 @section('administration-content')
     <form method="POST" action="{{ route('admin.channels.store') }}">
-        {{ csrf_field() }}
+        @include ('admin.channels._form')
+        {{-- {{ csrf_field() }}
 
         <div class="form-group">
             <label for="name">Name:</label>
@@ -24,6 +25,6 @@
             <li>{{ $error }}</li>
             @endforeach
         </ul>
-        @endif
+        @endif --}}
     </form>
 @endsection
