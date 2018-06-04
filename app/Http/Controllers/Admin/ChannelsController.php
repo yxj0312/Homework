@@ -41,16 +41,17 @@ class ChannelsController extends Controller
 
     /**
      * Show the form to edit an existing channel.
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Channel $channel)
     {
         return view('admin.channels.edit', compact('channel'));
     }
+
     /**
      * Update an existing channel.
-     * 
+     *
      * @return \Illuminate\
      */
     public function update(Channel $channel)
@@ -65,8 +66,8 @@ class ChannelsController extends Controller
         if (request()->wantsJson()) {
             return response($channel, 200);
         }
+
         return redirect(route('admin.channels.index'))
             ->with('flash', 'Your channel has been updated!');
     }
-
 }
