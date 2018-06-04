@@ -47,13 +47,22 @@ class ProfilesController extends Controller
      */
     public function show(User $user)
     {
-        return view('profiles.show', [
+        /* return view('profiles.show', [
             'profileUser' => $user,
             // 'threads' => $user->threads()->paginate(30)
             // 'activities' => $activities
             // 'activities' => $this->getActivity($user)
             'activities' => Activity::feed($user)
-        ]);
+        ]); */
+
+        $data = [
+            'profileUser' => $user,
+            'activities' => Activity::feed($user)
+        ];
+        if (request()->expectsJson()) {
+            return $data;
+        }
+        return view('profiles.show', $data);
     }
 
     /**
