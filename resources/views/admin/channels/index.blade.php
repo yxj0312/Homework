@@ -15,6 +15,7 @@
             <th>Slug</th>
             <th>Description</th>
             <th>Threads</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -23,7 +24,10 @@
             <td>{{$channel->name}}</td>
             <td>{{$channel->slug}}</td>
             <td>{{$channel->description}}</td>
-            <td>{{ $channel->threads()->count()}}</td>
+            <td>{{$channel->threads()->count()}}</td>
+            <td>
+                <a href="/admin/channels/{{ $channel->slug }}/edit" class="btn btn-default btn-xs">Edit</a>
+            </td>
         </tr>
         @empty
         <tr>
