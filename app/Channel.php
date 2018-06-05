@@ -13,6 +13,10 @@ class Channel extends Model
      */
     protected $guarded = [];
 
+    protected $casts = [
+        'archived' => 'boolean'
+    ];
+
     /**
      * Get the route key name for Laravel.
      *
@@ -26,6 +30,11 @@ class Channel extends Model
     public function threads()
     {
         return $this->hasMany(Thread::class);
+    }
+
+    public function archive()
+    {
+        $this->update(['archived' => true]);
     }
 
     public function setNameAttribute($name)
