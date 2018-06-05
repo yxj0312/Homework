@@ -13,7 +13,7 @@ class ChannelsController extends Controller
     public function index()
     {
         return cache()->rememberForever('channels', function () {
-            return Channel::orderBy('name', 'desc')->get();
+            return Channel::where('archived', false)->orderBy('name', 'desc')->get();
         });
     }
 }
