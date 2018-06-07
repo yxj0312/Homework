@@ -103,7 +103,7 @@ class ThreadController extends Controller
                     $query->where('archived', false);
                 })
             ],
-            
+
             'g-recaptcha-response' => ['required', $recaptcha]
         ]);
 
