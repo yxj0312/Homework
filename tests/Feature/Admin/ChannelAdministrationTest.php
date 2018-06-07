@@ -62,7 +62,8 @@ class ChannelAdministrationTest extends TestCase
             route('admin.channels.update', ['channel' => create('App\Channel')->slug]),
             $updatedChannel = [
                 'name' => 'altered',
-                'description' => 'altered channel description'
+                'description' => 'altered channel description',
+                'archived' => true
             ]
         );
         $this->get(route('admin.channels.index'))
@@ -89,6 +90,18 @@ class ChannelAdministrationTest extends TestCase
         );
 
         $this->assertTrue($channel->fresh()->archived);
+    }
+
+    /** @test */
+    public function the_path_to_a_channel_is_unaffected_by_its_archived_status()
+    {
+        $thread = create('App\Thread');
+
+        $path = $thread->path();
+
+        $thread->channel->archive();
+
+        $this->assertEquals($path, $thread->fresh()->path());
     }
 
     /** @test */

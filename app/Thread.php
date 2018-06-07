@@ -93,7 +93,8 @@ class Thread extends Model
 
     public function channel()
     {
-        return $this->belongsTo(Channel::class);
+        // return $this->belongsTo(Channel::class);
+        return $this->belongsTo(Channel::class)->withoutGlobalScope('active');
     }
 
     public function subscriptions()
@@ -346,6 +347,10 @@ class Thread extends Model
     // ##############################################################
     public function getIsSubscribedToAttribute()
     {
+        if (! auth()->id()) {
+            return false;
+        }
+
         return $this->subscriptions()
             ->where('user_id', auth()->id())
             ->exists();

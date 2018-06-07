@@ -13,8 +13,8 @@
 <div class="form-group">
     <label for="archived">Status:</label>
     <select name="archived" id="archived" class="form-control">
-        <option value="0" {{ $channel->archived ? '' : 'selected' }}>Active</option>
-        <option value="1" {{ $channel->archived ? 'selected' : '' }}>Archievd</option>
+        <option value="0" {{ old('archived', $channel->archived) ? '' : 'selected' }}>Active</option>
+        <option value="1" {{ old('archived', $channel->archived) ? 'selected' : '' }}>Archievd</option>
     </select>
 </div>
 
