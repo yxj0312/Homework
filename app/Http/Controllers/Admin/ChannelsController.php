@@ -12,7 +12,7 @@ class ChannelsController extends Controller
     public function index()
     {
         // Don't apply globalScopes in this case.
-        $channels = Channel::withoutGlobalScopes()->orderBy('name', 'asc')->withCount('threads')->get();
+        $channels = Channel::withArchived()->withCount('threads')->get();
 
         return view('admin.channels.index', compact('channels'));
     }
