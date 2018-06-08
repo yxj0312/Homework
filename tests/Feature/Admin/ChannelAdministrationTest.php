@@ -20,7 +20,7 @@ class ChannelAdministrationTest extends TestCase
     }
 
     /** @test */
-    function an_administrator_can_access_the_channel_administration_section()
+    public function an_administrator_can_access_the_channel_administration_section()
     {
         $this->signInAdmin()
             ->get(route('admin.channels.index'))
@@ -72,7 +72,7 @@ class ChannelAdministrationTest extends TestCase
     }
 
     /** @test */
-    function an_administrator_can_mark_an_existing_channel_as_archived()
+    public function an_administrator_can_mark_an_existing_channel_as_archived()
     {
         $this->signInAdmin();
 
@@ -90,6 +90,33 @@ class ChannelAdministrationTest extends TestCase
         );
 
         $this->assertTrue($channel->fresh()->archived);
+    }
+
+    /** @test */
+    public function an_administrator_can_edit_an_archived_channel()
+    {
+        $this->signInAdmin();
+        $channel = create('App\Channel', ['archived' => true]);
+        $this->assertTrue($channel->archived);
+        $this->get(route('admin.channels.edit', $channel))
+            ->assertStatus(Response::HTTP_OK);
+    }
+
+    /** @test */
+    public function an_administrator_can_activate_an_archived_channel()
+    {
+        $this->signInAdmin();
+        $channel = create('App\Channel', ['archived' => true]);
+        $this->assertTrue($channel->archived);
+        $this->patch(
+            route('admin.channels.update', $channel),
+            [
+                'name' => 'altered',
+                'description' => 'altered channel description',
+                'archived' => false
+            ]
+        );
+        $this->assertFalse($channel->fresh()->archived);
     }
 
     /** @test */
