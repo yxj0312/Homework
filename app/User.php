@@ -119,7 +119,7 @@ class User extends Authenticatable
 
     public function getAvatarPathAttribute($avatar)
     {
-        return asset(($avatar ? 'storage/'.$avatar : 'images/avatars/default.png'));
+        return asset(($avatar ? 'storage/'.$avatar : 'images/avatars/default.svg'));
     }
 
     public function visitedThreadCacheKey($thread)
