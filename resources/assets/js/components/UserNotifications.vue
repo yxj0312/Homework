@@ -15,7 +15,7 @@
                 v-for="notification in notifications" :key="notification.id"
                 :href="notification.data.link"
                 v-text="notification.data.message"
-                @click="markAsRead(notification)"
+                @click.prevent="markAsRead(notification)"
              >
                 Foobar
              </a>
@@ -37,14 +37,24 @@
         },
 
         created() {
-            axios.get('/profiles/' + window.App.user.name + '/notifications')
+            /* axios.get('/profiles/' + window.App.user.name + '/notifications')
             // U have a response, we are going to save them
-                .then(response => this.notifications = response.data);
+                .then(response => this.notifications = response.data); */
+            this.fetchNotifications();
         },
 
         methods: {
+            fetchNotifications() {
+                axios.get('/profiles/' + window.App.user.name + '/notifications')
+                 .then(response => this.notifications = response.data);
+            },
+
             markAsRead(notification) {
                 axios.delete('/profiles/' + window.App.user.name + '/notifications/' + notification.id)
+                .then(response => {
+                    this.fetchNotifications();
+                    document.location.replace(response.data.link);
+                });
             }
         }
     }
