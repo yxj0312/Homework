@@ -1,12 +1,9 @@
 @tailwind preflight;
-
 @import "components/btn";
 @import "components/widget";
 @import "sections/search";
 @import "sections/trix";
-
 @tailwind utilities;
-
 a {
     @apply .text-grey-darkest;
     text-decoration: none;
