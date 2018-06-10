@@ -5,11 +5,13 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import InstantSearch from 'vue-instantsearch';
+import VModal from 'vue-js-modal'
 
 window.Vue = require('vue');
 require('./bootstrap');
 
 Vue.use(InstantSearch);
+Vue.use(VModal);
 
 let authorizations = require('./authorizations');
 
@@ -61,5 +63,19 @@ Vue.component('thread-view', require('./pages/Thread.vue'));
 
 /* eslint-disable no-unused-vars*/
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
+    data: {
+      searching: false
+    },
+
+    methods: {
+      search() {
+        this.searching = true;
+
+        this.$nextTick(() => {
+          this.$refs.search.focus();
+        });
+      }
+    }
 });
