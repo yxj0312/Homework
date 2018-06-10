@@ -25,30 +25,20 @@
         ]) !!};
     </script>
 
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-
     @yield('head')
 </head>
 
-<body class="font-sans bg-grey-lighter">
+<body class="font-sans bg-white">
     <div id="app">
     @include ('layouts.nav')
 
-        <div class="container mx-auto">
+        <div class="container">
             <div class="flex">
-                
-@section('sidebar')
-    @include('sidebar') @show
-
-                <div class="px-10 bg-white flex-1">
-                    @yield('content')
-                </div>
-    @include('channels-sidebar')
+                @yield('content')
             </div>
         </div>
 
         <flash message="{{ session('flash') }}"></flash>
-    @include('modals.all')
     </div>
 
     <!-- Scripts -->

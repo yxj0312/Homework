@@ -1,81 +1,51 @@
-<nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-    <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+<nav class="bg-blue-darker py-4">
+    <div class="container mx-auto flex justify-between items-center text-blue-lightest pl-6">
+        <div>
+            <h1 class="font-normal text-2xl">
+                <a href="/" class="text-blue-lightest flex items-center">
+                @include ('svgs.logo', ['class' => 'mr-2'])
+                    {{ config('app.name', 'Council') }}
                 </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">Browse</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href={{route( 'threads')}}>All Threads</a> @if (auth()->check())
-                        <a class="dropdown-item" href="/threads?by={{ auth()->user()->name }}">My Threads</a> @endif
-                        <a class="dropdown-item" href="/threads?popular=1">Popular Threads</a>
-                        <a class="dropdown-item" href="/threads?unanswered=1">Unanswered Threads</a>                        
-                    </div>
-                </li>
-                <li class="nav-item"><a class="nav-link" href={{route( 'threads.create')}}>New Thread</a></li>
-                {{-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                                Channels 
-                            </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        @foreach ($channels as $channel)
-                        <a class="dropdown-item" href="/threads/{{ $channel->slug }}">{{ $channel->name }}</a> @endforeach
-                    </div>
-                </li> --}}
-                {{-- <channel-dropdown :channels="{{ $channels }}"></channel-dropdown> --}}
-                <channel-dropdown></channel-dropdown>                
-            </ul>
-            <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ml-auto">
-                <!-- Authentication Links -->
-                @guest
-                    <li><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                    <li><a class="nav-link" href="{{ route('register') }}">Register</a></li>
-                @else
-                <user-notifications></user-notifications>
+            </h1>
+        </div>
 
-                @if (Auth::user()->isAdmin())
-                    <li>
-                        <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
-                            <span class="fa fa-cog" aria-hidden="true"></span>
-                        </a>
-                    </li>
-                @endif
+        <div class="flex" v-cloak>
+            <div class="search-wrap rounded-full bg-blue-darkest w-10 cursor-pointer h-10 flex items-center justify-center mr-4 relative"
+                @mouseover="search" @mouseout="searching = false">
+                <form method="GET" action="/threads/search" v-show="searching">
+                    <input type="text" placeholder="Search for something..." name="q" ref="search" class="search-input absolute pin-r pin-t h-full rounded bg-blue-darkest border-none pl-6 pr-10 text-white">
+                </form>
+    @include('svgs.icons.search')
+            </div>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" 
-                       href="#"
-                       role="button"
-                       data-toggle="dropdown" 
-                       aria-haspopup="true" 
-                       aria-expanded="false"
-                    >
-                        {{ Auth::user()->name }} <span class="caret"></span>
-                    </a>
+            @if (auth()->check())
+            <user-notifications></user-notifications>
 
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('profile', Auth::user())}}">My Profile</a>
-                        {{-- <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form> --}}
-                        <logout-button route="{{ route('logout') }}">Logout</logout-button>
+            {{-- User dropdown. --}}
+            <div>
+                <dropdown>
+                    <div slot="heading" class="rounded-full bg-blue-darkest w-10 h-10 flex items-center justify-center cursor-pointer relative z-10">
+                        <img src="{{ auth()->user()->avatar_path }}" alt="{{ auth()->user()->username }}" class="relative z-10 w-4 rounded-full">
                     </div>
-                </li>
-                @endguest
-            </ul>
+
+                    <template slot="links">
+                            <li class="text-sm pb-3">
+                                <a class="link" href="{{ route('profile', Auth::user()) }}">My Profile</a>
+                            </li>
+
+                            @if (Auth::user()->isAdmin())
+                                <li class="text-sm pb-3">
+                                    <a class="link" href="{{ route('admin.dashboard.index') }}">Admin</a>
+                                </li>
+                            @endif
+
+                            <li class="text-sm">
+                                <logout-button route="{{ route('logout') }}" class="link">Logout</logout-button>
+                            </li>
+                        </template>
+                </dropdown>
+            </div>
+            @endif
         </div>
     </div>
 </nav>

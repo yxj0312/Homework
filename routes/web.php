@@ -29,7 +29,7 @@ Route::get('threads/{channel}/{thread}', 'ThreadController@show')->name('threads
 Route::patch('threads/{channel}/{thread}', 'ThreadController@update')->name('threads.update');
 Route::delete('threads/{channel}/{thread}', 'ThreadController@destroy');
 Route::post('threads', 'ThreadController@store')->name('threads.store')->middleware('must-be-confirmed');
-Route::get('threads/{channel}', 'ThreadController@index');
+Route::get('threads/{channel}', 'ThreadController@index')->name('channels');
 
 Route::post('locked-threads/{thread}', 'LockedThreadsController@store')->name('locked-threads.store')->middleware('admin');
 Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy')->middleware('admin');
