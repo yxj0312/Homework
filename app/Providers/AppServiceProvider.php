@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 // use App\Channel;
+use App\Trending;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Trending $trending)
     {
         // \View::composer(['threads.create','threads.index'], function ($view) {
 
