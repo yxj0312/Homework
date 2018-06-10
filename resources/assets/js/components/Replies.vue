@@ -1,20 +1,35 @@
 <template>
-    <div>
-        <div  v-for="(reply,index) in items" :key="reply.id">
+    <!-- <div>
+        <div  v-for="(reply,index) in items" :key="reply.id"> -->
             <!-- Listen to the $emit from child -->
-            <reply :reply="reply" @deleted="remove(index)"></reply>
+            <!-- <reply :reply="reply" @deleted="remove(index)"></reply>
             <br>
-        </div>
+        </div> -->
 
-        <paginator :dataSet="dataSet" @changed="fetch"></paginator>
+        <!-- <paginator :dataSet="dataSet" @changed="fetch"></paginator> -->
 
         <!-- Move endpoint to newReply -->
         <!-- <new-reply :endpoint="endpoint" @created="add"></new-reply> -->
-        <p v-if="$parent.locked">
+        <!-- <p v-if="$parent.locked">
             This thread has been locked. No more replies are allowed.
-        </p>
+        </p> -->
 
-        <new-reply @created="add" v-else></new-reply> 
+        <!-- <new-reply @created="add" v-else></new-reply> -->
+    <!-- </div> -->
+    <div class="flex" style="margin-left: 56px">
+        <div>
+            <div v-for="(reply, index) in items" :key="reply.id">
+                <reply :reply="reply" @deleted="remove(index)"></reply>
+            </div>
+
+            <paginator :dataSet="dataSet" @changed="fetch"></paginator>
+
+            <p v-if="$parent.locked" class="mt-4 text-sm text-grey-dark text-center">
+                This thread has been locked. No more replies are allowed.
+            </p>
+
+            <new-reply @created="add" v-else></new-reply>
+        </div>
     </div>
 </template>
 
@@ -22,7 +37,7 @@
     import Reply from './Reply.vue';
     import NewReply from './NewReply.vue';
     import collection from '../mixins/collection'
-     
+
     export default {
         // props: ['data'],
         components: { Reply, NewReply },
