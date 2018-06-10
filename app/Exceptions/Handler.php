@@ -3,7 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Validation\ValidationException;
+// use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -50,11 +50,11 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         // if(app()->environment() === 'testing') throw $exception;
-        if ($exception instanceof ValidationException) {
-            if ($request->wantsJson()) {
-                return response('Sorry, validation failed', 422);
-            }
-        }
+        // if ($exception instanceof ValidationException) {
+        //     if ($request->wantsJson()) {
+        //         return response('Sorry, validation failed', 422);
+        //     }
+        // }
 
         if ($exception instanceof ThrottleException) {
             // if($request->wantsJson())
