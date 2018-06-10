@@ -1,8 +1,9 @@
 <template>
-    <div class="new-reply">
+    <!-- <div class="new-reply"> -->
+    <div class="py-6 ml-10">
         <div v-if="! signedIn">
-            <p class="text-center">
-                Please <a href="/login">sign in</a> to participate in this
+            <p class="text-center text-sm text-grey-dark">
+                Please <a href="/login" @click.prevent="$modal.show('login')" class="text-blue link">sign in</a> to participate in this
                 discussion.
             </p>
         </div>
@@ -12,7 +13,7 @@
         </div>
 
         <div v-else>
-            <div class="form-group">
+            <div class="mb-3">
                 <wysiwyg name="body"
                     v-model="body"
                     placeholder="Have something to say?"
@@ -28,14 +29,14 @@
             </div>
             <br>
             <button type="submit"
-                    class="btn btn-default"
+                    class="btn is-green"
                     @click="addReply">Post</button>
         </div>
     </div>
 </template>
 
 <script>
-import 'jquery';
+// import 'jquery';
 import 'jquery.caret';
 import 'at.js';
 
@@ -111,8 +112,9 @@ export default {
 
 <style scoped>
 .new-reply {
-  padding: 15px;
+  /* padding: 15px;
   background-color: #fff;
-  border: 1px solid #e3e3e3;
+  border: 1px solid #e3e3e3; */
+  background-color: #fff;
 }
 </style>
