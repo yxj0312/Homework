@@ -59,7 +59,6 @@ class YouWereMentioned extends Notification
             'message' => $this->reply->owner->name.' metioned you in '.$this->reply->thread->title,
             'notifier' => $this->user(),
             'link' => $this->reply->path()
-
         ];
     }
 }
