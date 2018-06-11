@@ -1,5 +1,6 @@
 let mix = require('laravel-mix');
 let tailwindcss = require('tailwindcss');
+require('dotenv').config();
 
 // Add the JS part of your libs
 var jslibs = [
@@ -29,5 +30,5 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             processCssUrls: false,
             postCss: [tailwindcss('./tailwind.js')],
         })
-        .browserSync('homework.loc')
+        .browserSync(process.env.DEV_URL)
 //    .sourceMaps();
