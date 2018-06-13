@@ -1,13 +1,30 @@
-// Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-// Variables
-@import "variables";
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@tailwind preflight;
+@import "components/btn";
+@import "components/widget";
+@import "sections/search";
+@import "sections/trix";
+@tailwind utilities;
+a {
+    @apply .text-grey-darkest;
+    text-decoration: none;
+    &.link:hover {
+        text-decoration: underline;
+    }
+}
 
-@import "~font-awesome/scss/font-awesome.scss";
+input {
+    @apply .border .border-grey-light;
+}
 
-.navbar-laravel {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+pre {
+    @apply .whitespace-pre-wrap;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.ais-highlight>em {
+    font-weight: bold;
+    @apply .text-black;
 }

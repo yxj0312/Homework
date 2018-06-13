@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ config('app.locale') }}">
 
 <head>
     <meta charset="utf-8">
@@ -12,63 +12,43 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/0.11.2/trix.css"> --}}
+
     <!-- Scripts -->
     <script>
-        window.App = {!!json_encode([
-            'signedIn' => \Auth::check(),
-            'user' => \Auth::user(),
-        ])  !!}
+        window.App = {!! json_encode([
+            'csrfToken' => csrf_token(),
+            'user' => Auth::user(),
+            'signedIn' => Auth::check()
+        ]) !!};
     </script>
 
-    <style>
-        body {
-            padding-bottom: 100px;
-        }
-
-        .level {
-            display: flex;
-            align-items: center;
-        }
-
-        .level-item {
-            margin-right: 1em;
-        }
-
-        .flex {
-            flex: 1;
-        }
-
-        .mr-1 {
-            margin-right: 1em;
-        }
-
-        .ml-a {
-            margin-left: auto;
-        }
-
-        [v-cloak] {
-            display: none;
-        }
-        .ais-highlight > em {
-            background: yellow;
-            font-style: normal;
-        }
-    </style>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 
     @yield('head')
 </head>
 
-<body>
+<body class="font-sans bg-grey-lighter">
     <div id="app">
-    @include('layouts.nav')
+    @include ('layouts.nav')
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+        <div class="container mx-auto">
+            <div class="flex">
+                
+@section('sidebar')
+    @include('sidebar') @show
+
+                <div class="px-10 bg-white flex-1">
+                    @yield('content')
+                </div>
+    @include('channels-sidebar')
+            </div>
+        </div>
 
         <flash message="{{ session('flash') }}"></flash>
+    @include('modals.all')
     </div>
 
     <!-- Scripts -->

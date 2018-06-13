@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
-use App\Trending;
+// use App\Trending;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function show(Trending $trending)
+    // public function show(Trending $trending)
+    public function show()
     {
         // $search = request('q');
 
@@ -22,9 +23,10 @@ class SearchController extends Controller
             return Thread::search(request('q'))->paginate(25);
         }
 
-        return view('threads.search', [
-            // 'threads' => $threads,
-            'trending' => $trending->get()
-        ]);
+        // return view('threads.search', [
+        //     // 'threads' => $threads,
+        //     'trending' => $trending->get()
+        // ]);
+        return view('threads.search');
     }
 }

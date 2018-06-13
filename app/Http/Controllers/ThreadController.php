@@ -29,7 +29,8 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
+    // public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
+    public function index(Channel $channel, ThreadFilters $filters)
     {
         // $threads = Thread::filter($filters)->get();
 
@@ -63,7 +64,8 @@ class ThreadController extends Controller
 
         return view('threads.index', [
             'threads' => $threads,
-            'trending' => $trending->get()
+            // 'trending' => $trending->get()
+            'channel' => $channel
         ]);
     }
 

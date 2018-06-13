@@ -15,7 +15,6 @@
                 repliesCount: this.thread.replies_count,
                 locked: this.thread.locked,
                 pinned: this.thread.pinned,
-                editing: false,
                 title: this.thread.title,
                 body: this.thread.body,
                 // use v-model to bind this.
@@ -23,12 +22,25 @@
                     //  We can move it to created()
                     // title: this.thread.title,
                     // body: this.thread.body
-                }
+                },
+                editing: false,
+                feedback: "",
+                errors: false
             };
         },
 
         created() {
             this.resetForm();
+        },
+
+        watch: {
+            editing(enabled) {
+                if (enabled) {
+                    this.$modal.show("update-thread");
+                } else {
+                    this.$modal.hide("update-thread");
+                }
+            }
         },
 
         methods: {
@@ -68,6 +80,10 @@
                     // this.title = result.data.title;
                     // this.body = result.data.body;
                     flash('Your thread has been updated.');
+                })
+                .catch(error => {
+                    this.feedback = "Whoops, validation failed.";
+                    this.errors = error.response.data.errors;
                 });
             },
 
@@ -77,14 +93,16 @@
                     body: this.thread.body,
                 };
                 this.editing = false;
+
+                this.$modal.hide("update-thread");
             },
 
-            classes(target) {
-                return [
-                    'btn',
-                    target ? 'btn-primary' : 'btn-default'
-                ];
-            }
+            // classes(target) {
+            //     return [
+            //         'btn',
+            //         target ? 'btn-primary' : 'btn-default'
+            //     ];
+            // }
         }
     }
 </script>

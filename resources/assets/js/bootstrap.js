@@ -1,18 +1,35 @@
-
 window._ = require('lodash');
-window.Popper = require('popper.js').default;
+
+import InstantSearch from 'vue-instantsearch';
+import VModal from 'vue-js-modal'
+
+window.$ = window.jQuery = require('jquery');
 
 /**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
+ * Vue is a modern JavaScript library for building interactive web interfaces
+ * using reactive data binding and reusable components. Vue's API is clean
+ * and simple, leaving you to focus on building your next great project.
  */
 
-try {
-    window.$ = window.jQuery = require('jquery');
+window.Vue = require('vue');
 
-    require('bootstrap');
-} catch (e) {}
+Vue.use(InstantSearch);
+Vue.use(VModal);
+
+let authorizations = require('./authorizations');
+
+Vue.prototype.authorize = function (...params) {
+    if (!window.App.signedIn) return false;
+
+    if (typeof params[0] === 'string') {
+        return authorizations[params[0]](params[1]);
+    }
+
+    return params[0](window.App.user);
+};
+
+Vue.prototype.signedIn = window.App.signedIn;
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -22,32 +39,16 @@ try {
 
 window.axios = require('axios');
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common = {
+    'X-CSRF-TOKEN': window.App.csrfToken,
+    'X-Requested-With': 'XMLHttpRequest'
+};
 
-/**
- * Next we will register the CSRF Token as a common header with Axios so that
- * all outgoing HTTP requests automatically have it attached. This is just
- * a simple convenience so we don't have to attach every token manually.
- */
+window.events = new Vue();
 
-let token = document.head.querySelector('meta[name="csrf-token"]');
-
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    Console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
-
-/**
- * Assign window object.
- * create a new Vue instance, because every vue instance already is a event bus.
- */
-window.events = new Vue(); // vue.$emit / vue.$on to listen a fire event
-
-// One more global
-// you call ur flash function:
-window.flash = function(message, level = "success") {
-    // This will emit an event, and go to Flash.vue component.
-    // $on listening for that event
-    window.events.$emit('flash', { message, level });
+window.flash = function (message, level = 'success') {
+    window.events.$emit('flash', {
+        message,
+        level
+    });
 };
