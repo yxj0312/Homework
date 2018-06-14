@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,28 +31,29 @@
 
 <body class="font-sans bg-grey-lighter">
     <div id="app">
-    @include ('layouts.nav')
+        @include ('layouts.nav')
 
         <div class="container mx-auto">
             <div class="flex">
-                
-@section('sidebar')
-    @include('sidebar') @show
+                @section('sidebar')
+                    @include('sidebar')
+                @show
 
                 <div class="px-10 bg-white flex-1">
                     @yield('content')
                 </div>
-    @include('channels-sidebar')
+
+                 @include('channels-sidebar')
             </div>
         </div>
 
         <flash message="{{ session('flash') }}"></flash>
-    @include('modals.all')
+
+        @include('modals.all')
     </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('scripts')
 </body>
-
 </html>
