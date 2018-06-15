@@ -7,6 +7,8 @@ use Illuminate\Contracts\Validation\Rule;
 
 class Recaptcha implements Rule
 {
+    const URL = 'https://www.google.com/recaptcha/api/siteverify';
+
     /**
      * Determine if the validation rule passes.
      *
@@ -18,7 +20,7 @@ class Recaptcha implements Rule
     {
         // Guzzle or zttp
 
-        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
+        $response = Zttp::asFormParams()->post(static::URL, [
             'secret' => config('services.recaptcha.secret'),
             'response' => $value,
             'remoteip' => request()->ip()
@@ -45,7 +47,7 @@ class Recaptcha implements Rule
      */
     public static function isInTestMode()
     {
-        return Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
+        return Zttp::asFormParams()->post(static::URL, [
             'secret' => config('services.recaptcha.secret'),
             'response' => 'test',
             'remoteip' => request()->ip()
