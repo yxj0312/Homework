@@ -62,6 +62,7 @@ class NotifyMentionedUsers
     public function mentionedUsers($body)
     {
         preg_match_all('/@([\w\-]+)/', $body, $matches);
+
         return $matches[1];
     }
 }

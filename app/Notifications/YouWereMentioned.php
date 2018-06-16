@@ -2,10 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Reply;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
-use App\Reply;
 
 class YouWereMentioned extends Notification
 {
