@@ -14,6 +14,7 @@ class ThreadReceiveNewReply
      * @param \App\Reply $reply
      */
     public $reply;
+
     /**
      * Create a new event instance.
      *
@@ -23,6 +24,7 @@ class ThreadReceiveNewReply
     {
         $this->reply = $reply;
     }
+
     /**
      * Get the subject of the event.
      */
