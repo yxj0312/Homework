@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Events;
 
 use Illuminate\Queue\SerializesModels;
@@ -12,6 +13,7 @@ class ThreadWasPublished
      * @var \App\Thread
      */
     public $thread;
+
     /**
      * Create a new event instance.
      *
@@ -22,6 +24,7 @@ class ThreadWasPublished
     {
         $this->thread = $thread;
     }
+
     /**
      * Get the subject of the event.
      */
