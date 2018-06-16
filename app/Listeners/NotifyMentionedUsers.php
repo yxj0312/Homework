@@ -3,28 +3,17 @@
 namespace App\Listeners;
 
 use App\User;
-use App\Events\ThreadReceiveNewReply;
 use App\Notifications\YouWereMentioned;
 
 class NotifyMentionedUsers
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
-     * @param  ThreadReceiveNewReply  $event
+     * @param  mixed  $event
      * @return void
      */
-    public function handle(ThreadReceiveNewReply $event)
+    public function handle($event)
     {
         // Inspect the body of the reply for username mentions
         // We need some regular expensions: goto https://regexr.com/
@@ -34,10 +23,15 @@ class NotifyMentionedUsers
         /* $mentionedUsers = $event->reply->mentionedUsers(); */
 
         // Give me all of the user u have, just as long as the name calling exist in this array
-        User::whereIn('name', $event->reply->mentionedUsers())->get()
+        /* User::whereIn('name', $event->reply->mentionedUsers())->get()
              ->each(function ($user) use ($event) {
                  $user->notify(new YouWereMentioned($event->reply));
-             });
+             }); */
+
+        tap($event->subject(), function ($subject) {
+            User::whereIn('name', $this->mentionedUsers($subject))
+                ->get()->each->notify(new YouWereMentioned($subject));
+        });
 
         // Foreach mentionedUsers, map of them and return name of user.
        /*  collect($event->reply->mentionedUsers())
@@ -58,5 +52,16 @@ class NotifyMentionedUsers
                 $user->notify(new YouWereMentioned($event->reply));
             }
         } */
+    }
+
+    /**
+     * Fetch all mentioned users within the reply's body.
+     *
+     * @return array
+     */
+    public function mentionedUsers($body)
+    {
+        preg_match_all('/@([\w\-]+)/', $body, $matches);
+        return $matches[1];
     }
 }

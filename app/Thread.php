@@ -5,6 +5,7 @@ namespace App;
 // use App\Notifications\ThreadWasUpdated;
 use Laravel\Scout\Searchable;
 use App\Events\ThreadHasNewReply;
+use App\Events\ThreadWasPublished;
 use App\Events\ThreadReceiveNewReply;
 use Illuminate\Database\Eloquent\Model;
 
@@ -60,7 +61,7 @@ class Thread extends Model
         static::created(function ($thread) {
             $thread->update(['slug' => $thread->title]);
             // Then it is going to hit setSlugAttribute method.
-
+            event(new ThreadWasPublished($thread));
             // $thread->creator->increment('reputation', 10);
             // $thread->creator->increment('reputation', Reputation::THREAD_WAS_PUBLISHED);
             Reputation::gain($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
@@ -89,6 +90,14 @@ class Thread extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the title for the thread.
+     */
+    public function title()
+    {
+        return $this->title;
     }
 
     public function channel()

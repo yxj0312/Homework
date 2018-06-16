@@ -64,6 +64,14 @@ class Reply extends Model
         return $this->belongsTo(Thread::class);
     }
 
+    /**
+     * Get the related title for the reply.
+     */
+    public function title()
+    {
+        return $this->thread->title;
+    }
+
     // ##############################################################
     // Methods
     // ##############################################################
