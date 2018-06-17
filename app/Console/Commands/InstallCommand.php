@@ -126,7 +126,7 @@ class InstallCommand extends Command
                 config(["database.connections.mysql.{$configKey}" => '']);
                 continue;
             }
-            
+
             config(["database.connections.mysql.{$configKey}" => $value]);
         }
         $this->call('migrate');
@@ -143,6 +143,7 @@ class InstallCommand extends Command
     {
         $question = new Question($question, 'NULL');
         $question->setHidden(true)->setHiddenFallback($fallback);
+
         return $this->output->askQuestion($question);
     }
 }
