@@ -27,17 +27,25 @@ class InstallCommand extends Command
     public function handle()
     {
         $this->welcome();
+
         $this->createEnvFile();
+
         if (strlen(config('app.key')) === 0) {
             $this->call('key:generate');
             $this->line('~ Secret key properly generated.');
         }
-        $this->updateEnvironmentFile($this->requestDatabaseCredentials());
+
+        $credentials = $this->requestDatabaseCredentials();
+
+        $this->updateEnvironmentFile($credentials);
+
         if ($this->confirm('Do you want to migrate the database?', false)) {
-            $this->call('migrate');
+            $this->migrateDatabaseWithFreshCredentials($credentials);
             $this->line('~ Database successfully migrated.');
         }
+
         $this->call('cache:clear');
+
         $this->goodbye();
     }
 
@@ -50,6 +58,7 @@ class InstallCommand extends Command
     protected function updateEnvironmentFile($updatedValues)
     {
         $envFile = $this->laravel->environmentFilePath();
+
         foreach ($updatedValues as $key => $value) {
             file_put_contents($envFile, preg_replace(
                 "/{$key}=(.*)/",
@@ -97,7 +106,43 @@ class InstallCommand extends Command
     {
         if (! file_exists('.env')) {
             copy('.env.example', '.env');
+
             $this->line('.env file successfully created');
         }
+    }
+
+    /**
+     * Migrate the db with the new credentials.
+     *
+     * @param array $credentials
+     * @return void
+     */
+    protected function migrateDatabaseWithFreshCredentials($credentials)
+    {
+        foreach ($credentials as $key => $value) {
+            $configKey = strtolower(str_replace('DB_', '', $key));
+
+            if ($configKey === 'password' && $value == 'null') {
+                config(["database.connections.mysql.{$configKey}" => '']);
+                continue;
+            }
+            
+            config(["database.connections.mysql.{$configKey}" => $value]);
+        }
+        $this->call('migrate');
+    }
+
+    /**
+     * Prompt the user for optional input but hide the answer from the console.
+     *
+     * @param  string  $question
+     * @param  bool    $fallback
+     * @return string
+     */
+    public function askHiddenWithDefault($question, $fallback = true)
+    {
+        $question = new Question($question, 'NULL');
+        $question->setHidden(true)->setHiddenFallback($fallback);
+        return $this->output->askQuestion($question);
     }
 }

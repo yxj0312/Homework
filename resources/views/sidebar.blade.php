@@ -3,8 +3,16 @@
 
     <div class="widget border-b-0">
         @if (auth()->check())
-        <button class="btn is-green w-full" @click="$modal.show('new-thread')">Add New Thread</button> @else
-        <button class="btn is-green w-full tracking-wide" @click="$modal.show('login')">Log In To Post</button> @endif
+        @if(auth()->user()->confirmed)
+                <button class="btn is-green w-full" @click="$modal.show('new-thread')">Add New Thread</button>
+            @else
+                <p class="text-xs text-grey-dark font-bold border border-dashed border-grey-dark p-3">
+                    Please confirm your email address to participate.
+                </p>
+            @endif
+        @else
+            <button class="btn is-green w-full tracking-wide" @click="$modal.show('login')">Log In To Post</button>
+        @endif
     </div>
 
     <div class="widget">
