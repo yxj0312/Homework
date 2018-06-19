@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 trait HasReputation
@@ -13,6 +14,7 @@ trait HasReputation
         $this->reputation = 0;
         $this->save();
     }
+
     /**
      * Award reputation points to the model.
      *
@@ -22,6 +24,7 @@ trait HasReputation
     {
         $this->increment('reputation', config("homework.reputation.{$action}"));
     }
+
     /**
      * Reduce reputation points for the model.
      *
