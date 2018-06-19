@@ -316,7 +316,6 @@ class Thread extends Model
         // Reputation::gain($reply->owner, Reputation::BEST_REPLY_AWARDED);
         $reply->owner->gainReputation('best_reply_awarded');
 
-
         // $this->best_reply_id = $reply->id;
 
         // $this->save();
