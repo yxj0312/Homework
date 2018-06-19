@@ -96,6 +96,25 @@ class ReputationTest extends TestCase
     }
 
     /** @test */
+    public function a_user_loses_points_when_their_best_reply_is_deleted()
+    {
+        $this->signIn();
+
+        $reply = create(\App\Reply::class, ['user_id' => auth()->id()]);
+
+        $reply->thread->markBestReply($reply);
+
+        $total = $this->points['reply_posted'] + $this->points['best_reply_awarded'];
+
+        $this->assertEquals($total, auth()->user()->fresh()->reputation);
+
+        $reply->delete();
+        
+        $this->assertEquals(0, auth()->user()->fresh()->reputation);
+    }
+
+
+    /** @test */
     public function when_a_thread_owner_changes_their_preferred_best_reply_the_points_should_be_transferred()
     {
         // Given a thread exists.
