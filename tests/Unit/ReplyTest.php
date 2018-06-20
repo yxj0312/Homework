@@ -75,4 +75,34 @@ class ReplyTest extends TestCase
       $this->assertEquals("<p>This is okay.</p>", $reply->body);
   }
 
+    /** @test */
+    public function it_generates_the_correct_path_for_a_paginated_thread()
+    {
+        // Given we have a thread.
+        $thread = create('App\Thread');
+
+        // And that thread has three replies.
+        $replies = create('App\Reply', ['thread_id' => $thread->id], 3);
+
+        // And we are paginating 1 per page
+        config(['homework.pagination.perPage' => 1]);
+
+        // If we generate the path for the last reply(3nd one).
+        // It should include ?page=3 in the path.
+        $this->assertEquals(
+            $thread->path() . '?page=1#reply-1',
+            $replies->first()->path()
+        );
+
+        $this->assertEquals(
+            $thread->path() . '?page=2#reply-2',
+            $replies[1]->path()
+        );
+        
+        $this->assertEquals(
+            $thread->path() . '?page=3#reply-3',
+            $replies->last()->path()
+        );
+    }
+
 }

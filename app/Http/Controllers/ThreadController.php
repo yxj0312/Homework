@@ -194,7 +194,7 @@ class ThreadController extends Controller
 
         // dd($threads->toSql());
 
-        return $threads->paginate(5);
+        return $threads->paginate(config('homework.pagination.perPage'));
     }
 
     /**

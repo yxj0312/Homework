@@ -20,7 +20,7 @@ class ReplyController extends Controller
 
     public function index($channelId, Thread $thread)
     {
-        return $thread->replies()->paginate(5);
+        return $thread->replies()->paginate(config('homework.pagination.perPage'));
     }
 
     // public function store($channelId, Thread $thread, Spam $spam)
