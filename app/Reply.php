@@ -86,8 +86,19 @@ class Reply extends Model
 
     public function path()
     {
+        $perPage = config('homework.pagination.perPage');
+
+        /* an example with php artisan tinker: */
+        /* $things = [['name' => 'foo'], ['name' => 'bar'], ['name' => 'baz']];
+        // We wanna find out the position of ['name' => 'bar']
+        collect($things)->pluck('name')->search('bar'); */
+        $replyPosition = $this->thread->replies()->pluck('id')->search($this->id) + 1;
+
+        $page = ceil($replyPosition / $perPage);
         // We do need a id to hook to, so that we can direct go the favorited reply.
-        return $this->thread->path()."#reply-{$this->id}";
+        // if the reply is in page 3 like .../thread-slug?page=3#reply-80,
+        // it is not correctly.
+        return $this->thread->path()."?page={$page}#reply-{$this->id}";
     }
 
     public function wasJustPublished()
