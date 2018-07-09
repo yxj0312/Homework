@@ -29,12 +29,12 @@
     @yield('head')
 </head>
 
-<body class="font-sans bg-grey-lighter">
-    <div id="app">
+<body class="font-sans bg-grey-lighter h-full">
+    <div id="app" class="flex flex-col min-h-full">
         @include ('layouts.nav')
 
-        <div class="container mx-auto">
-            <div class="flex">
+        <div class="container mx-auto flex flex-1">
+            <div class="flex flex-1">
                 @section('sidebar')
                     @include('sidebar')
                 @show
@@ -48,9 +48,10 @@
         </div>
 
         <flash message="{{ session('flash') }}"></flash>
+
         <div v-cloak>
             @include('modals.all')
-        </div>    
+        </div>
     </div>
 
     <!-- Scripts -->
