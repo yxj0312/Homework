@@ -30,5 +30,4 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             processCssUrls: false,
             postCss: [tailwindcss('./tailwind.js')],
         })
-        .browserSync(process.env.DEV_URL)
-//    .sourceMaps();
+    .browserSync(process.env.DEV_URL)

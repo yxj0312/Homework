@@ -1,13 +1,14 @@
 <template>
-    <ul class="pagination" v-if="shouldPaginate">
-        <li v-show="prevUrl">
+    <ul v-if="shouldPaginate">
+        <li v-show="prevUrl" class="inline">
             <a href="#" aria-label="Previous" rel="prev" @click.prevent="page--">
-                <span aria-hidden="true">&laquo; Previous</span>
+                <span class="text-xs mr-2" aria-hidden="true">&laquo; Previous</span>
             </a>
         </li>
-        <li v-show="nextUrl">
+
+        <li v-show="nextUrl" class="inline">
             <a href="#" aria-label="Next" rel="next" @click.prevent="page++">
-                <span aria-hidden="true">Next &raquo;</span>
+                <span class="text-xs" aria-hidden="true">Next &raquo;</span>
             </a>
         </li>
     </ul>
@@ -16,6 +17,7 @@
 <script>
     export default {
         props: ['dataSet'],
+
         data() {
             return {
                 page: 1,
@@ -23,25 +25,30 @@
                 nextUrl: false
             }
         },
+
         watch: {
             dataSet() {
                 this.page = this.dataSet.current_page;
                 this.prevUrl = this.dataSet.prev_page_url;
                 this.nextUrl = this.dataSet.next_page_url;
             },
+
             page() {
                 this.broadcast().updateUrl();
             }
         },
+
         computed: {
             shouldPaginate() {
                 return !! this.prevUrl || !! this.nextUrl;
             }
         },
+
         methods: {
             broadcast() {
                 return this.$emit('changed', this.page);
             },
+            
             updateUrl() {
                 history.pushState(null, null, '?page=' + this.page);
             }
