@@ -358,17 +358,19 @@ class Thread extends Model
     // ##############################################################
     // Accessor
     // ##############################################################
+
     /**
      * Fetch the path to the thread as a property.
      */
     public function getPathAttribute()
     {
-        if (!$this->channel) {
+        if (! $this->channel) {
             return '';
         }
+
         return $this->path();
     }
-    
+
     public function getIsSubscribedToAttribute()
     {
         if (! auth()->id()) {
