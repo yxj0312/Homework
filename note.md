@@ -8,3 +8,9 @@
 as our next learing lessons, and go back to answer the following question.
 ## What is the utility of tailwind in this design?
 * [Vue Modals, Spinners, and Tailwind](https://laracasts.com/series/whatcha-working-on/episodes/26) here is a video, which might be what is Jeff doing by refactoring the council design.
+
+# Review course
+## Ep 38 Laravel and Vue Pagination
+* v-if="shouldPagniate"
+* v-show="prevUrl/nextUrl"
+* broadcast() {this.$emit('updated', this.page)}
