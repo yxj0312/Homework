@@ -14,3 +14,7 @@ as our next learing lessons, and go back to answer the following question.
 * v-if="shouldPagniate"
 * v-show="prevUrl/nextUrl"
 * broadcast() {this.$emit('updated', this.page)}
+
+# New Lessons
+## Modern CSS for Backend Developers:
+* [Workshop - FAQs](https://laracasts.com/series/modern-css-for-backend-developers/episodes/6)
