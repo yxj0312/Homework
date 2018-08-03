@@ -28,7 +28,7 @@ class RegistrationTest extends TestCase
         ]);
 
 
-        // php artisan make:mail PleaseConfirmYourEmail --makedown="emails.confirm-email"
+        // php artisan make:mail PleaseConfirmYourEmail --markdown="emails.confirm-email"
         // Mailtrap.io
         Mail::assertQueued(PleaseConfirmYourEmail::class);
     }
