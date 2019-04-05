@@ -3,11 +3,8 @@
 namespace Tests\Feature;
 
 use App\Thread;
-use App\Mentions;
 use Tests\TestCase;
 use App\Rules\Recaptcha;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MentionUsersTest extends TestCase
@@ -41,7 +38,7 @@ class MentionUsersTest extends TestCase
         ]);
 
         $this->post(route('threads'), $thread->toArray() + ['g-recaptcha-response' => 'token']);
-        
+
         // Then @JaneDoe should receive a notification.
         $this->assertCount(1, $jane->notifications);
         $this->assertEquals(
@@ -55,12 +52,12 @@ class MentionUsersTest extends TestCase
     {
         // Given I have a user, JohnDoe, who is signed in
         $john = create('App\User', ['name' => 'JohnDoe']);
-        
+
         $this->signIn($john);
-        
+
         // And another user, JaneDoe
         $jane = create('App\User', ['name' => 'JaneDoe']);
-        
+
         // If we have a thread
         $thread = create('App\Thread');
 
@@ -79,11 +76,11 @@ class MentionUsersTest extends TestCase
     function it_can_fetch_all_mentioned_users_starting_with_the_given_characters()
     {
         create('App\User', ['name' => 'johndoe']);
-        create('App\User', ['name' => 'johndoe2']);        
+        create('App\User', ['name' => 'johndoe2']);
         create('App\User', ['name' => 'janedoe']);
 
         $results = $this->json('GET', '/api/users', ['name' => 'john']);
-        
+
         $this->assertCount(2, $results->json());
     }
 }

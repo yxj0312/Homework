@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -24,7 +23,7 @@ class NotificationsTest extends TestCase
         $thread = create('App\Thread')->subscribe();
 
         $this->assertCount(0, auth()->user()->notifications);
-        
+
         // Then each time a new reply is left
         $thread->addReply([
             'user_id' => auth()->id(),
@@ -57,7 +56,7 @@ class NotificationsTest extends TestCase
         create(DatabaseNotification::class);
 
         // $user = auth()->user();
-        
+
         // $response = $this->getJson("/profiles/{ $user->name }/notifications")->json();
 
         $this->assertCount(
@@ -76,7 +75,7 @@ class NotificationsTest extends TestCase
         //     'body' => 'Some reply here'
         // ]);
 
-        create(DatabaseNotification::class);        
+        create(DatabaseNotification::class);
 
         // $user = auth()->user();
 

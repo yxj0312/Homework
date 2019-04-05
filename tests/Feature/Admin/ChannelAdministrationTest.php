@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin;
 use App\Channel;
 use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -25,7 +24,7 @@ class ChannelAdministrationTest extends TestCase
         $this->signInAdmin()
             ->get(route('admin.channels.index'))
             ->assertStatus(Response::HTTP_OK);
-            
+
         $this->get(route('admin.channels.create'))
             ->assertStatus(Response::HTTP_OK);
     }
@@ -79,7 +78,7 @@ class ChannelAdministrationTest extends TestCase
         $channel = create('App\Channel');
 
         $this->assertFalse($channel->archived);
-        
+
         $this->patch(
             route('admin.channels.update', ['channel' => $channel->slug]),
             [

@@ -6,7 +6,6 @@ use App\Thread;
 use App\Activity;
 use Tests\TestCase;
 use App\Rules\Recaptcha;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
@@ -38,7 +37,7 @@ class CreateThreadsTest extends TestCase
 
 	  	$this->post(route('threads'))
 	   		->assertRedirect(route('login'));
- 
+
 
 		 /*$this->expectException('Illuminate\Auth\AuthenticationException');
 
@@ -53,7 +52,7 @@ class CreateThreadsTest extends TestCase
 	 * According to the EP8: Beside recomment the throw in Handler.php.
 	 * You should also phpunit --filter=guests_cannot_see_the_create_thread_page
 	 * Or it could be thrown by the aboved test.
-	 * 
+	 *
 	 */
 	/** @test */
 	// public function guests_cannot_see_the_create_thread_page()
@@ -67,7 +66,7 @@ class CreateThreadsTest extends TestCase
 	function new_users_must_first_confirm_their_email_address_before_creating_threads()
 	{
 		$user = factory('App\User')->states('unconfirmed')->create();
-		
+
 		$this->signIn($user);
 
         $thread = make('App\Thread');
@@ -83,16 +82,16 @@ class CreateThreadsTest extends TestCase
 	public function a_user_can_create_new_forum_threads()
 	{
 		 // $this->actingAs(factory('App\User')->create());
-		 
+
 		 // $this->actingAs(create('App\User'));
-		 
+
 		//  $this->signIn();
 
 		 // Can use raw() to make an array
 		 // $thread = factory('App\Thread')->make();
 
-		 /* Mistake by EP9. should not be create, otherwise it has already existed in DB. 
-		  * We already know its title and body. Thus the post test below is meaningless   
+		 /* Mistake by EP9. should not be create, otherwise it has already existed in DB.
+		  * We already know its title and body. Thus the post test below is meaningless
 		  **/
 		//  $thread = make('App\Thread');
 
@@ -156,21 +155,21 @@ class CreateThreadsTest extends TestCase
 	function a_thread_requires_a_unique_slug()
 	{
 		$this->signIn();
-		
-		// Create two random threads. 
+
+		// Create two random threads.
 		// For assurance that we can pass all situation, cause it always create from id= 1 without this assurance
 		// comment it again after all passed.
 		/* create('App\Thread', [], 2); */
 
 		$thread = create('App\Thread', ['title' => 'Foo Title']);
-		
+
 		// Refactor: using a model event to instead of using model factory to assign the slug
 		// See boot method in Thread.php
 		$this->assertEquals($thread->fresh()->slug, 'foo-title');
 
 		/* $thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
 		$this->assertEquals($thread->fresh()->slug, 'foo-title'); */
-		
+
 		// If slug not nullable, it will be fail, cause we are not setting slug in modelfactory, when $thread is created.
 		/* $this->post(route('threads'), $thread->toArray()); */
 
@@ -194,7 +193,7 @@ class CreateThreadsTest extends TestCase
 
         /* $thread = create('App\Thread', ['title' => 'Some Title 24', 'slug' => 'some-title-24']); */
         $thread = create('App\Thread', ['title' => 'Some Title 24']);
-		
+
 		/* $this->post(route('threads'), $thread->toArray());
 		$this->assertTrue(Thread::whereSlug('some-title-24-2')->exists()); */
 
@@ -258,13 +257,13 @@ class CreateThreadsTest extends TestCase
 
 		$this->publishThread(['channel_id' => $channel->id])
 			->assertSessionHasErrors('channel_id');
-			
+
 		$this->assertCount(0, $channel->threads);
 	}
 
 	public function publishThread($overrides = [])
 	{
-	   
+
 	   $this->withExceptionHandling()->signIn();
 
 	   $thread = make('App\Thread', $overrides);
