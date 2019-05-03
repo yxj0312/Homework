@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BestReplyTest extends TestCase
@@ -21,7 +20,7 @@ class BestReplyTest extends TestCase
 
         $replies = create('App\Reply', ['thread_id' => $thread->id], 2);
 
-        $this->assertFalse($replies[1]->isBest());        
+        $this->assertFalse($replies[1]->isBest());
 
         $this->postJson(route('best-replies.store', [$replies[1]->id]));
 
@@ -32,7 +31,7 @@ class BestReplyTest extends TestCase
     function only_the_thread_creator_may_mark_a_reply_as_best()
     {
         $this->withExceptionHandling();
-        
+
         $this->signIn();
 
         $thread = create('App\Thread', ['user_id' => auth()->id()]);
@@ -43,7 +42,7 @@ class BestReplyTest extends TestCase
 
         // Symfony\Component\HttpFoundation\Response to see status list.
         $this->postJson(route('best-replies.store', [$replies[1]->id]))->assertStatus(403);
-        
+
         $this->assertFalse($replies[1]->fresh()->isBest());
     }
 
