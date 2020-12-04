@@ -25,7 +25,7 @@ class ThreadFilters extends Filters
     /**
      * Filter the query according to most popular threads.
      *
-     * @return this
+     * @return $this
      */
     protected function popular()
     {
