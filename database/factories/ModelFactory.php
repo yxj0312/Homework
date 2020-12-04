@@ -1,8 +1,8 @@
 <?php
 
-use Ramsey\Uuid\Uuid;
 use Faker\Generator as Faker;
 use Illuminate\Notifications\DatabaseNotification as DatabaseNotification;
+use Ramsey\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
