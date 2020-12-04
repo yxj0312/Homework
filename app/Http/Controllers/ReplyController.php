@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use App\Reply;
-use App\Thread;
-use App\Rules\SpamFree;
+use App\Http\Requests\CreatePostRequest;
 use App\Inspections\Spam;
+use App\Reply;
+use App\Rules\SpamFree;
+use App\Thread;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Requests\CreatePostRequest;
 
 class ReplyController extends Controller
 {
@@ -55,9 +55,9 @@ class ReplyController extends Controller
 
         // try {
         return $thread->addReply([
-        'body' => request('body'),
-        'user_id' => auth()->id()
-      ])->load('owner');
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ])->load('owner');
         // Could also see Handler.php from Exception
         // } catch(\Exception $e) {
         //     return response('Locked', 422);

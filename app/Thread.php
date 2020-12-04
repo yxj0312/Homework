@@ -3,11 +3,11 @@
 namespace App;
 
 // use App\Notifications\ThreadWasUpdated;
-use Laravel\Scout\Searchable;
 use App\Events\ThreadHasNewReply;
-use App\Events\ThreadWasPublished;
 use App\Events\ThreadReceiveNewReply;
+use App\Events\ThreadWasPublished;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 // U can wrapper Facades before path to use a real time facade.
 // use Facades\App\Reputation;
