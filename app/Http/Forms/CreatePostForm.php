@@ -2,10 +2,10 @@
 
 namespace App\Http\Forms;
 
-use App\Rules\SpamFree;
-use Illuminate\Support\Facades\Gate;
 use App\Exceptions\ThrottleException;
+use App\Rules\SpamFree;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class CreatePostForm extends FormRequest
 {
