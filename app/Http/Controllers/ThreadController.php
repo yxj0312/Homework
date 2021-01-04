@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Thread;
 use App\Channel;
+use App\Filters\ThreadFilters;
+use App\Inspections\Spam;
+use App\Rules\Recaptcha;
+use App\Rules\SpamFree;
+use App\Thread;
 use App\Trending;
 use Carbon\Carbon;
-use App\Rules\SpamFree;
-use App\Rules\Recaptcha;
-use App\Inspections\Spam;
 use Illuminate\Http\Request;
-use App\Filters\ThreadFilters;
 use Illuminate\Validation\Rule;
 
 class ThreadController extends Controller
